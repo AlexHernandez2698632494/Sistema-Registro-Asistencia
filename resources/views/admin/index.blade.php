@@ -100,27 +100,27 @@
                         </thead>
                         <div class="table-body">
                             <tbody>
-                                @foreach ($personas as $item)
+                                @foreach ($admin as $item)
                                     <tr>
-                                        <td>{{ $item->nombre }}</td>
-                                        <td>{{ $item->apellido }}</td>
-                                        <td>{{ $item->dui }}</td>
-                                        <td> {{ $item->telefono }}</td>
-                                        <td>{{ $item->correo }} </td>
+                                        <td>{{ $item->nombreAdmin }}</td>
+                                        <td>{{ $item->apellidosAdmin }}</td>
+                                        <td>{{ $item->carnetAdmin }}</td>
+                                        <td> {{ $item->telefonoAdmin }}</td>
+                                        <td>{{ $item->correoAdmin }} </td>
                                         <td>
                                             <div class="row">
                                                 <div class="col-4 mx-0 px-0">
                                                     <a type="button" class="btn btn-primary icon-button"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         data-bs-title="Ver información"
-                                                        href="{{ route('admin.adminInfo', $item->idPersona) }}"><i
+                                                        href="{{ route('admin.adminInfo', $item->idAdmin) }}"><i
                                                             class="fa-solid fa-eye my-1"></i></a>
                                                 </div>
                                                 <div class="col-4 mx-0 px-0">
                                                     <a type="button" class="btn btn-warning icon-button"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         data-bs-title="Actualizar"
-                                                        href="{{ route('admin.edit', $item->idPersona) }}"><i
+                                                        href="{{ route('admin.edit', $item->idAdmin) }}"><i
                                                             class="fa-solid fa-arrows-rotate my-1"
                                                             style="color: white"></i></a>
                                                 </div>
@@ -128,7 +128,7 @@
                                                     <button type="button" class="btn btn-danger icon-button"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         data-bs-title="Eliminar"
-                                                        value="{{$item->idPersona }}, {{$item->nombre.' '.$item->apellido}}"
+                                                        value="{{$item->idAdmin }}, {{$item->nombreAdmin.' '.$item->apellidosAdmin}}"
                                                         onclick="openDeleteAdminModal(this.value)">
                                                         <i class="fa-solid fa-trash"></i>
                                                     </button>

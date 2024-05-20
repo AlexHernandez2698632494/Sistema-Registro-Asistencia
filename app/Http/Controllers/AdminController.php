@@ -18,12 +18,11 @@ class AdminController extends Controller
     {
         if(session()->has('administrador')){
             //$personas = Persona::where('estadoEliminacion', "=", "1")->get();
-        $personas = DB::table('Persona')
-                        ->join('Administrador','Persona.idPersona','=','Administrador.idPersona')
-                        ->where('Administrador.estadoEliminacion','=',1)
+        $admin = DB::table('administrador')
+                        ->where('estadoEliminacion','=',1)
                         ->get();
        //return $personas;
-        return view('admin.index', compact('personas'));
+        return view('admin.index', compact('admin'));
         }else{
             return view('layout.403');            
         }   
