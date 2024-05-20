@@ -5,10 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class persona extends Model
+class estudianteUDB extends Model
 {
     use HasFactory;
-    protected $table = 'Persona';
-    protected $primaryKey = 'idPersona';
-    public $timestamps = false;
 }

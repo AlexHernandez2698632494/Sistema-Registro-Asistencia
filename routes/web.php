@@ -5,6 +5,8 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\GuestSiteController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\GuestStudentSiteController;
+use App\Http\Controllers\UDBStudentGuestSiteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -66,3 +68,11 @@ Route::post('/firsAdmin', [LoginController::class, 'storeFirstAdmin'])->name('st
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 //Route::get('/recuperarView', [LoginController::class, 'recuperarView'])->name('recuperarView');
 //Route::post('/recuperarContra', [LoginController::class, 'recuperarContra'])->name('recuperarContra');
+
+//Rutas relacionadas con el controlador de estudiantes (GuestStudentSiteController)
+Route::get('/estudiantes', [GuestStudentSiteController::class, 'index'])->name('student.index');
+
+//Rutas relacionadas con el controlador de estudiantes UDB(UDBStudentGuestSiteController)
+Route::prefix('estudiante/UDB')->group(function(){
+    route::get('/',[UDBStudentGuestSiteController::class, 'studentUDB'])->name('UDBStudentGuestSite.index');
+});

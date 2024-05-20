@@ -46,9 +46,9 @@
         </script>
     @endif
 <body>
-	<section class="vh-100" style="background-color: #0060B4;">
-		<div class="container py-5 h-100">
-			<div class="row d-flex justify-content-center align-items-center h-100">
+	<section class="vh-200" style="background-color: #0060B4;">
+		<div class="container py-5 h-200">
+			<div class="row d-flex justify-content-center align-items-center h-200">
 				<div class="col-12 col-md-8 col-lg-6 col-xl-5">
 					<div class="card shadow-2-strong" style="border-radius: 1rem;">
 						<div class="card-body p-5 text-center">
@@ -58,14 +58,14 @@
 								<a href="{{route('guestSite.index') }}" class="nav-link" id="tab-register" data-mdb-toggle="pill" role="tab" aria-controls="pills-register" aria-selected="false" style="color: #0060B4;">Registrar Invitado</a>
 							</li>
 								<li class="nav-item" role="presentation">
-									<a class="nav-link" id="tab-register" data-mdb-toggle="pill" href="#pills-register" role="tab" aria-controls="pills-register" aria-selected="false" style="color: #0060B4;">Registrar Estudiante</a>
+									<a href="{{route('student.index')}}" class="nav-link" id="tab-register" data-mdb-toggle="pill"  role="tab" aria-controls="pills-register" aria-selected="false" style="color: #0060B4;">Registrar Estudiante</a>
 								</li>
 							</ul>
 							<!-- Pills navs -->
 
 							<h3 class="mb-1">¡Bienvenido!</h3>
 							<h3 class="mb-3">Sistema de Registro de Asistencia DAC</h3>
-
+							<img class="img" width="125" src="http://127.0.0.1:8000/img/LOGO-DAC-2021.png" alt="LOGO DE DEPARTAMENTO DE ARTE Y CULTURA (DAC)">
 							<div class="my-2" style="background-color:#0060B4; "></div>
 							<form method="post" action="{{ route('login') }}">
 								@csrf
