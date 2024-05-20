@@ -63,17 +63,17 @@
                                         <div class="col-lg-12  col-md-6 col-xs-12">
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text" id="basic-addon1"><i class="bi-solid bi-gender-ambiguous"></i></span>
-                                                <select class="form-select" aria-label="Default select example" id="txtSex" name="Sex">
+                                                <select class="form-select" aria-label="Default select example" id="txtSex" name="sexo">
                                                     <option value="" disabled selected>Ingrese su sexualidad</option>
-                                                    <option value="1">Masculino</option>
-                                                    <option value="0">Femenino</option>
+                                                    <option value="Masculino">Masculino</option>
+                                                    <option value="Femenino">Femenino</option>
                                                 </select>
                                             </div>
                                         </div>
                                          <div class="col-lg-12 col-md-6 col-xs-12">
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-address-card"></i></span>
-                                                <input type="text" class="form-control" placeholder="Ingrese carnet" aria-label="carnetAdmin" id="txtCarnetAdmin" name="carnetAdmin" value="{{ old('carnetAdmin') }}">
+                                                <input type="text" class="form-control" placeholder="Ingrese carnet" aria-label="carnet" id="txtCarnetAdmin" name="carnet" value="{{ old('carnet') }}">
                                             </div>
                                         </div>
                                         <div class="col-lg-12 col-md-6 col-xs-12">

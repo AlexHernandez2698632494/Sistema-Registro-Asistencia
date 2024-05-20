@@ -34,7 +34,6 @@
     <script src="{{ asset('js/alertify.js') }}"></script>
     <link href="{{ asset('css/alertify.min.css') }}" type="text/css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
     <link rel="icon" type="icon" href="http://127.0.0.1:8000/img/logo_dac-.ico">
     <title>DAC | @yield('title')</title>
 </head>
