@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use App\Models\persona;
 use App\Models\invitado;
 use App\Mail\Credentials;
 use App\Models\Usuarios;
@@ -85,56 +84,70 @@ class GuestSiteController extends Controller
 		return $pass;
 	}
 
-    public function store(Request $request)
-    {
-        // Validar los datos ingresados por el usuario
-        $validator = Validator::make($request->all(), [
-            'nombre' => 'required|string|max:255',
-            'apellido' => 'required|string|max:255',
-            'dui' => 'required|string|max:10',
-            'telefono' => 'required|string|max:10',
-            'correo' => 'nullable|email|max:255',
-            'direccion' => 'nullable|string',
-            'carrera' => 'nullable|string|max:255',
+    public function store(Request $request){
+        //Validar los datos ingresados por el usuario
+        $request->validate([
+            'nombreInvitado' => ['required', 'max:255', 'string'],
+            'apellidosInvitado' => ['required', 'max:255', 'string'],
+            // 'sexoInvitado' => ['required', 'max:10', 'string'],
+            'duiInvitado' => ['required', 'max:10', 'string'],
+            'correoInvitado' => ['required', 'max:255', 'string'],
+            'telefonoInvitado' => ['required', 'max:10', 'string'],
+            'departamento' => ['required', 'max:255', 'string'],
+            'municipio' => ['required', 'max:255', 'string'],
+            // 'departamentoInvitado' => ['required', 'max:255', 'string'],
+            // 'municipioInvitado' => ['required', 'max:255', 'string'],
         ]);
-        // Si la validación falla, redireccionar con los errores
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+
+        try{
+            DB::beginTransaction();
+            $nombreInvitado = $request->input('nombreInvitado');
+            $apellidosInvitado = $request->input('apellidosInvitado');
+            $sexoInvitado = $request->input('sexo');
+            $duiInvitado = $request->input('duiInvitado');
+            $correoInvitado = $request->input('correoInvitado');
+            $telefonoInvitado = $request->input('telefonoInvitado');
+            $departamentoInvitado = $request->input('departamento');
+            $municipioInvitado = $request->input('municipio');
+
+            $guest = new invitado();
+            $guest->nombreInvitado = $nombreInvitado;
+            $guest->apellidosInvitado = $apellidosInvitado;
+            $guest->sexoInvitado = $sexoInvitado;
+            $guest->duiInvitado = $duiInvitado;
+            $guest->correoInvitado = $correoInvitado;
+            $guest->telefonoInvitado = $telefonoInvitado;
+            $guest->departamentoInvitado = $departamentoInvitado;
+            $guest->municipioInvitado = $municipioInvitado;
+            $guest->estadoEliminacion = 1;
+
+            //envio de credenciales al invitado
+         $guestEmail = $request->input('correoInvitado');
+         $guestName = $request->input('nombreInvitado').''.$request->input('apellidosInvitado');
+        
+         $userName = $this->generateUser($request->input('nombreInvitado'),$request->input('apellidosInvitado'));
+         $pass = $this->generatePass();
+        
+         $userObj = new Usuarios();
+         $userObj->idUsuario = $request->input('duiInvitado');
+         $userObj->usuario = $userName;
+         $userObj->password = hash('SHA256',$pass);
+         $userObj->nivel = 1;
+         $userObj->save();
+
+         if($guest->save() && $userObj->save()){
+            $email = new Credentials($userName, $pass, $guestName);
+         Mail::to($guestEmail)->send($email);
+         DB::commit();
+         // Redireccionar con un mensaje de éxito
+         return to_route('showLogin')->with('exitoAgregar', 'Registro agregado exitosamente.');
+         }else{
+            DB::rollBack();
+            return redirect()->back()->with('errorAgregar','Ha ocurrido un error al registrarse');
         }
-
-        DB::beginTransaction();
-        // Crear una nueva persona
-        $persona = new Persona();
-        $persona->nombre = $request->input('nombre');
-        $persona->apellido = $request->input('apellido');
-        $persona->dui = $request->input('dui');
-        $persona->telefono = $request->input('telefono');
-        $persona->correo = $request->input('correo');
-        $persona->direccion = $request->input('direccion');
-        $persona->save();
-        // Crear un nuevo invitado asociado a la persona
-        $invitado = new Invitado();
-        $invitado->idPersona = $persona->idPersona;
-        $invitado->save();
-
-        //envio de credenciales al invitado
-        $guestEmail = $request->input('correo');
-        $guestName = $request->input('nombre').''.$request->input('apellido');
-
-        $userName = $this->generateUser($request->input('nombre'),$request->input('apellido'));
-        $pass = $this->generatePass();
-
-        $userObj = new Usuarios();
-        $userObj->idUsuario = $request->input('dui');
-        $userObj->usuario = $userName;
-        $userObj->password = hash('SHA256',$pass);
-        $userObj->nivel = 1;
-        $userObj->save();
-
-        $email = new Credentials($userName, $pass, $guestName);
-        Mail::to($guestEmail)->send($email);
-        DB::commit();
-        // Redireccionar con un mensaje de éxito
-        return to_route('showLogin')->with('exitoAgregar', 'Registro agregado exitosamente.');
+        }catch(Exception $e){
+            DB::rollBack();
+            return redirect()->back()->with('errorAgregar','Ha ocurrido un error al registrarse'.$e->getMessage());
+        } 
     }
 }

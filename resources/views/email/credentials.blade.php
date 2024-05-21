@@ -8,7 +8,7 @@
 </head>
 <body>
     <p>Credenciales de acceso</p>
-    <p>¡Hola {{ $name}}!, aquí estan tus credenciales para acceder al Sistema de Gestión Estudiantil</p>
+    <p>¡Hola {{ $name}}!, aquí estan tus credenciales para acceder al Sistema de Registro de Asistencia para Eventos del Departamento de Arte y Cultura (DAC)</p>
     <p>Usuario: {{ $user }}</p>
     <p>Contraseña: {{ $pass }}</p>
 </body>
