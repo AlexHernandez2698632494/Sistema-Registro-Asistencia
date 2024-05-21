@@ -35,6 +35,15 @@
                     </li>                
                 </ul>
             </li>
+            <li id="opcionesVerRegistro">
+                <a class="dropdown-toggle" data-bs-toggle="collapse" href="#menuRegistro" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    Ver registro eventos
+                </a>
+                <ul class="collapse list-unstyled" id="menuRegistro">
+                    <li><a href="#formativa">Area Formativa</a></li>
+                    <li><a href="#entretenimiento">Area Entretenimiento</a></li>               
+                </ul>
+            </li>
             <li id="opcionesUsuarios">
                 <a class="dropdown-toggle" data-bs-toggle="collapse" href="#menuUsuarios" role="button" aria-expanded="false" aria-controls="collapseExample">
                     Usuarios
