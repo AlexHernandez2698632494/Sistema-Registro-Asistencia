@@ -44,10 +44,10 @@
                         <a href="{{ route('area.create') }}" id="registroAreas">Registro de Areas</a>
                     </li>
                     <li>
-                        <a href="" id="controlAreas">Control de Areas</a>
+                        <a href="{{ route('area.index') }}" id="controlAreas">Control de Areas</a>
                     </li>     
                     <li>
-                        <a href="" id="controlAreaE">Areas Eliminados</a>
+                        <a href="{{ route('area.restoreView') }}" id="controlAreaE">Areas Eliminados</a>
                     </li>                   
                 </ul>
             </li>

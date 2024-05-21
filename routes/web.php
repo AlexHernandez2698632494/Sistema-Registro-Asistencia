@@ -83,6 +83,8 @@ Route::prefix('area')->group(function(){
     route::get('/index',[AreaController::class, 'index'])->name('area.index');
     route::post('/add',[AreaController::class, 'store'])->name('area.store');
     route::get('/create',[AreaController::class, 'create'])->name('area.create');
-
+    route::delete('/delete',[AreaController::class,'destroy'])->name('area.delete');
+    route::get('/restoreView',[AreaController::class,'restoreView'])->name('area.restoreView');
+    route::put('/restore',[AreaController::class, 'restore'])->name('area.restore');
 });
 
