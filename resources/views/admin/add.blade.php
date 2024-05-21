@@ -87,13 +87,16 @@
                             </div>          
                             <div class="row mt-2 justify-content-center">
                                 <div class="col-lg-3 col-xs-12 mt-2">
-                                    <label for="dui" class="form-label">DUI</label>                                
-                                    <input type="text" class="form-control" placeholder="Ingrese DUI" aria-label="dui" id="txtDui" name="dui" value="{{old('dui')}}">
+                                    <label for="dui" class="form-label">Sexo</label>                        
+											<select class="form-select" aria-label="Default select example" id="txtSex" name="sexo">
+												<option value="" disabled selected>Ingrese su sexualidad</option>
+												<option value="Masculino">Masculino</option>
+												<option value="Femenino">Femenino</option>
+											</select>
                             </div>
                                 <div class="col-lg-3 col-xs-12 mt-2">
-                                    <label for="telefono" class="form-label">Número de teléfono/celular</label>                                
-                                    {{-- <input type="text" id="telefono" name="telefono" placeholder="Ingrese número" class="form-control input Phone" value="{{old('telefono')}}">                                                                                                     --}}
-                                    <input type="text" class="form-control txtPhone" id="txtPhone" placeholder="Ingrese número de teléfono" aria-label="phone" name="telefono" value="{{old('telefono')}}">
+                                    <label for="carnet" class="form-label">Carnet</label>                                
+                                    <input type="text" class="form-control txtCarnet" id="txtCarnet" placeholder="Ingrese su carnet" aria-label="carnet" name="carnet" value="{{old('carnet')}}">
                                 </div>                                
                             </div>  
                             <div class="row mt-2 justify-content-center">
@@ -104,8 +107,9 @@
                             </div>
                             <div class="row justify-content-center">
                                 <div class="col-lg-3 col-xs-12 mt-2">                                    
-                                    <label for="direccion" class="form-label">Direccion</label>                                
-                                    <input type="text" id="direccion" name="direccion" placeholder="Ingrese direccion" class="form-control input"  value="{{old('direccion')}}" >                                    
+                                <label for="telefono" class="form-label">Número de teléfono/celular</label>                                
+                                    {{-- <input type="text" id="telefono" name="telefono" placeholder="Ingrese número" class="form-control input Phone" value="{{old('telefono')}}">                                                                                                     --}}
+                                    <input type="text" class="form-control txtPhone" id="txtPhone" placeholder="Ingrese número de teléfono" aria-label="phone" name="telefono" value="{{old('telefono')}}">                
                                 </div>
                                 <div class="col-lg-3 col-xs-12 mt-2">
                                     <label for="cargo" class="form-label">Cargo</label>                                

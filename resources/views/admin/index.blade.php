@@ -92,7 +92,7 @@
                             <tr>
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Apellido</th>
-                                <th scope="col">DUI</th>
+                                <th scope="col">Carnet</th>
                                 <th scope="col">Contacto</th>
                                 <th scope="col">Correo</th>
                                 <th scope="col">Acciones</th>
