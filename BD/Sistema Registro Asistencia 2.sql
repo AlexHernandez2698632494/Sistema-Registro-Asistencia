@@ -1,17 +1,17 @@
-	CREATE DATABASE sistemaasistencia;
-    use sistemaasistencia;
-    
-    CREATE TABLE invitado(
-    idInvitado INT AUTO_INCREMENT PRIMARY KEY,
-    nombreInvitado VARCHAR(256) NOT NULL,
-    apellidosInvitado VARCHAR(256) NOT NULL,
-    sexoInvitado VARCHAR(10) NOT NULL,
-    duiInvitado VARCHAR(10) NOT NULL,
-    correoInvitado TEXT NOT NULL,
-    telefonoInvitado VARCHAR(10) NOT NULL,
-    departamentoInvitado TEXT NOT NULL,
-    municipioInvitado TEXT NOT NULL,
-    estadoEliminacion INT NOT NULL DEFAULT 1
+CREATE DATABASE sistemaasistencia;
+use sistemaasistencia;
+
+CREATE TABLE invitado(
+idInvitado INT AUTO_INCREMENT PRIMARY KEY,
+nombreInvitado VARCHAR(256) NOT NULL,
+apellidosInvitado VARCHAR(256) NOT NULL,
+sexoInvitado VARCHAR(10) NOT NULL,
+duiInvitado VARCHAR(10) NOT NULL,
+correoInvitado TEXT NOT NULL,
+telefonoInvitado VARCHAR(10) NOT NULL,
+departamentoInvitado TEXT NOT NULL,
+municipioInvitado TEXT NOT NULL,
+estadoEliminacion INT NOT NULL DEFAULT 1
 ); 
 
 CREATE TABLE estudianteUDB(
@@ -55,8 +55,7 @@ CREATE TABLE administrador(
     estadoEliminacion INT NOT NULL DEFAULT 1
 ); 
 
-CREATE TABLE `Usuario`
-(
+CREATE TABLE `Usuario`(
   `idUsuario` varchar(10) PRIMARY KEY,
   `usuario` varchar(500) NOT NULL,
   `password` text NOT NULL,
@@ -65,20 +64,17 @@ CREATE TABLE `Usuario`
 
 CREATE TABLE areaFormativaEntretenimiento(
     idAreaFormativaEntretenimiento INT PRIMARY KEY AUTO_INCREMENT,
-    danza INT NOT NULL DEFAULT 0,
-    teatro INT NOT NULL DEFAULT 0,
-    musica INT NOT NULL DEFAULT 0,
-    artesPlasticas INT NOT NULL DEFAULT 0,
-    cultura INT NOT NULL DEFAULT 0,
-    artesLiterarias INT NOT NULL DEFAULT 0,
+    nombreArea text not null,
+    nivel int not null,
     estadoEliminacion INT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE Areas(
     idAreas INT PRIMARY KEY AUTO_INCREMENT,
-    AreaFormativa INT NOT NULL,
-    AreEntretenimiento INT NOT NULL,
-    estadoEliminacion INT NOT NULL DEFAULT 1
+    nombre text,
+    idAreaFormativaEntretenimiento int,
+    estadoEliminacion INT NOT NULL DEFAULT 1,
+    FOREIGN KEY(`idAreaFormativaEntretenimiento`) REFERENCES `areaFormativaEntretenimiento`(`idAreaFormativaEntretenimiento`)
 );
 
 CREATE TABLE Eventos(
@@ -90,11 +86,15 @@ CREATE TABLE Eventos(
     descripcion TEXT DEFAULT NULL,
     precio VARCHAR(8) ,
     imagen VARCHAR(255) NOT NULL,
-    tipo INT NOT NULL,
-    area INT NOT NULL,
-    estadoEliminacion INT NOT NULL DEFAULT 1,
-    FOREIGN KEY (area) REFERENCES Areas(idAreas),
-    FOREIGN KEY (tipo) REFERENCES areaFormativaEntretenimiento(idAreaFormativaEntretenimiento)
+    estadoEliminacion INT NOT NULL DEFAULT 1
+);
+
+CREATE TABLE areaFormativaEntretenimientoEvento(
+`idDetalle` int PRIMARY KEY AUTO_INCREMENT,
+  `idEvento` int NOT NULL,
+  `idAreas` int NOT NULL,
+  FOREIGN KEY(`idEvento`) REFERENCES `Eventos`(`idEvento`),
+  FOREIGN KEY(`idAreas`) REFERENCES `Areas`(`idAreas`)
 );
 
 CREATE TABLE adquirirEntrada(

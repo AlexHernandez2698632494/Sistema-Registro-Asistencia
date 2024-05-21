@@ -35,6 +35,22 @@
                     </li>                
                 </ul>
             </li>
+            <li id="opcionesArea">
+                <a class="dropdown-toggle" data-bs-toggle="collapse" href="#menuArea" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    Areas
+                </a>
+                <ul class="collapse list-unstyled" id="menuArea">
+                    <li>
+                        <a href="{{ route('area.create') }}" id="registroAreas">Registro de Areas</a>
+                    </li>
+                    <li>
+                        <a href="" id="controlAreas">Control de Areas</a>
+                    </li>     
+                    <li>
+                        <a href="" id="controlAreaE">Areas Eliminados</a>
+                    </li>                   
+                </ul>
+            </li>
             <li id="opcionesVerRegistro">
                 <a class="dropdown-toggle" data-bs-toggle="collapse" href="#menuRegistro" role="button" aria-expanded="false" aria-controls="collapseExample">
                     Ver registro eventos

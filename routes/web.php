@@ -3,10 +3,11 @@ use App\Http\Controllers\InvitadoController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\UsuarioController;
-use App\Http\Controllers\GuestSiteController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\GuestStudentSiteController;
 use App\Http\Controllers\UDBStudentGuestSiteController;
+use App\Http\Controllers\AreaController;
+use App\Http\Controllers\GuestSiteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -76,3 +77,12 @@ Route::get('/estudiantes', [GuestStudentSiteController::class, 'index'])->name('
 Route::prefix('estudiante/UDB')->group(function(){
     route::get('/',[UDBStudentGuestSiteController::class, 'studentUDB'])->name('UDBStudentGuestSite.index');
 });
+
+//Rutas relacionadas con el controlador de areas (AreaController)
+Route::prefix('area')->group(function(){
+    route::get('/index',[AreaController::class, 'index'])->name('area.index');
+    route::post('/add',[AreaController::class, 'store'])->name('area.store');
+    route::get('/create',[AreaController::class, 'create'])->name('area.create');
+
+});
+

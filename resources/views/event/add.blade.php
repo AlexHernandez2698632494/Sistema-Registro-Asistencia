@@ -32,81 +32,114 @@
                     </div>
                 </div>
             </nav>  
-            <div class="card eventAdd-Card">
+            <div class="card teacherAdd-Card">
                 <div class="card-body">
-                    <p class="d-flex justify-content-center">Registro de eventos</p>
-                    <div class="separator"></div>
-                    @if ($errors->any())
-                        <div class="alert alert-danger my-2 pb-0">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-                    <form method="POST" action="{{route('events.add')}}" enctype="multipart/form-data">
-                        @csrf
-                        @method('POST')
-                        <div class="row">
-                            <div class="col-lg-5 col-xs-12">
-                                <p class="d-flex justify-content-center mt-2 mb-0">Información general</p>
-                                <p class="d-flex justify-content-center mt-0 subtitle">Ingrese la información que se
-                                    solicita</p>
-                                <div class="input-group mb-3 mt-3">
-                                    <span class="input-group-text" id="eventName"><i
-                                            class="fa-solid fa-person"></i></span>
-                                    <input type="text" class="form-control" placeholder="Ingrese nombre del evento"
-                                        aria-label="name" name="eventName" value="{{ old('eventName') }}">
-                                </div>
-                                <div class="input-group mb-3 mt-3">
-                                    <span class="input-group-text" id="eventLocation"><i
-                                            class="fa-solid fa-Location-dot"></i></span>
-                                    <input type="text" class="form-control"
-                                        placeholder="Ingrese ubicacion del evento" aria-label="Location"
-                                        name="eventLocation" value="{{old('eventLocation')}}">
-                                </div>
-                                <div class="input-group mb-3 mt-3">
-                                    <span class="input-group-text" id="eventDate"><i
-                                            class="fa-solid fa-calendar"></i></span>
-                                    <input type="date" class="form-control" placeholder="Ingrese fecha del evento"
-                                        aria-label="Date" name="eventDate" value="{{old('eventDate')}}" min="{{ now()->toDateString() }}">
-                                </div>
-                                <div class="input-group mb-3 mt-3">
-                                    <span class="input-group-text" id="eventTime"><i
-                                            class="fa-solid fa-clock"></i></span>
-                                    <input type="time" class="form-control" placeholder="Ingrese hora del evento"
-                                        aria-label="Time" name="eventTime" value="{{old('eventTime')}}">
-                                </div>
-                                <div class="input-group mb-3 mt-3">
-                                    <span class="input-group-text" id="eventDescription"><i
-                                            class="fa-solid fa-info"></i></span>
-                                    <input type="text" class="form-control"
-                                        placeholder="Ingrese descripcion o sinopsis del evento" aria-label="Description"
-                                        name="eventDescription" value="{{old('eventDescription')}}">
-                                </div>
-                                <div class="input-group mb-3 mt-3">
-                                    <span class="input-group-text" id="eventPrice"><i
-                                            class="fa-solid fa-money-bill"></i></span>
-                                    <input type="Price" class="form-control" placeholder="Ingrese precio del evento"
-                                        aria-label="Price" name="eventPrice" value="{{old('eventPrice')}}">
-                                </div>
-                                <div class="input-group mb-3 mt-3">
-                                    <span class="input-group-text" id="eventImage"><i
-                                            class="fa-solid fa-image"></i></span>
-                                    <input type="file" class="form-control" placeholder="Ingrese imagen promocional"
-                                        aria-label="Image" name="eventImage" accept="image/jpeg, image/jpg, image/png">
-                                </div>
-                                <div class="row mx-2 my-2">
-                                    <div class="col d-flex justify-content-center">
-                                        <button type="submit" class="btn btn-block btn-Add">Registrar evento</button>
-                                    </div>								
-                                </div>
-                            </div>
-                        </div>
+            	<p class="d-flex justify-content-center">Registro de docentes</p>
+						<div class="separator"></div>
+						@if ($errors->any())
+							<div class="alert alert-danger my-2 pb-0">
+								<ul>
+									@foreach ($errors->all() as $error)
+										<li>{{ $error }}</li>
+									@endforeach
+								</ul>
+							</div>
+						@endif							
+						<form method="POST" action="{{route('events.add')}}">
+							@csrf
+							@method('POST')
+							<div class="row">
+								<div class="col-lg-5 col-xs-12">
+									<p class="d-flex justify-content-center mt-2 mb-0">Información general</p>
+									<p class="d-flex justify-content-center mt-0 subtitle">Ingrese la información que se solicita</p>
+									<div class="input-group mb-3 mt-3">
+                                        <span class="input-group-text" id="eventName"><i
+                                                class="fa-solid fa-person"></i></span>
+                                        <input type="text" class="form-control" placeholder="Ingrese nombre del evento"
+                                            aria-label="name" name="eventName" value="{{ old('eventName') }}">
+                                    </div>
+                                    <div class="input-group mb-3 mt-3">
+                                        <span class="input-group-text" id="eventLocation"><i
+                                                class="fa-solid fa-Location-dot"></i></span>
+                                        <input type="text" class="form-control"
+                                            placeholder="Ingrese ubicacion del evento" aria-label="Location"
+                                            name="eventLocation" value="{{old('eventLocation')}}">
+                                    </div>
+                                    <div class="input-group mb-3 mt-3">
+                                        <span class="input-group-text" id="eventDate"><i
+                                                class="fa-solid fa-calendar"></i></span>
+                                        <input type="date" class="form-control" placeholder="Ingrese fecha del evento"
+                                            aria-label="Date" name="eventDate" value="{{old('eventDate')}}" min="{{ now()->toDateString() }}">
+                                    </div>
+                                    <div class="input-group mb-3 mt-3">
+                                        <span class="input-group-text" id="eventTime"><i
+                                                class="fa-solid fa-clock"></i></span>
+                                        <input type="time" class="form-control" placeholder="Ingrese hora del evento"
+                                            aria-label="Time" name="eventTime" value="{{old('eventTime')}}">
+                                    </div>
+                                    <div class="input-group mb-3 mt-3">
+                                        <span class="input-group-text" id="eventDescription"><i
+                                                class="fa-solid fa-info"></i></span>
+                                        <input type="text" class="form-control"
+                                            placeholder="Ingrese descripcion o sinopsis del evento" aria-label="Description"
+                                            name="eventDescription" value="{{old('eventDescription')}}">
+                                    </div>
+                                    <div class="input-group mb-3 mt-3">
+                                        <span class="input-group-text" id="eventPrice"><i
+                                                class="fa-solid fa-money-bill"></i></span>
+                                        <input type="Price" class="form-control" placeholder="Ingrese precio del evento"
+                                            aria-label="Price" name="eventPrice" value="{{old('eventPrice')}}">
+                                    </div>
+                                    <div class="input-group mb-3 mt-3">
+                                        <span class="input-group-text" id="eventImage"><i
+                                                class="fa-solid fa-image"></i></span>
+                                        <input type="file" class="form-control" placeholder="Ingrese imagen promocional"
+                                            aria-label="Image" name="eventImage" accept="image/jpeg, image/jpg, image/png">
+                                    </div>							
+								</div>
+								<div class="col-lg-7 col-xs-12 subjects-container">
+									<p class="d-flex justify-content-center mt-2 mb-0">Seleccione la area del evento</p>
+									<div class="row">
+										<p class="d-flex justify-content-center mt-0">Area Formativa</p>
+										{{-- @foreach ($materias as $materia)
+											@if ($materia->nivel==1)
+											<div class="col-lg-4 col-xs-12 ">
+												<div class="form-check mt-3">
+													<input class="form-check-input" type="checkbox" value="{{ $materia->idMateria }}" id="checkSubject{{$materia->idMateria}}" name="materias[]" {{ in_array($materia->idMateria, old('materias', [])) ? 'checked' : '' }}>
+													<label class="form-check-label" for="checkSubject{{$materia->idMateria}}">
+														{{ $materia->nombreMateria }}
+													</label>
+												</div>
+											</div>
+											@endif	
+										@endforeach																		 --}}
+									</div>
+									<br><div class="separator"></div><br>
+									<div class="row">
+										<p class="d-flex justify-content-center mt-0">Area Entretenimiento</p>
+										{{-- @foreach ($materias as $materia)
+										@if ($materia->nivel==2)
+										<div class="col-lg-4 col-xs-12 ">
+											<div class="form-check mt-3">
+												<input class="form-check-input" type="checkbox" value="{{ $materia->idMateria }}" id="checkSubject{{$materia->idMateria}}" name="materias[]" {{ in_array($materia->idMateria, old('materias', [])) ? 'checked' : '' }}>
+												<label class="form-check-label" for="checkSubject{{$materia->idMateria}}">
+													{{ $materia->nombreMateria }}
+												</label>
+											</div>
+										</div>
+										@endif	
+										@endforeach																		 --}}
+									</div>
+								</div>
+							</div>
+							<div class="row mx-2 my-2">
+								<div class="col d-flex justify-content-center">
+									<button type="submit" class="btn btn-block btn-Add">Registrar docente</button>
+								</div>								
+							</div>
+						</form>
                 </div>
-                </form>
-            </div>
+            </div>    
         </div>
 
     </div>
