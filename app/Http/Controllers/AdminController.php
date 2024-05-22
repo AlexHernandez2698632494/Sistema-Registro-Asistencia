@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\persona;
-use App\Models\admin;
+use App\Http\Models\admin;
 use App\Models\Usuarios;
 use Exception;
 
@@ -47,15 +47,14 @@ class AdminController extends Controller
     {
         if(session()->has('administrador')){
              $validator = Validator::make($request->all(), [
-            'nombre' => ['required', 'max:255', 'string'],
-            'apellido' => ['required', 'max:255', 'string'],
-            'dui' => ['required', 'regex:/^[0-9]{8}-[0-9]{1}$/', 'unique:Persona,dui'],
-            'telefono' => ['required', 'regex:/^([2,6,7][0-9]{3})(-)([0-9]{4})$/', 'unique:Persona,telefono'],
-            'correo' => ['required', 'email', 'unique:Persona,correo'],
-            'direccion' => ['required', 'max:255', 'string'],
-            'cargo' => ['required', 'max:255', 'string'],
-            'usuario' => ['required', 'max:255', 'string'],
-            'password' => ['required', 'min:8', 'string'],
+                'nombre' => ['required', 'max:255', 'string'],
+                'apellido' => ['required', 'max:255', 'string'],
+                'carnet' => ['required', 'max:255', 'string'],
+                'telefono' => ['required', 'regex:/^([2,6,7][0-9]{3})(-)([0-9]{4})$/', 'unique:administrador,telefonoAdmin'],
+                'correo' => ['required', 'email', 'unique:administrador,correoAdmin'],
+                'cargo' => ['required', 'max:255', 'string'],
+                'usuario' => ['required', 'max:255', 'string'],
+                'password' => ['required', 'min:8', 'string'], 
         ], [
             'dui.regex' => 'Formato incorrecto de DUI.', // Mensaje de error personalizado
         ]);
@@ -69,38 +68,39 @@ class AdminController extends Controller
             DB::beginTransaction();
             $name = $request->input('nombre');
             $apellido = $request->input('apellido');
-            $dui = $request->input('dui');
+            $sexo = $request->input('sexo');
+            $carnet = $request->input('carnet');
             $telefono = $request->input('telefono');
             $correo = $request->input('correo');
-            $direccion = $request->input('direccion');
             $cargo = $request->input('cargo');
             $user = $request->input('usuario');
             $pass = $request->input(('password'));
 
-            $admin = new persona();
-            $admin->nombre = $name;
-            $admin->apellido = $apellido;
-            $admin->dui = $dui;
-            $admin->telefono = $telefono;
-            $admin->correo = $correo;
-            $admin->direccion = $direccion;
+            $admin = new admin();
+            $admin->nombreAdmin = $name;
+            $admin->apellidosAdmin = $apellido;
+            $admin->sexoAdmin = $sexo;
+            $admin->carnetAdmin = $carnet;
+            $admin->telefonoAdmin = $telefono;
+            $admin->correoAdmin = $correo;
+            $admin->cargoAdmin = $cargo;
             $admin->estadoEliminacion = 1;
 
              
 
             if($admin->save()){
-                $idPersona = $admin->idPersona;
-                $administrateur = new admin();
-                $administrateur->idPersona= $idPersona;
-                $administrateur->cargo = $cargo;
-                $administrateur->estadoEliminacion = 1; 
+                // $idPersona = $admin->idPersona;
+                // $administrateur = new admin();
+                // $administrateur->idPersona= $idPersona;
+                // $administrateur->cargo = $cargo;
+                // $administrateur->estadoEliminacion = 1; 
                 $newUser = new Usuarios();
-                $newUser->idUsuario = $dui;
+                $newUser->idUsuario = $carnet;
                 $newUser->usuario = $user;
                 $newUser->password = Hash('SHA256',$pass);
                 $newUser->nivel = 0;
 
-                if($newUser->save() && $administrateur->save()){
+                if($newUser->save() ){
                     DB::commit();
                     return to_route('admin.create')->with('exitoAgregar',' registrado correctamente');
                 }else{
@@ -127,10 +127,10 @@ class AdminController extends Controller
     public function show(string $id)
     {
         if(session()->has('administrador')){
-            //echo($id);
-        $adminInfo = persona::find($id);
-        // return $adminInfo;
-        return view('admin.adminInfomation', compact('adminInfo'));
+            echo($id);
+            $adminInfo = admin($id);
+            return $adminInfo;
+       // return view('admin.adminInfomation', compact('adminInfo'));
         }else{
             return view('layout.403');            
         } 
@@ -142,9 +142,9 @@ class AdminController extends Controller
     public function edit(string $id)
     {
         if(session()->has('administrador')){
-            $personaEdit = persona::find($id);
+            $adminEdit = admin::find($id);
 
-        return view('admin.edit', compact('personaEdit'));
+        return view('admin.edit', compact('adminEdit'));
         }else{
             return view('layout.403');            
         }  
@@ -156,14 +156,13 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         if(session()->has('administrador')){
-            $personaEdit = persona::find($id);
-        $personaEdit->nombre = $request->post('nombre');
-        $personaEdit->apellido = $request->post('apellido');
-        $personaEdit->dui = $request->post('dui');
-        $personaEdit->telefono = $request->post('telefono');
-        $personaEdit->correo = $request->post('correo');
-        $personaEdit->direccion = $request->post('direccion');
-        $personaEdit->save();
+            $adminEdit = admin::find($id);
+        $adminEdit->nombreAdmin = $request->post('nombre');
+        $adminEdit->apellidoAdmin = $request->post('apellido');
+        $adminEdit->carnetAdmin = $request->post('carnet');
+        $adminEdit->telefonoAdmin = $request->post('telefono');
+        $adminEdit->correoAdmin = $request->post('correo');
+        $adminEdit->save();
 
         return redirect()->route("admin.index")->with("exitoAgregar", "Actualizado con exito");
         }else{

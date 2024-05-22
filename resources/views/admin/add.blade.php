@@ -89,14 +89,15 @@
                                 <div class="col-lg-3 col-xs-12 mt-2">
                                     <label for="dui" class="form-label">Sexo</label>                        
 											<select class="form-select" aria-label="Default select example" id="txtSex" name="sexo">
-												<option value="" disabled selected>Ingrese su sexualidad</option>
+												<option value="" disabled selected>Ingrese su genero</option>
 												<option value="Masculino">Masculino</option>
 												<option value="Femenino">Femenino</option>
 											</select>
                             </div>
                                 <div class="col-lg-3 col-xs-12 mt-2">
                                     <label for="carnet" class="form-label">Carnet</label>                                
-                                    <input type="text" class="form-control txtCarnet" id="txtCarnet" placeholder="Ingrese su carnet" aria-label="carnet" name="carnet" value="{{old('carnet')}}">
+                                    <!-- {{-- <input type="text" id="carnet" name="carnet" placeholder="Ingrese su carnet" class="form-control input Phone" value="{{old('telefono')}}">                                                                                                     --}} -->
+                                    <input type="text" class="form-control txtCarnetAdmin" id="txtCarnetAdmin" placeholder="Ingrese su carnet" aria-label="carnet" name="carnet" value="{{old('carnet')}}">                
                                 </div>                                
                             </div>  
                             <div class="row mt-2 justify-content-center">

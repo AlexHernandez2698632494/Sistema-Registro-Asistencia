@@ -32,8 +32,8 @@
 								<div class="col-12">{{$adminInfo->nombre}} {{$adminInfo->apellido}}</div>
 							</div>
 							<div class="row mt-2">								
-								<div class="col-12"><b>DUI : </b></div>
-								<div class="col-12">{{$adminInfo->dui}}</div>
+								<div class="col-12"><b>Carnet : </b></div>
+								<div class="col-12">{{$adminInfo->carnet}}</div>
 							</div>
 							<div class="row mt-2">								
 								<div class="col-12"><b>Telefono: </b></div>
@@ -43,10 +43,7 @@
 								<div class="col-12"><b>Correo</b></div>
 								<div class="col-12">{{$adminInfo->correo}}</div>
 							</div>
-							<div class="row mt-2">								
-								<div class="col-12"><b>Direccion</b></div>
-								<div class="col-12">{{$adminInfo->direccion}}</div>
-							</div>
+							
 							
 						</div>																					
 					</div>  
