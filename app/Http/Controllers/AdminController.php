@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\persona;
 use App\Models\admin;
+use App\Models\administrador;
 use App\Models\Usuarios;
 use Exception;
 
@@ -143,9 +144,10 @@ class AdminController extends Controller
     public function edit(string $id)
     {
         if(session()->has('administrador')){
-            $adminEdit = DB::table('administrador')->where('idAdmin','=',$id)->get();
-
-        return view('admin.edit', compact('adminEdit'));
+           // $adminEdit = DB::table('administrador')->where('idAdmin','=',$id)->get();
+           $adminEdit = administrador::find($id);
+            //return $adminEdit;
+            return view('admin.edit', compact('adminEdit'));
         }else{
             return view('layout.403');            
         }  
@@ -157,15 +159,16 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         if(session()->has('administrador')){
-            $adminEdit = admin::find($id);
-        $adminEdit->nombreAdmin = $request->post('nombre');
-        $adminEdit->apellidoAdmin = $request->post('apellido');
-        $adminEdit->carnetAdmin = $request->post('carnet');
-        $adminEdit->telefonoAdmin = $request->post('telefono');
-        $adminEdit->correoAdmin = $request->post('correo');
-        $adminEdit->save();
-
-        return redirect()->route("admin.index")->with("exitoAgregar", "Actualizado con exito");
+            $personaEdit = admin::find($id);
+            $personaEdit->nombreAdmin = $request->post('nombre');
+            $personaEdit->apellidosAdmin = $request->post('apellido');
+           // $personaEdit->dui = $request->post('dui');
+            $personaEdit->telefonoAdmin = $request->post('telefono');
+            $personaEdit->correoAdmin = $request->post('correo');
+            //$personaEdit->direccion = $request->post('direccion');
+            $personaEdit->save();
+    
+            return redirect()->route("admin.index")->with("exitoAgregar", "Actualizado con exito");
         }else{
             return view('layout.403');            
         }   
@@ -185,11 +188,9 @@ class AdminController extends Controller
             $affected1 = DB::table('Administrador')
                             ->where('idAdmin','=',$adminId)->update(['estadoEliminacion' => 0]);
             if ($affected == 1){
-                if ($affected1 == 1){
+                
                     return to_route('admin.index')->with('exitoEliminacion','El administrador se ha eliminado correctamente');
-                }else{
-                    return to_route('admin.index')->with('errorEliminacion','Error al eliminar el administrador');            
-                }
+                
             }else{
                 return to_route('admin.index')->with('errorEliminacion','Error al eliminar el administrador');            
             }
@@ -220,11 +221,9 @@ class AdminController extends Controller
                         ->update(['estadoEliminacion' => 1]);
         $affected1 = DB::table('Administrador')->where('idAdmin','=', $restoreEventId)->update(['estadoEliminacion' => 1]);
         if($affected == 1){
-            if($affected1){
+            
                 return to_route('admin.restoreView')->with('exitoRestaurar','El administrador se ha restaurado correctamente');
-            }else{
-                return to_route('admin.restoreView')->with('errorRestaurar','Error al eliminar el administrador');
-            }
+            
         }else{
             return to_route('admin.restoreView')->with('errorRestaurar','Error al eliminar el administrador');
         }
