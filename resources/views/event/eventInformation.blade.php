@@ -22,6 +22,7 @@
                 </div>
             </nav>
             <div class="row">
+                @foreach($eventInfo as $eventInfo)
                 <div class="col-lg-4 col-xs-12">
                     <div class="card">
                         <div class="card-body">
@@ -57,8 +58,20 @@
                 <div class="col-lg-8 col-xs-12">
                     <div class="card InfoTitlesSubjectsCard">
                         <div class="card-body titlesSubject-container">
-                            <p class="d-flex justify-content-center">Poster del evento</p>
+                            <p class="d-flex justify-content-center">{{$eventInfo->nombreArea}}</p>
                             <div class="separator"></div>
+                            <div class="row mt-2">
+                                <div class="col-lg-6 col-xs-12">
+                                    <div class="col">
+                                        <div class="col-12"><b>{{$eventInfo->nombre}}</b></div>
+                                        <div class="col-12"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body cardBody-Teachers">
+                            <p class="d-flex justify-content-center">Imagen Promocional del Evento {{$eventInfo->NombreEvento}}</p>
+                            <div class="separator mb-3"></div>
                             <div class="row mt-2">
                                 <div class="col-lg-6 col-xs-12">
                                     <div class="col">
@@ -66,12 +79,11 @@
                                             alt="Imagen de el evento {{ $eventInfo->NombreEvento }}" width="300px">
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
                 </div>
+                @endforeach
             </div>
         </div>
     </div>

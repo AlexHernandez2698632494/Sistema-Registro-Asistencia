@@ -6,6 +6,7 @@
 <script src="{{ asset('js/sweetalert.js') }}"></script>
 <script src="{{ asset('js/events/removedInit.js') }}"></script>
 <script src="{{ asset('js/events/restoreModal.js') }}"></script>
+<script src="{{ asset('js/events/deleteEvents.js') }}"></script>
 <body style="overflow-x: hidden">    
 
 	@if (session('exitoEliminar'))
@@ -96,7 +97,19 @@
 															onclick="openRestoreModal(this.value)">
 															<i class="fa-solid fa-trash-can-arrow-up"></i>
 														</button>
-													</div>	
+													</div>
+                                                    <div class="col-4 mx-0 px-0">
+                                                        <button 
+                                                            type="button" 
+                                                            class="btn btn-danger icon-button"
+                                                            data-bs-toggle="tooltip" 
+                                                            data-bs-placement="bottom" 
+                                                            data-bs-title="Eliminar" 
+                                                            value="{{$removedEvents->idEvento}}, {{$removedEvents->NombreEvento}}"
+                                                            onclick="openDeleteEventModal(this.value)">
+                                                            <i class="fa-solid fa-trash"></i>
+                                                        </button>
+                                                    </div>	
 												</div>																									
 											</td>
 										</tr> 
@@ -132,6 +145,28 @@
             </div>
         </div>
     </div>
-
+	<!-- Modal para eliminar definitivamente-->
+    <div class="modal fade" id="eliminarEvento" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Verificación de eliminación</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="txtDeleteModal"></p>
+                </div>
+                <div class="modal-footer">
+                    <form method="POST" action="{{ route('events.destroyer')}}">
+                        @csrf
+                        @method('DELETE')
+                        <input type="text" name="idEventoEliminar" id="txtIdEventoEliminar" hidden>                        
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

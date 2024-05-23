@@ -48,6 +48,7 @@ Route::prefix('event')->group(function(){
     route::delete('/delete',[EventController::class,'destroy'])->name('events.delete');
     route::get('/restoreView',[EventController::class,'restoreView'])->name('event.restoreView');
     route::put('/restore',[EventController::class, 'restore'])->name('event.restore');
+    route::delete('/destroyer',[EventController::class,'destroyer'])->name('events.destroyer');
 });
 
 Route::prefix('invitado')->group(function(){

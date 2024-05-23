@@ -19,22 +19,37 @@
         </script>
     @endif
 
+    @if (session('errorRegistro'))
+        <script>
+            swal({
+                title: "Error al registrar",
+                text: "{{ session('errorRegistro') }}",
+                icon: "error",
+                button: "OK",
+                closeOnClickOutside: false,
+                }).then((value) => {
+                if (value) {
+                    location.reload();
+                }
+            })            
+        </script>
+    @endif 
+
     @include('layout.horizontalMenu')
     <div class="wrapper">
         @include('layout.verticalMenu')
         <div id="content" class="mt-0 pt-0">
             <nav class="navbar navbar-expand-lg navbar-light bg-light mt-3">
-                <div class="container-fluid">
-                    <a href="{{ route('events.index') }}" class="btn btn-light" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" data-bs-title="Regresar">
+                <div class="container-fluid">                    
+                    <a href="{{ route('events.index') }}" class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Regresar">
                         <i class="fas fa-arrow-left"></i>
-                    </a>
+                    </a>                    
                     <div class="col text-center">
                         <p style="color: black; margin: 0; font-weight: bold">Registro de nuevo evento</p>
                     </div>
                 </div>
-            </nav>
-            <div class="card teacherAdd-Card">
+            </nav>  
+            <div class="card eventAdd-Card">
                 <div class="card-body">
                     <p class="d-flex justify-content-center">Registro de eventos</p>
                     <div class="separator"></div>
@@ -47,7 +62,7 @@
                             </ul>
                         </div>
                     @endif
-                    <form method="POST" action="{{ route('events.add') }}">
+                    <form method="POST" action="{{route('events.add')}}" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
                         <div class="row">
@@ -66,33 +81,32 @@
                                             class="fa-solid fa-Location-dot"></i></span>
                                     <input type="text" class="form-control"
                                         placeholder="Ingrese ubicacion del evento" aria-label="Location"
-                                        name="eventLocation" value="{{ old('eventLocation') }}">
+                                        name="eventLocation" value="{{old('eventLocation')}}">
                                 </div>
                                 <div class="input-group mb-3 mt-3">
                                     <span class="input-group-text" id="eventDate"><i
                                             class="fa-solid fa-calendar"></i></span>
                                     <input type="date" class="form-control" placeholder="Ingrese fecha del evento"
-                                        aria-label="Date" name="eventDate" value="{{ old('eventDate') }}"
-                                        min="{{ now()->toDateString() }}">
+                                        aria-label="Date" name="eventDate" value="{{old('eventDate')}}" min="{{ now()->toDateString() }}">
                                 </div>
                                 <div class="input-group mb-3 mt-3">
                                     <span class="input-group-text" id="eventTime"><i
                                             class="fa-solid fa-clock"></i></span>
                                     <input type="time" class="form-control" placeholder="Ingrese hora del evento"
-                                        aria-label="Time" name="eventTime" value="{{ old('eventTime') }}">
+                                        aria-label="Time" name="eventTime" value="{{old('eventTime')}}">
                                 </div>
                                 <div class="input-group mb-3 mt-3">
                                     <span class="input-group-text" id="eventDescription"><i
                                             class="fa-solid fa-info"></i></span>
                                     <input type="text" class="form-control"
                                         placeholder="Ingrese descripcion o sinopsis del evento" aria-label="Description"
-                                        name="eventDescription" value="{{ old('eventDescription') }}">
+                                        name="eventDescription" value="{{old('eventDescription')}}">
                                 </div>
                                 <div class="input-group mb-3 mt-3">
                                     <span class="input-group-text" id="eventPrice"><i
                                             class="fa-solid fa-money-bill"></i></span>
                                     <input type="Price" class="form-control" placeholder="Ingrese precio del evento"
-                                        aria-label="Price" name="eventPrice" value="{{ old('eventPrice') }}">
+                                        aria-label="Price" name="eventPrice" value="{{old('eventPrice')}}">
                                 </div>
                                 <div class="input-group mb-3 mt-3">
                                     <span class="input-group-text" id="eventImage"><i
@@ -148,9 +162,9 @@
                         </div>
                         <div class="row mx-2 my-2">
                             <div class="col d-flex justify-content-center">
-                                <button type="submit" class="btn btn-block btn-Add">Registrar docente</button>
-                            </div>
-                        </div>
+                                <button type="submit" class="btn btn-block btn-Add">Registrar evento</button>
+                            </div>								
+                        </div> 
                     </form>
                 </div>
             </div>

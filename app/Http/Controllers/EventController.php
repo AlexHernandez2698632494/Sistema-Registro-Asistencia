@@ -39,7 +39,6 @@ class EventController extends Controller
                     'afe.idareaFormativaEntretenimiento',
                     'afe.nombreArea',
                     'afe.nivel',
-                    'afe.estadoEliminacion',
                     'a.idAreas',
                     'a.nombre',
                     'a.idAreaFormativaEntretenimiento',
@@ -54,7 +53,6 @@ class EventController extends Controller
                 'afe.idareaFormativaEntretenimiento',
                 'afe.nombreArea',
                 'afe.nivel',
-                'afe.estadoEliminacion',
                 'a.idAreas',
                 'a.nombre',
                 'a.idAreaFormativaEntretenimiento'
@@ -70,49 +68,68 @@ class EventController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        if (session()->has('administrador')) {
-            $validator = Validator::make($request->all(), [
-                'eventName' => ['required'],
-                'eventLocation' => ['required'],
-                'eventDate' => ['required', 'date'],
-                'eventTime' => ['required', 'date_format:H:i'],
-                'eventDescription' => ['required'],
-                'eventPrice' => ['required', 'string'],
-                'eventImage' => ['required', 'image'], // Cambiado de 'url' a 'image'
-            ], [
-                'eventPrice.string' => 'Formato incorrecto de Precio.',
-                'eventImage.image' => 'El archivo debe ser una imagen.',
-            ]);
+{
+    if(session()->has('administrador')){
+        $validator = Validator::make($request->all(), [
+            'eventName' => ['required'],
+            'eventLocation' => ['required'],
+            'eventDate' => ['required', 'date'],
+            'eventTime' => ['required', 'date_format:H:i'],
+            'eventDescription' => ['required'],
+            'eventPrice' => ['required', 'string'],
+            'eventImage' => ['required', 'image'], // Cambiado de 'url' a 'image'
+            'areas' => ['required', 'array', 'size:1'],
+        ], [
+            'eventPrice.string' => 'Formato incorrecto de Precio.',
+            'eventImage.image' => 'El archivo debe ser una imagen.',
+            'areas.required' => 'Debe seleccionar una área.',
+            'areas.size' => 'Solo puede seleccionar una área.'
+        ]);
 
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
+        DB::beginTransaction();
+         try{
             $event = new eventos(); // Asumiendo que tu modelo se llama Evento
 
-            if ($request->hasFile('eventImage')) {
-                $file = $request->file('eventImage');
-                $destinationPath = public_path('imagen'); // Ruta absoluta para guardar en public/imagenes
-                $fileName = time() . '.' . $file->getClientOriginalExtension(); // NombreEvento único para el archivo
-                $file->move($destinationPath, $fileName);
-                $event->imagen = 'imagen/' . $fileName; // Ruta relativa para guardar en la base de datos
-            }
+         if ($request->hasFile('eventImage')) {
+             $file = $request->file('eventImage');
+             $destinationPath = public_path('imagen'); // Ruta absoluta para guardar en public/imagenes
+             $fileName = time() . '.' . $file->getClientOriginalExtension(); // NombreEvento único para el archivo
+             $file->move($destinationPath, $fileName);
+             $event->imagen = 'imagen/' . $fileName; // Ruta relativa para guardar en la base de datos
+         }
 
-            $event->NombreEvento = $request->input('eventName');
-            $event->lugar = $request->input('eventLocation');
-            $event->fecha = $request->input('eventDate');
-            $event->hora = $request->input('eventTime');
-            $event->descripcion = $request->input('eventDescription');
-            $event->precio = $request->input('eventPrice');
-            $event->estadoEliminacion = 1;
-            $event->save();
+         $event->NombreEvento = $request->input('eventName');
+         $event->lugar = $request->input('eventLocation');
+         $event->fecha = $request->input('eventDate');
+         $event->hora = $request->input('eventTime');
+         $event->descripcion = $request->input('eventDescription');
+         $event->precio = $request->input('eventPrice');
+         $event->estadoEliminacion = 1;
+         $event->save();
 
-            return redirect()->route('events.create')->with('exitoRegistro', 'Evento registrado exitosamente');
-        } else {
-            return view('layout.403');
-        }
-    }
+         // Guardar la relación entre el evento y las áreas seleccionadas
+         $areas = $request->input('areas');
+         foreach ($areas as $areaId) {
+             DB::table('areaFormativaEntretenimientoEvento')->insert([
+                 'idEvento' => $event->idEvento,
+                 'idAreas' => $areaId
+             ]);
+         }
+
+         DB::commit(); // Confirmar transacción
+
+        return redirect()->route('events.create')->with('exitoRegistro', 'Evento registrado exitosamente');     
+         }catch(Exception $e){
+            return redirect()->route('events.create')->with('errorRegistro', 'Error al registrar evento ');     
+         }
+    }else{
+        return view('layout.403');            
+    } 
+}
 
 
     /**
@@ -123,6 +140,13 @@ class EventController extends Controller
         if (session()->has('administrador')) {
             //echo($id);
             $eventInfo = eventos::find($id);
+            $eventInfo = DB::table('Eventos')
+                            ->join('areaFormativaEntretenimientoEvento','areaFormativaEntretenimientoEvento.idEvento', '=', 'Eventos.idEvento')
+                            ->join('Areas','Areas.idAreas', '=', 'areaFormativaEntretenimientoEvento.idAreas')
+                            ->join('areaFormativaEntretenimiento', 'areaFormativaEntretenimiento.idAreaFormativaEntretenimiento', '=', 'Areas.idAreaFormativaEntretenimiento')
+                            ->select('Eventos.*','areaFormativaEntretenimiento.nombreArea','Areas.nombre')
+                            ->where('Eventos.idEvento','=',$id)
+                            ->get();
             //return $eventInfo;
             return view('event.eventInformation', compact('eventInfo'));
         } else {
@@ -210,11 +234,14 @@ class EventController extends Controller
 
                 $eventId = $request->input('idEventoEliminar');
 
-                $rowAffected = DB::table('Eventos')
-                    ->where('idEvento', $eventId)
-                    ->update(['estadoEliminacion' => 0]);
-
-                if ($rowAffected == 1) {
+                 $rowAffected = DB::table('Eventos')
+                     ->where('idEvento', $eventId)
+                     ->update(['estadoEliminacion' => 0]);
+                     $rowAffected1 = DB::table('areaformativaentretenimientoevento')
+                     ->where('idEvento', $eventId)
+                     ->update(['estadoEliminacion' => 0]);
+                if ($rowAffected == 1 && $rowAffected1) {
+                    DB::commit();
                     return to_route('events.index')->with('exitoEliminacion', 'El evento ha sido eliminado correctamente');
                 } else {
                     return to_route('events.index')->with('errorEliminacion', 'Ha ocurrido un error al eliminar el evento');
@@ -249,8 +276,11 @@ class EventController extends Controller
             if ($restoreEventId != null) {
                 try {
                     $affected = DB::table('Eventos')->where('idEvento', $restoreEventId)->update(['estadoEliminacion' => 1]);
-
-                    if ($affected == 1) {
+                    $rowAffected1 = DB::table('areaformativaentretenimientoevento')
+                    ->where('idEvento', $restoreEventId)
+                    ->update(['estadoEliminacion' => 1]);
+                    if ($affected == 1 && $rowAffected1 == 1) {
+                        DB::commit();
                         return to_route('event.restoreView')->with('exitoRestaurar', 'El evento se ha restaurado correctamente');
                     } else {
                         return to_route('event.restoreView')->with('errorRestaurar', 'Ha ocurrido un error al restaurar el evento');
@@ -261,6 +291,36 @@ class EventController extends Controller
             } else {
                 return to_route('event.restoreView')->with('errorRestaurar', 'Debe de seleccionar un evento para restaurar');
             }
+        } else {
+            return view('layout.403');
+        }
+    }
+    public function destroyer(Request $request)
+    {
+        if (session()->has('administrador')) {
+            //
+            try {
+                $request->validate([
+                    'idEventoEliminar' => 'required'
+                ]);
+
+                $eventId = $request->input('idEventoEliminar');
+
+                DB::transaction(function () use ($eventId) {
+                    // Eliminar registros en la tabla areaFormativaEntretenimientoEvento
+                    DB::table('areaFormativaEntretenimientoEvento')
+                        ->where('idEvento', $eventId)
+                        ->delete();
+    
+                    // Eliminar el registro en la tabla Eventos
+                    DB::table('Eventos')
+                        ->where('idEvento', $eventId)
+                        ->delete();
+                });
+                return to_route('events.index')->with('exitoEliminacion', 'El evento ha sido eliminado correctamente');
+            } catch (Exception $e) {
+                return to_route('events.index')->with('errorEliminacion', 'Ha ocurrido un error al eliminar el evento');
+            };
         } else {
             return view('layout.403');
         }

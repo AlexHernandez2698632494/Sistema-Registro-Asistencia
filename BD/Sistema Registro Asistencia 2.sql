@@ -65,9 +65,11 @@ CREATE TABLE `Usuario`(
 CREATE TABLE areaFormativaEntretenimiento(
     idAreaFormativaEntretenimiento INT PRIMARY KEY AUTO_INCREMENT,
     nombreArea text not null,
-    nivel int not null,
-    estadoEliminacion INT NOT NULL DEFAULT 1
+    nivel int not null
 );
+
+insert into areaFormativaEntretenimiento values ('1','Area Formativa','1');
+insert into areaFormativaEntretenimiento values ('2','Area Entretenimiento','2');
 
 CREATE TABLE Areas(
     idAreas INT PRIMARY KEY AUTO_INCREMENT,
@@ -93,6 +95,7 @@ CREATE TABLE areaFormativaEntretenimientoEvento(
 `idDetalle` int PRIMARY KEY AUTO_INCREMENT,
   `idEvento` int NOT NULL,
   `idAreas` int NOT NULL,
+	estadoEliminacion INT NOT NULL DEFAULT 1,
   FOREIGN KEY(`idEvento`) REFERENCES `Eventos`(`idEvento`),
   FOREIGN KEY(`idAreas`) REFERENCES `Areas`(`idAreas`)
 );
@@ -107,5 +110,6 @@ CREATE TABLE adquirirEntrada(
     estado BOOLEAN DEFAULT FALSE,
     estadoEliminacion INT NOT NULL DEFAULT 1
 );
+
 
 
