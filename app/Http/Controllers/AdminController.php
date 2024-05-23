@@ -144,10 +144,15 @@ class AdminController extends Controller
     public function edit(string $id)
     {
         if(session()->has('administrador')){
-           // $adminEdit = DB::table('administrador')->where('idAdmin','=',$id)->get();
-           $adminEdit = administrador::find($id);
+        $adminEdit = DB::table('administrador')->where('idAdmin','=',$id)->get();
+           $adminEdit = admin::find($id);
             //return $adminEdit;
-            return view('admin.edit', compact('adminEdit'));
+            $usuarios = DB::table('administrador')->where('idAdmin','=',$id)
+                            ->join('Usuario', 'Usuario.idUsuario','=', 'administrador.carnetAdmin')
+                            ->select('Usuario')
+                            ->get();
+           //return $usuarios;
+            return view('admin.edit', compact('adminEdit','usuarios'));
         }else{
             return view('layout.403');            
         }  
@@ -159,14 +164,13 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         if(session()->has('administrador')){
-            $personaEdit = admin::find($id);
-            $personaEdit->nombreAdmin = $request->post('nombre');
-            $personaEdit->apellidosAdmin = $request->post('apellido');
-           // $personaEdit->dui = $request->post('dui');
-            $personaEdit->telefonoAdmin = $request->post('telefono');
-            $personaEdit->correoAdmin = $request->post('correo');
-            //$personaEdit->direccion = $request->post('direccion');
-            $personaEdit->save();
+            $adminEdit = admin::find($id);
+            $adminEdit->nombreAdmin = $request->post('nombreAdmin');
+            $adminEdit->apellidoAdmin = $request->post('apellido');
+            $adminEdit->carnetAdmin = $request->post('carnet');
+            $adminEdit->telefonoAdmin = $request->post('telefono');
+            $adminEdit->correoAdmin = $request->post('correo');
+            $adminEdit->save();
     
             return redirect()->route("admin.index")->with("exitoAgregar", "Actualizado con exito");
         }else{

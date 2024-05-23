@@ -83,60 +83,38 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-3 col-xs-12 mt-2">                                    
                                     <label for="nombre" class="form-label">Nombre</label>                                
-                                    <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre" class="form-control input"  value="{{old('nombre')}}" required>                                    
+                                    <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre" class="form-control input"  value="{{$adminEdit->nombreAdmin}}" required>                                    
                                 </div>
                                 <div class="col-lg-3 col-xs-12 mt-2">
                                     <label for="apellido" class="form-label">Apellido</label>                                
-                                    <input type="text" id="Apellido" name="apellido" placeholder="Ingrese apellido" class="form-control input" value="{{old('apellido')}}" required>
+                                    <input type="text" id="Apellido" name="apellido" placeholder="Ingrese apellido" class="form-control input" value="{{$adminEdit->apellidosAdmin}}" required>
                                 </div>
                             </div>          
-                            <div class="row mt-2 justify-content-center">
-                                <div class="col-lg-3 col-xs-12 mt-2">
-                                    <label for="dui" class="form-label">Sexo</label>                        
-											<select class="form-select" aria-label="Default select example" id="txtSex" name="sexo">
-												<option value="" disabled selected>Ingrese su genero</option>
-												<option value="Masculino">Masculino</option>
-												<option value="Femenino">Femenino</option>
-											</select>
-                            </div>
-                                <div class="col-lg-3 col-xs-12 mt-2">
-                                    <label for="carnet" class="form-label">Carnet</label>                                
-                                    <!-- {{-- <input type="text" id="carnet" name="carnet" placeholder="Ingrese su carnet" class="form-control input Phone" value="{{old('telefono')}}">                                                                                                     --}} -->
-                                    <input type="text" class="form-control txtCarnetAdmin" id="txtCarnetAdmin" placeholder="Ingrese su carnet" aria-label="carnet" name="carnet" value="{{old('carnet')}}">                
-                                </div>                                
-                            </div>  
+                             
                             <div class="row mt-2 justify-content-center">
                                 <div class="col-lg-6 col-xs-12 mt-2">                                    
                                     <label for="correo" class="form-label">Correo electrónico</label>                                
-                                    <input type="email" id="correo"  placeholder="Ingrese correo" name="correo" class="form-control  input" value="{{old('correo')}}" required>                                    
+                                    <input type="email" id="correo"  placeholder="Ingrese correo" name="correo" class="form-control  input" value="{{$adminEdit->correoAdmin}}" required>                                    
                                 </div>
                             </div>
                             <div class="row justify-content-center">
                                 <div class="col-lg-3 col-xs-12 mt-2">                                    
-                                <label for="telefono" class="form-label">Número de teléfono/celular</label>                                
-                                    {{-- <input type="text" id="telefono" name="telefono" placeholder="Ingrese número" class="form-control input Phone" value="{{old('telefono')}}">                                                                                                     --}}
-                                    <input type="text" class="form-control txtPhone" id="txtPhone" placeholder="Ingrese número de teléfono" aria-label="phone" name="telefono" value="{{old('telefono')}}">                
+                                <label for="telefono" class="form-label">Número de teléfono/celular</label>                                                                                                                               
+                                    <input type="text" class="form-control txtPhone" id="txtPhone" placeholder="Ingrese número de teléfono" aria-label="phone" name="telefono" value="{{$adminEdit->telefonoAdmin}}">                
                                 </div>
                                 <div class="col-lg-3 col-xs-12 mt-2">
                                     <label for="cargo" class="form-label">Cargo</label>                                
-                                    <input type="text" id="cargo" name="cargo" placeholder="Ingresar Cargo" class="form-control input" value="{{old('cargo')}}" >
+                                    <input type="text" id="cargo" name="cargo" placeholder="Ingresar Cargo" class="form-control input" value="{{$adminEdit->cargoAdmin}}" >
                                 </div>
                             </div>   
                             <div class="row justify-content-center">
                                 <div class="col-lg-3 col-xs-12 mt-2">                                    
-                                    <label for="usuario" class="form-label">Usuario</label>                                
-                                    <input type="text" id="usuario" name="usuario" placeholder="Ingrese Usuario" class="form-control input"  value="{{old('usuario')}}" >                                    
+                                    <label for="usuario" class="form-label">Usuario</label>   
+                                    @foreach($usuarios as $usuario)                             
+                                    <input type="text" id="usuario" name="usuario" placeholder="Ingrese Usuario" class="form-control input"  value="{{$usuario->usuario}}" >   
+                                    @endforeach                                 
                                 </div>
-                                <div class="col-lg-3 col-xs-12 mt-2">
-                                    <label for="password" class="form-label">Contraseña</label>                                
-                                    <input type="password" id="password" name="password" placeholder="Ingresar Contraseña" class="form-control input" value="{{old('password')}}" >
-                                </div>
-                                
                             </div>  
-                            
-                                <div class="col-lg-3 col-xs-12 mt-2">
-                                  
-                                </div>
                             </div>                                                                                                                                                          
                             <div class="row mx-2 my-2">
                                 <div class="col d-flex justify-content-center">

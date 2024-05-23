@@ -9,6 +9,6 @@ class admin extends Model
 {
     use HasFactory;
     protected $table = 'administrador';
-    protected $primarykey = 'idAdmin';
+    protected $primaryKey = 'idAdmin';
     public $timestamps = false;
 }
