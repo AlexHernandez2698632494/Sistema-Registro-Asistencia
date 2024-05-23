@@ -128,8 +128,8 @@ class AdminController extends Controller
     {
         if(session()->has('administrador')){
             //echo($id);
-            $adminInfo = admin::find($id);
-            //$adminInfo = DB::table('administrador')->where('idAdmin','=',$id)->get();
+            //$adminInfo = admin::find($id);
+            $adminInfo = DB::table('administrador')->where('idAdmin','=',$id)->get();
             //return $adminInfo;
         return view('admin.adminInfomation', compact('adminInfo'));
         }else{
@@ -179,11 +179,11 @@ class AdminController extends Controller
         if(session()->has('administrador')){
             $adminId = $request->input('idAdminEliminar');
             $affected = DB::table('administrador')
-                            ->where('idPersona', '=', $adminId)
+                            ->where('idAdmin', '=', $adminId)
                             ->update(['estadoEliminacion' => 0]);
             
             $affected1 = DB::table('Administrador')
-                            ->where('idAdministrador','=',$adminId)->update(['estadoEliminacion' => 0]);
+                            ->where('idAdmin','=',$adminId)->update(['estadoEliminacion' => 0]);
             if ($affected == 1){
                 if ($affected1 == 1){
                     return to_route('admin.index')->with('exitoEliminacion','El administrador se ha eliminado correctamente');
@@ -215,10 +215,10 @@ class AdminController extends Controller
             $restoreEventId = $request->input('idAdminRestaurar');
         //DB::beginTransaction();
         //try{
-            $affected = DB::table('Persona')
-                        ->where('idPersona','=', $restoreEventId)
+            $affected = DB::table('administrador')
+                        ->where('idAdmin','=', $restoreEventId)
                         ->update(['estadoEliminacion' => 1]);
-        $affected1 = DB::table('Administrador')->where('idPersona','=', $restoreEventId)->update(['estadoEliminacion' => 1]);
+        $affected1 = DB::table('Administrador')->where('idAdmin','=', $restoreEventId)->update(['estadoEliminacion' => 1]);
         if($affected == 1){
             if($affected1){
                 return to_route('admin.restoreView')->with('exitoRestaurar','El administrador se ha restaurado correctamente');
