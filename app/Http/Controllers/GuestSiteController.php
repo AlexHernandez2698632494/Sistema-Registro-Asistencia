@@ -19,10 +19,16 @@ class GuestSiteController extends Controller
     
      public function site () {
         if(session()->has('invitado')){
-            $guestInfo = DB::table('Eventos')
-                            ->select('NombreEvento','fecha','hora','precio','idEvento')
-                            ->get();
-            //return $guestInfo;
+            // $guestInfo = DB::table('Eventos')
+            //                 ->select('NombreEvento','fecha','hora','precio','idEvento')
+            //                 ->get();
+            $guestInfo = DB::table('areaFormativaEntretenimientoEvento as afee')
+                                ->join('eventos as e','e.idEvento','=', 'afee.idEvento')
+                                ->join('areas as a','a.idAreas','=','afee.idAreas') 
+                                ->join('areaFormativaEntretenimiento as afe','afe.idAreaFormativaEntretenimiento','=','a.idAreaFormativaEntretenimiento')
+                                ->select('e.NombreEvento','e.fecha','e.hora','e.precio','e.idEvento','a.nombre','afe.nombreArea')
+                                ->get();
+           // return $guestInfo;
             return view('guestSite.site',compact('guestInfo'));
          }else{
              return view('layout.403');            
