@@ -71,7 +71,7 @@
                     @endif    
                   
                       
-                        <form action="{{ route('admin.update',$personaEdit)}}" method="POST" >
+                        <form action="{{ route('admin.update',$adminEdit)}}" method="POST" >
                             @csrf        
                             @method("PUT")                  
                             <div class="row">
@@ -83,34 +83,57 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-3 col-xs-12 mt-2">                                    
                                     <label for="nombre" class="form-label">Nombre</label>                                
-                                    <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre" class="form-control input"  value="{{$personaEdit->nombre}}" required>                                    
+                                    <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre" class="form-control input"  value="{{old('nombre')}}" required>                                    
                                 </div>
                                 <div class="col-lg-3 col-xs-12 mt-2">
                                     <label for="apellido" class="form-label">Apellido</label>                                
-                                    <input type="text" id="Apellido" name="apellido" placeholder="Ingrese apellido" class="form-control input" value="{{$personaEdit->apellido}}" required>
+                                    <input type="text" id="Apellido" name="apellido" placeholder="Ingrese apellido" class="form-control input" value="{{old('apellido')}}" required>
                                 </div>
                             </div>          
                             <div class="row mt-2 justify-content-center">
                                 <div class="col-lg-3 col-xs-12 mt-2">
-                                    <label for="dui" class="form-label">DUI</label>                                
-                                    <input type="text" id="dui"  name="dui" placeholder="Ingrese dui" class="form-control input" value="{{$personaEdit->dui}}" required>                                
-                                </div>
+                                    <label for="dui" class="form-label">Sexo</label>                        
+											<select class="form-select" aria-label="Default select example" id="txtSex" name="sexo">
+												<option value="" disabled selected>Ingrese su genero</option>
+												<option value="Masculino">Masculino</option>
+												<option value="Femenino">Femenino</option>
+											</select>
+                            </div>
                                 <div class="col-lg-3 col-xs-12 mt-2">
-                                    <label for="telefono" class="form-label">Número de teléfono/celular</label>                                
-                                    <input type="text" id="telefono" name="telefono" placeholder="Ingrese número" class="form-control input Phone" value="{{$personaEdit->telefono}}">                                                                                                    
+                                    <label for="carnet" class="form-label">Carnet</label>                                
+                                    <!-- {{-- <input type="text" id="carnet" name="carnet" placeholder="Ingrese su carnet" class="form-control input Phone" value="{{old('telefono')}}">                                                                                                     --}} -->
+                                    <input type="text" class="form-control txtCarnetAdmin" id="txtCarnetAdmin" placeholder="Ingrese su carnet" aria-label="carnet" name="carnet" value="{{old('carnet')}}">                
                                 </div>                                
                             </div>  
                             <div class="row mt-2 justify-content-center">
                                 <div class="col-lg-6 col-xs-12 mt-2">                                    
                                     <label for="correo" class="form-label">Correo electrónico</label>                                
-                                    <input type="email" id="correo"  placeholder="Ingrese correo" name="correo" class="form-control  input" value="{{$personaEdit->correo}}" required>                                    
+                                    <input type="email" id="correo"  placeholder="Ingrese correo" name="correo" class="form-control  input" value="{{old('correo')}}" required>                                    
                                 </div>
                             </div>
                             <div class="row justify-content-center">
                                 <div class="col-lg-3 col-xs-12 mt-2">                                    
-                                    <label for="direccion" class="form-label">Direccion</label>                                
-                                    <input type="text" id="direccion" name="direccion" placeholder="Ingrese direccion" class="form-control input"  value="{{$personaEdit->direccion}}" >                                    
+                                <label for="telefono" class="form-label">Número de teléfono/celular</label>                                
+                                    {{-- <input type="text" id="telefono" name="telefono" placeholder="Ingrese número" class="form-control input Phone" value="{{old('telefono')}}">                                                                                                     --}}
+                                    <input type="text" class="form-control txtPhone" id="txtPhone" placeholder="Ingrese número de teléfono" aria-label="phone" name="telefono" value="{{old('telefono')}}">                
                                 </div>
+                                <div class="col-lg-3 col-xs-12 mt-2">
+                                    <label for="cargo" class="form-label">Cargo</label>                                
+                                    <input type="text" id="cargo" name="cargo" placeholder="Ingresar Cargo" class="form-control input" value="{{old('cargo')}}" >
+                                </div>
+                            </div>   
+                            <div class="row justify-content-center">
+                                <div class="col-lg-3 col-xs-12 mt-2">                                    
+                                    <label for="usuario" class="form-label">Usuario</label>                                
+                                    <input type="text" id="usuario" name="usuario" placeholder="Ingrese Usuario" class="form-control input"  value="{{old('usuario')}}" >                                    
+                                </div>
+                                <div class="col-lg-3 col-xs-12 mt-2">
+                                    <label for="password" class="form-label">Contraseña</label>                                
+                                    <input type="password" id="password" name="password" placeholder="Ingresar Contraseña" class="form-control input" value="{{old('password')}}" >
+                                </div>
+                                
+                            </div>  
+                            
                                 <div class="col-lg-3 col-xs-12 mt-2">
                                   
                                 </div>

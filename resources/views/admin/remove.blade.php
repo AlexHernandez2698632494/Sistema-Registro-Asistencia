@@ -69,11 +69,11 @@
 								<tbody>	
 									@foreach ($removedAdmins as $removedadmin)
 										<tr>
-											<td>{{ $removedadmin->nombre }}</td>
-											<td>{{ $removedadmin->apellido }}</td>
-                                            <td>{{ $removedadmin->dui }}</td>	
-                                            <td>{{ $removedadmin->telefono}}</td>
-                                            <td>{{ $removedadmin->correo}}</td>	
+											<td>{{ $removedadmin->nombreAdmin }}</td>
+											<td>{{ $removedadmin->apellidosAdmin }}</td>
+                                            <td>{{ $removedadmin->carnetAdmin }}</td>	
+                                            <td>{{ $removedadmin->telefonoAdmin}}</td>
+                                            <td>{{ $removedadmin->correoAdmin}}</td>	
 											<td>
 												<div class="row d-flex justify-content-center">													
 													<div class="col-4 mx-0 px-0">
@@ -83,7 +83,7 @@
 															data-bs-toggle="tooltip" 
 															data-bs-placement="bottom" 
 															data-bs-title="Restaurar" 
-                                                            value="{{$removedadmin->idPersona }}, {{$removedadmin->nombre.' '.$removedadmin->apellido}}"
+                                                            value="{{$removedadmin->idAdmin }}, {{$removedadmin->nombreAdmin.' '.$removedadmin->apellidosAdmin}}"
 															onclick="openRestoreModal(this.value)">
 															<i class="fa-solid fa-trash-can-arrow-up"></i>
 														</button>

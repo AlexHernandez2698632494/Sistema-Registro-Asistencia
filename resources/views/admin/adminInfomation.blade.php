@@ -24,26 +24,36 @@
 			<div class="row">
 				<div class="col-lg-4 col-xs-12">
 					<div class="card">
+						@foreach($adminInfo as $adminInfo)
 						<div class="card-body">
 							<p class="d-flex justify-content-center">Información general del administrador</p>
 							<div class="separator"></div>	
 							<div class="row mt-2">								
 								<div class="col-12"><b>Nombre del administrador</b></div>
-								<div class="col-12">{{$adminInfo->nombre}} {{$adminInfo->apellido}}</div>
+								<div class="col-12">{{$adminInfo->nombreAdmin}} {{$adminInfo->apellidosAdmin}}</div>
+							</div>
+							<div class="row mt-2">								
+								<div class="col-12"><b>Sexo</b></div>
+								<div class="col-12">{{$adminInfo->sexoAdmin}}</div>
 							</div>
 							<div class="row mt-2">								
 								<div class="col-12"><b>Carnet : </b></div>
-								<div class="col-12">{{$adminInfo->carnet}}</div>
+								<div class="col-12">{{$adminInfo->carnetAdmin}}</div>
 							</div>
 							<div class="row mt-2">								
+								<div class="col-12"><b>Cargo : </b></div>
+								<div class="col-12">{{$adminInfo->cargoAdmin}}</div>
+							</div>
+							
+							<div class="row mt-2">								
 								<div class="col-12"><b>Telefono: </b></div>
-								<div class="col-12">{{$adminInfo->telefono}}</div>
+								<div class="col-12">{{$adminInfo->telefonoAdmin}}</div>
 							</div>
 							<div class="row mt-2">								
 								<div class="col-12"><b>Correo</b></div>
-								<div class="col-12">{{$adminInfo->correo}}</div>
+								<div class="col-12">{{$adminInfo->correoAdmin}}</div>
 							</div>
-							
+							@endforeach
 							
 						</div>																					
 					</div>  

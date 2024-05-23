@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\persona;
-use App\Http\Models\admin;
+use App\Models\admin;
 use App\Models\Usuarios;
 use Exception;
 
@@ -127,10 +127,11 @@ class AdminController extends Controller
     public function show(string $id)
     {
         if(session()->has('administrador')){
-            echo($id);
-            $adminInfo = admin($id);
-            return $adminInfo;
-       // return view('admin.adminInfomation', compact('adminInfo'));
+            //echo($id);
+            $adminInfo = admin::find($id);
+            //$adminInfo = DB::table('administrador')->where('idAdmin','=',$id)->get();
+            //return $adminInfo;
+        return view('admin.adminInfomation', compact('adminInfo'));
         }else{
             return view('layout.403');            
         } 
@@ -142,7 +143,7 @@ class AdminController extends Controller
     public function edit(string $id)
     {
         if(session()->has('administrador')){
-            $adminEdit = admin::find($id);
+            $adminEdit = DB::table('administrador')->where('idAdmin','=',$id)->get();
 
         return view('admin.edit', compact('adminEdit'));
         }else{
@@ -177,7 +178,7 @@ class AdminController extends Controller
     {
         if(session()->has('administrador')){
             $adminId = $request->input('idAdminEliminar');
-            $affected = DB::table('Persona')
+            $affected = DB::table('administrador')
                             ->where('idPersona', '=', $adminId)
                             ->update(['estadoEliminacion' => 0]);
             
@@ -200,7 +201,8 @@ class AdminController extends Controller
     public function restoreView()
     {
         if(session()->has('administrador')){
-            $removedAdmins = persona::where('estadoEliminacion', '=', 0)->get();
+            //$removedAdmins = admin::where('estadoEliminacion', '=', 0)->get();
+            $removedAdmins=DB::table('administrador')->where('estadoEliminacion','=',0)->get();
         return view(('admin.remove'), compact('removedAdmins'));
         }else{
             return view('layout.403');            
