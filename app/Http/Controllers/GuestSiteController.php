@@ -26,7 +26,7 @@ class GuestSiteController extends Controller
                                 ->join('eventos as e','e.idEvento','=', 'afee.idEvento')
                                 ->join('areas as a','a.idAreas','=','afee.idAreas') 
                                 ->join('areaFormativaEntretenimiento as afe','afe.idAreaFormativaEntretenimiento','=','a.idAreaFormativaEntretenimiento')
-                                ->select('e.NombreEvento','e.fecha','e.hora','e.precio','e.idEvento','a.nombre','afe.nombreArea')
+                                ->select('e.NombreEvento','e.fecha','e.hora','e.precio','e.idEvento','e.descripcion','a.nombre','afe.nombreArea')
                                 ->get();
            // return $guestInfo;
             return view('guestSite.site',compact('guestInfo'));
