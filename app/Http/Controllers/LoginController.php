@@ -36,8 +36,8 @@ class LoginController extends Controller
 
                     if($accessLevel == 1){  //Invitado
                         $guestDui = $user[0]->idUsuario;
-                        $guestStatus = DB::table('invitado')->get();
-                        if($guestStatus[0]->estadoEliminacion == 1){
+                        $guestStatus = DB::table('invitado')->where('duiInvitado','=',$guestDui)->get();
+                        if($guestStatus && $guestStatus[0]->estadoEliminacion == 1){
                             $request->session()->put('user',$user);
                             session()->put('invitado',$guestStatus);
                             return to_route('guestSite.site');

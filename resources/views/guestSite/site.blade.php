@@ -37,7 +37,7 @@
                       @foreach($guestInfo as $info)
                       @if($info->nombreArea == 'Area Formativa')
                       <div class="col-lg-4 col-xl-6 col-md-6 col-xs-12 my-2">
-                                <div class="card" style="height: 350px; max-height: 350px; width:525px; overflow-y: auto">
+                                <div class="card" style="height: 350px; max-height: 350px; width:475px; overflow-y: auto">
                                     <div class="card-header" style="background-color: #2F98FE">                          
                                     </div>
                                     <div class="card-body">
@@ -64,7 +64,7 @@
                       @foreach($guestInfo as $info)
                       @if($info->nombreArea == 'Area Entretenimiento')
                       <div class="col-lg-4 col-xl-6 col-md-6 col-xs-12 my-2">
-                                <div class="card" style="height: 350px; max-height: 350px; width:525px; overflow-y: auto">
+                                <div class="card" style="height: 350px; max-height: 350px; width:475px; overflow-y: auto">
                                     <div class="card-header" style="background-color: #2F98FE">                          
                                     </div>
                                     <div class="card-body">
