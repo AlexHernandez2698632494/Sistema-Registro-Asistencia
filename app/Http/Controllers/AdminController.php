@@ -147,10 +147,11 @@ class AdminController extends Controller
         $adminEdit = DB::table('administrador')->where('idAdmin','=',$id)->get();
            $adminEdit = admin::find($id);
             //return $adminEdit;
-            $usuarios = DB::table('administrador')->where('idAdmin','=',$id)
-                            ->join('Usuario', 'Usuario.idUsuario','=', 'administrador.carnetAdmin')
-                            ->select('Usuario')
-                            ->get();
+            $usuarios = DB::table('administrador')
+            ->where('idAdmin', '=', $id)
+            ->join('Usuario', 'Usuario.idUsuario', '=', 'administrador.carnetAdmin')
+            ->select('Usuario.*')  // Select the fields you need
+            ->first();
            //return $usuarios;
             return view('admin.edit', compact('adminEdit','usuarios'));
         }else{
@@ -165,12 +166,19 @@ class AdminController extends Controller
     {
         if(session()->has('administrador')){
             $adminEdit = admin::find($id);
-            $adminEdit->nombreAdmin = $request->post('nombreAdmin');
-            $adminEdit->apellidoAdmin = $request->post('apellido');
-            $adminEdit->carnetAdmin = $request->post('carnet');
-            $adminEdit->telefonoAdmin = $request->post('telefono');
-            $adminEdit->correoAdmin = $request->post('correo');
-            $adminEdit->save();
+            $usuarios = DB::table('usuario')->where('idUsuario','=',$id)->get();
+        
+
+           // echo($id);
+             $adminEdit->nombreAdmin = $request->post('nombre');
+             $adminEdit->apellidosAdmin = $request->post('apellido');
+             $adminEdit->cargoAdmin = $request->post('cargo');
+             $adminEdit->telefonoAdmin = $request->post('telefono');
+             $adminEdit->correoAdmin = $request->post('correo');
+             $adminEdit->save();
+            
+
+        
     
             return redirect()->route("admin.index")->with("exitoAgregar", "Actualizado con exito");
         }else{

@@ -9,6 +9,6 @@ class Usuarios extends Model
 {
     use HasFactory;
     protected $table = 'Usuario';
-    protected $primarykey = 'idUsuario';
+    protected $primaryKey = 'idUsuario';
     public $timestamps = false;
 }

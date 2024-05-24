@@ -71,7 +71,7 @@
                     @endif    
                   
                       
-                        <form action="{{ route('admin.update',$adminEdit)}}" method="POST" >
+                        <form action="{{ route('admin.update',$adminEdit,$usuarios)}}" method="POST" >
                             @csrf        
                             @method("PUT")                  
                             <div class="row">
@@ -110,9 +110,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-3 col-xs-12 mt-2">                                    
                                     <label for="usuario" class="form-label">Usuario</label>   
-                                    @foreach($usuarios as $usuario)                             
-                                    <input type="text" id="usuario" name="usuario" placeholder="Ingrese Usuario" class="form-control input"  value="{{$usuario->usuario}}" >   
-                                    @endforeach                                 
+                                    <input type="text" id="usuario" name="usuario" placeholder="Ingrese Usuario" class="form-control input"  value="{{$usuarios->usuario}}" >   
                                 </div>
                             </div>  
                             </div>                                                                                                                                                          
