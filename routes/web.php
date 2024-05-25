@@ -56,6 +56,7 @@ Route::prefix('invitado')->group(function(){
     route::post('/add',[GuestSiteController::class,'store'])->name('guestSite.add');
     route::get('/',[GuestSiteController::class,'site'])->name('guestSite.site');
     route::get('show/{id}', [GuestSiteController::class, 'show'])->name('guestSite.showInfo');
+    Route::get('/miPerfil', [guestSiteController::class, 'miPerfil'])->name('guestSite.miPerfil');
 });
 
 

@@ -17,7 +17,11 @@ class EventController extends Controller
     public function index()
     {
         if (session()->has('administrador')) {
-            $events = eventos::where('estadoEliminacion', "=", "1")->get();
+            //$events = eventos::where('estadoEliminacion', "=", "1")->get();
+            $events = DB::table('eventos')->join('areaFormativaEntretenimientoEvento','areaFormativaEntretenimientoEvento.idEvento', '=', 'Eventos.idEvento')
+            ->join('Areas','Areas.idAreas', '=', 'areaFormativaEntretenimientoEvento.idAreas')
+            ->join('areaFormativaEntretenimiento', 'areaFormativaEntretenimiento.idAreaFormativaEntretenimiento', '=', 'Areas.idAreaFormativaEntretenimiento')
+            ->select('Eventos.*','areaFormativaEntretenimiento.nombreArea','Areas.nombre')->where('Eventos.estadoEliminacion','=',1)->get();
             return view('event.index', compact('events'));
         } else {
             return view('layout.403');

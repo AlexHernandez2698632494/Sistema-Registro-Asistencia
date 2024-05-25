@@ -77,6 +77,7 @@
 									<th scope="col">Nombre</th>
 									<th scope="col">Fecha</th>
 									<th scope="col">Hora</th>
+									<th scope="col">Area</th>
 									<th scope="col">Acciones</th>
 							</tr>
 							</thead>
@@ -87,6 +88,7 @@
 										<td>{{ $event->NombreEvento}}</td>
 										<td>{{ $event->fecha }}</td>
 										<td>{{ $event->hora }}</td>
+										<td>{{ $event->nombreArea}}</td>
 								<td>
 												<div class="row">
 													<div class="col-4 mx-0 px-0">

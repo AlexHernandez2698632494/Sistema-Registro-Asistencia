@@ -54,32 +54,32 @@
                             </thead>
                             <div class="table-body">
                                 <tbody>
-                                    @foreach ($estudiantes as $estudiante)
+                                    @foreach ($estudiantesUDB as $estudianteUDB)
                                         <tr>
                                             <td>Estudiante</td>
-                                            <td>{{$estudiante->usuario}}</td>
-                                            <td>{{ $estudiante->nombre.' '.$estudiante->apellido }}</td>
+                                            <td>{{$estudianteUDB->usuario}}</td>
+                                            <td>{{ $estudianteUDB->nombreUDB.' '.$estudianteUDB->apellidosUDB }}</td>
                                         </tr>
                                     @endforeach
                                     @foreach ($invitados as $invitado)
                                         <tr>
                                             <td>Invitado</td>
                                             <td>{{$invitado->usuario}}</td>
-                                            <td>{{ $invitado->nombre.' '.$invitado->apellido }}</td>
+                                            <td>{{ $invitado->nombreInvitado.' '.$invitado->apellidosInvitado }}</td>
                                         </tr>
                                     @endforeach
                                     @foreach ($administradores as $administrador)
                                         <tr>
                                             <td>Administrador</td>
                                             <td>{{$administrador->usuario}}</td>
-                                            <td>{{ $administrador->nombre.' '.$administrador->apellido }}</td>
+                                            <td>{{ $administrador->nombreAdmin.' '.$administrador->apellidosAdmin }}</td>
                                         </tr>
                                     @endforeach
-                                    @foreach ($instituciones as $institucion)
+                                    @foreach ($estudiantesOtra as $estudianteOtra)
                                         <tr>
                                             <td>Invitados Institución</td>
-                                            <td>{{$institucion->usuario}}</td>
-                                            <td>{{ $institucion->nombre.' '.$institucion->apellido }}</td>
+                                            <td>{{$estudianteOtra->usuario}}</td>
+                                            <td>{{ $estudianteOtra->nombreInstitucion.' '.$estudianteOtra->apellidosInstitucion }}</td>
                                         </tr>
                                     @endforeach                                                                                                                                                              
                                 </tbody>
@@ -89,7 +89,6 @@
                 </div>
             </div>                                            
         </div>
-    </div>
     <!-- Modal para eliminar usuario-->
     <div class="modal fade" id="eliminarUsuario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -124,4 +123,3 @@
    
 </body>
 </html>
-tiene menú contextual
