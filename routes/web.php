@@ -57,6 +57,9 @@ Route::prefix('invitado')->group(function(){
     route::get('/',[GuestSiteController::class,'site'])->name('guestSite.site');
     route::get('show/{id}', [GuestSiteController::class, 'show'])->name('guestSite.showInfo');
     Route::get('/miPerfil', [guestSiteController::class, 'miPerfil'])->name('guestSite.miPerfil');
+    route::put('/updateInfor',[GuestSiteController::class,'updateInfor'])->name('guestSite.updateInfor');
+
+    Route::get('/pdf', [guestSiteController::class, 'pdf'])->name('pdf.invitado');
 });
 
 
