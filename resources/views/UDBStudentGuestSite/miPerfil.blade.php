@@ -46,7 +46,7 @@
         <div id="content" class="mt-0 pt-0">            
             <nav class="navbar navbar-expand-lg navbar-light bg-light mt-3 mx-5">
                 <div class="container-fluid">                    
-                    <a href="{{ route('guestSite.index') }}" class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Regresar">
+                    <a href="{{ route('UDBStudentGuestSite.site') }}" class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Regresar">
                         <i class="fas fa-arrow-left"></i>
                     </a>                    
                     <div class="col text-center">
@@ -113,11 +113,11 @@
                         <div class="row mt-2">
                             <div class="col-lg-6 col-xs-12">
                                 <label for="txtCorreoInvitado" class="form-label" style="font-weight: bold">Correo del invitado</label>                                
-                                <input type="email" id="txtCorreoInvitado" name="correoInvitado" placeholder="Ingrese correo electrónico del invitado" class="form-control inputTxt" value="{{$informacionUDB[0]->correoUDB}}">
+                                <input type="email" id="txtCorreoInvitado" name="correoUDB" placeholder="Ingrese correo electrónico del invitado" class="form-control inputTxt" value="{{$informacionUDB[0]->correoUDB}}">
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <label for="txtTelefonoInvitado" class="form-label" style="font-weight: bold">Teléfono del invitado</label>                                
-                                <input type="text" id="txtTelefonoInvitado" name="telefonoInvitado" placeholder="Ingrese teléfono del invitado" class="form-control inputTxt" value="{{$informacionUDB[0]->telefonoUDB}}">
+                                <input type="text" id="txtTelefonoInvitado" name="telefonoUDB" placeholder="Ingrese teléfono del invitado" class="form-control inputTxt" value="{{$informacionUDB[0]->telefonoUDB}}">
                             </div>    
                             <input type="text" id="txtIdInvitado" name="idInvitadoActualizar" value="{{$informacionUDB[0]->idUDB}}" hidden>                    
                         </div>

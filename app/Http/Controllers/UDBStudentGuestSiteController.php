@@ -147,4 +147,34 @@ class UDBStudentGuestSiteController extends Controller
             return view('layout.403');
         }
     }
+
+    public function updateInfor(Request $request)
+    {
+        if (session()->has('estudianteUDB')) {
+            $validator = Validator::make($request->all(), [
+                'correoUDB' => 'required|email',
+                'telefonoUDB' => [
+                    'required',
+                    'regex:/^[267]\d{3}-\d{4}$/'
+                ]
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            try {
+                $UDB = estudianteUDB::findOrFail($request->input('idInvitadoActualizar'));
+                $UDB->correoUDB = $request->input('correoUDB');
+                $UDB->telefonOUDB = $request->input('telefonoUDB');
+                $UDB->save();
+
+                return redirect()->back()->with('exitoModificar', 'Información actualizada correctamente');
+            } catch (\Exception $e) {
+                return redirect()->back()->with('errorModificar', 'Hubo un error al actualizar la información');
+            }
+        } else {
+            return view('layout.403');
+        }
+    }
 }

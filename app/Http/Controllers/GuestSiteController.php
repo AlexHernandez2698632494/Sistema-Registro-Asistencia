@@ -17,81 +17,83 @@ use Exception;
 
 class GuestSiteController extends Controller
 {
-    
-     public function site () {
-        if(session()->has('invitado')){
+
+    public function site()
+    {
+        if (session()->has('invitado')) {
             // $guestInfo = DB::table('Eventos')
             //                 ->select('NombreEvento','fecha','hora','precio','idEvento')
             //                 ->get();
             $guestInfo = DB::table('areaFormativaEntretenimientoEvento as afee')
-                                ->join('eventos as e','e.idEvento','=', 'afee.idEvento')
-                                ->join('areas as a','a.idAreas','=','afee.idAreas') 
-                                ->join('areaFormativaEntretenimiento as afe','afe.idAreaFormativaEntretenimiento','=','a.idAreaFormativaEntretenimiento')
-                                ->select('e.NombreEvento','e.fecha','e.hora','e.precio','e.idEvento','e.descripcion','a.nombre','afe.nombreArea')
-                                ->get();
-           // return $guestInfo;
-            return view('guestSite.site',compact('guestInfo'));
-         }else{
-             return view('layout.403');            
-        }  
-     }
+                ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
+                ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
+                ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
+                ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea')
+                ->get();
+            // return $guestInfo;
+            return view('guestSite.site', compact('guestInfo'));
+        } else {
+            return view('layout.403');
+        }
+    }
 
 
     public function show(string $id)
     {
-        if(session()->has('invitado')){
+        if (session()->has('invitado')) {
             $eventInfo = eventos::find($id);
-        //return $eventInfo;
-        return view('guestSite.eventInformation',compact('eventInfo'));
-    }else{
-        return view('layout.403');            
-   }  
-}
+            //return $eventInfo;
+            return view('guestSite.eventInformation', compact('eventInfo'));
+        } else {
+            return view('layout.403');
+        }
+    }
 
-    public function guestSite(){
+    public function guestSite()
+    {
         return view('guestSite.index');
     }
 
     public function generateUser(string $name, string $lastName)
-	{
-		$nameElements = explode(' ',$name);
-		$lastNameElements = explode(' ',$lastName);
+    {
+        $nameElements = explode(' ', $name);
+        $lastNameElements = explode(' ', $lastName);
 
-		$user = strtolower($nameElements[0].'.'.$lastNameElements[0]);
+        $user = strtolower($nameElements[0] . '.' . $lastNameElements[0]);
 
-		$counter = 2;
+        $counter = 2;
 
-		do{
-			$userVerification = DB::table('usuario')
-									->where('usuario', $user)
-									->exists();
+        do {
+            $userVerification = DB::table('usuario')
+                ->where('usuario', $user)
+                ->exists();
 
-			if($userVerification){
-				$user = strtolower($nameElements[0].'.'.$lastNameElements[0].$counter);
-				$counter++;
-			}
+            if ($userVerification) {
+                $user = strtolower($nameElements[0] . '.' . $lastNameElements[0] . $counter);
+                $counter++;
+            }
+        } while ($userVerification);
 
-		}while($userVerification);
+        return $user;
+    }
 
-		return $user;		
-	}
+    public function generatePass()
+    {
+        $permittedChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $pass = '';
+        $strength = 10;
 
-	public function generatePass()
-	{
-		$permittedChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		$pass = '';
-		$strength = 10;
+        $stringLenght = strlen($permittedChars);
 
-		$stringLenght = strlen($permittedChars);
+        for ($i = 0; $i < $strength; $i++) {
+            $randomCharacter = $permittedChars[mt_rand(0, $stringLenght - 1)];
+            $pass .= $randomCharacter;
+        }
+        return $pass;
+    }
 
-		for($i = 0; $i < $strength; $i++) {
-			$randomCharacter = $permittedChars[mt_rand(0, $stringLenght - 1)];
-			$pass .= $randomCharacter;
-		}
-		return $pass;
-	}
-
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         //Validar los datos ingresados por el usuario
         $request->validate([
             'nombreInvitado' => ['required', 'max:255', 'string'],
@@ -106,7 +108,7 @@ class GuestSiteController extends Controller
             // 'municipioInvitado' => ['required', 'max:255', 'string'],
         ]);
 
-        try{
+        try {
             DB::beginTransaction();
             $nombreInvitado = $request->input('nombreInvitado');
             $apellidosInvitado = $request->input('apellidosInvitado');
@@ -129,54 +131,85 @@ class GuestSiteController extends Controller
             $guest->estadoEliminacion = 1;
 
             //envio de credenciales al invitado
-         $guestEmail = $request->input('correoInvitado');
-         $guestName = $request->input('nombreInvitado').''.$request->input('apellidosInvitado');
-        
-         $userName = $this->generateUser($request->input('nombreInvitado'),$request->input('apellidosInvitado'));
-         $pass = $this->generatePass();
-        
-         $userObj = new Usuarios();
-         $userObj->idUsuario = $request->input('duiInvitado');
-         $userObj->usuario = $userName;
-         $userObj->password = hash('SHA256',$pass);
-         $userObj->nivel = 1;
-         $userObj->save();
+            $guestEmail = $request->input('correoInvitado');
+            $guestName = $request->input('nombreInvitado') . '' . $request->input('apellidosInvitado');
 
-         if($guest->save() && $userObj->save()){
-            $email = new Credentials($userName, $pass, $guestName);
-         Mail::to($guestEmail)->send($email);
+            $userName = $this->generateUser($request->input('nombreInvitado'), $request->input('apellidosInvitado'));
+            $pass = $this->generatePass();
 
-        //  $pdfData = [
-        //     'guestName' => $guestName,
-        //     'userName' => $userName,
-        //     'pass' => $pass,
-        // ];
+            $userObj = new Usuarios();
+            $userObj->idUsuario = $request->input('duiInvitado');
+            $userObj->usuario = $userName;
+            $userObj->password = hash('SHA256', $pass);
+            $userObj->nivel = 1;
+            $userObj->save();
 
-        // $pdf = PDF::loadView('pdf.docente', $pdfData);
-        // $pdf->save(public_path('pdf/docente.pdf'));
-         DB::commit();
-         // Redireccionar con un mensaje de éxito
-         return to_route('showLogin')->with('exitoAgregar', 'Registro agregado exitosamente.');
-         }else{
+            if ($guest->save() && $userObj->save()) {
+                $email = new Credentials($userName, $pass, $guestName);
+                Mail::to($guestEmail)->send($email);
+
+                //  $pdfData = [
+                //     'guestName' => $guestName,
+                //     'userName' => $userName,
+                //     'pass' => $pass,
+                // ];
+
+                // $pdf = PDF::loadView('pdf.docente', $pdfData);
+                // $pdf->save(public_path('pdf/docente.pdf'));
+                DB::commit();
+                // Redireccionar con un mensaje de éxito
+                return to_route('showLogin')->with('exitoAgregar', 'Registro agregado exitosamente.');
+            } else {
+                DB::rollBack();
+                return redirect()->back()->with('errorAgregar', 'Ha ocurrido un error al registrarse');
+            }
+        } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('errorAgregar','Ha ocurrido un error al registrarse');
+            return redirect()->back()->with('errorAgregar', 'Ha ocurrido un error al registrarse' . $e->getMessage());
         }
-        }catch(Exception $e){
-            DB::rollBack();
-            return redirect()->back()->with('errorAgregar','Ha ocurrido un error al registrarse'.$e->getMessage());
-        } 
     }
 
     // public function pdf(){
     //     return view('pdf.invitado');
     // }
 
-    public function miPerfil(){
-        if(session()->has('invitado')){
-            $id= session()->get('invitado');
-            $informacionInvitado = DB::table('invitado')->where('idInvitado','=',$id[0]->idInvitado)->get();
+    public function miPerfil()
+    {
+        if (session()->has('invitado')) {
+            $id = session()->get('invitado');
+            $informacionInvitado = DB::table('invitado')->where('idInvitado', '=', $id[0]->idInvitado)->get();
             return view('guestSite.miPerfil', compact('informacionInvitado'));
-        } else{
+        } else {
+            return view('layout.403');
+        }
+    }
+
+    public function updateInfor(Request $request)
+    {
+        if (session()->has('invitado')) {
+            $validator = Validator::make($request->all(), [
+                'correoInvitado' => 'required|email',
+                'telefonoInvitado' => [
+                    'required',
+                    'regex:/^[267]\d{3}-\d{4}$/'
+                ]
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            try {
+                $invitado = Invitado::findOrFail($request->input('idInvitadoActualizar'));
+                $invitado->correoInvitado = $request->input('correoInvitado');
+                $invitado->telefonoInvitado = $request->input('telefonoInvitado');
+                $invitado->save();
+
+                return redirect()->back()->with('exitoModificar', 'Información actualizada correctamente');
+            } catch (\Exception $e) {
+                return redirect()->back()->with('errorModificar', 'Hubo un error al actualizar la información');
+            }
+        } else {
             return view('layout.403');
         }
     }

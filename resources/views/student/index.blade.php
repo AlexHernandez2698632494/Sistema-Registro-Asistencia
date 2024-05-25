@@ -65,7 +65,7 @@
 								</li>
 							</ul>
                             <div class="row">
-                                <button class="btn btn-primary btn-lg btn-block mt-2" style="background-color: #0060B4;" type="submit">Ingresar</button>
+                                <a href="{{route('welcome')}}" class="btn btn-primary btn-lg btn-block mt-2" style="background-color: #0060B4;" type="submit">Regresar</a>
                             </div>
 						</div>
 					</div>
