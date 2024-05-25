@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\invitado;
 use App\Mail\Credentials;
 use App\Models\Usuarios;
@@ -144,6 +145,15 @@ class GuestSiteController extends Controller
          if($guest->save() && $userObj->save()){
             $email = new Credentials($userName, $pass, $guestName);
          Mail::to($guestEmail)->send($email);
+
+        //  $pdfData = [
+        //     'guestName' => $guestName,
+        //     'userName' => $userName,
+        //     'pass' => $pass,
+        // ];
+
+        // $pdf = PDF::loadView('pdf.docente', $pdfData);
+        // $pdf->save(public_path('pdf/docente.pdf'));
          DB::commit();
          // Redireccionar con un mensaje de éxito
          return to_route('showLogin')->with('exitoAgregar', 'Registro agregado exitosamente.');
@@ -155,5 +165,19 @@ class GuestSiteController extends Controller
             DB::rollBack();
             return redirect()->back()->with('errorAgregar','Ha ocurrido un error al registrarse'.$e->getMessage());
         } 
+    }
+
+    // public function pdf(){
+    //     return view('pdf.invitado');
+    // }
+
+    public function miPerfil(){
+        if(session()->has('invitado')){
+            $id= session()->get('invitado');
+            $informacionInvitado = DB::table('invitado')->where('idInvitado','=',$id[0]->idInvitado)->get();
+            return view('guestSite.miPerfil', compact('informacionInvitado'));
+        } else{
+            return view('layout.403');
+        }
     }
 }
