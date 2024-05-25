@@ -21,7 +21,39 @@ class UDBStudentGuestSiteController extends Controller
         return view('UDBStudentGuestSite.index');
     }
 
-   
+    public function site () {
+        if(session()->has('estudianteUDB')){
+            // $guestInfo = DB::table('Eventos')
+            //                 ->select('NombreEvento','fecha','hora','precio','idEvento')
+            //                 ->get();
+            $guestInfo = DB::table('areaFormativaEntretenimientoEvento as afee')
+                                ->join('eventos as e','e.idEvento','=', 'afee.idEvento')
+                                ->join('areas as a','a.idAreas','=','afee.idAreas') 
+                                ->join('areaFormativaEntretenimiento as afe','afe.idAreaFormativaEntretenimiento','=','a.idAreaFormativaEntretenimiento')
+                                ->select('e.NombreEvento','e.fecha','e.hora','e.precio','e.idEvento','e.descripcion','a.nombre','afe.nombreArea')
+                                ->get();
+           // return $guestInfo;
+            return view('UDBStudentGuestSite.site',compact('guestInfo'));
+         }else{
+             return view('layout.403');            
+        }  
+     }
+
+     public function show(string $id)
+    {
+        if(session()->has('estudianteUDB')){
+            $eventInfo = eventos::find($id);
+        //return $eventInfo;
+        return view('guestSite.eventInformation',compact('eventInfo'));
+    }else{
+        return view('layout.403');            
+   }  
+}
+
+    public function guestSite(){
+        return view('UDBStudentGuestSite.index');
+    }
+
 
 	public function generatePass()
 	{
@@ -87,7 +119,7 @@ class UDBStudentGuestSiteController extends Controller
          $userObj->idUsuario = $request->input('carnetUDB');
          $userObj->usuario = $userName;
          $userObj->password = hash('SHA256',$pass);
-         $userObj->nivel = 1;
+         $userObj->nivel = 2;
          $userObj->save();
 
          if($UDB->save() && $userObj->save()){
@@ -104,5 +136,15 @@ class UDBStudentGuestSiteController extends Controller
             DB::rollBack();
             return redirect()->back()->with('errorAgregar','Ha ocurrido un error al registrarse'.$e->getMessage());
         } 
+    }
+
+    public function miPerfil(){
+        if(session()->has('estudianteUDB')){
+            $id= session()->get('estudianteUDB');
+            $informacionUDB = DB::table('estudianteUDB')->where('idUDB','=',$id[0]->idUDB)->get();
+            return view('UDBStudentGuestSite.miPerfil', compact('informacionUDB'));
+        } else{
+            return view('layout.403');
+        }
     }
 }

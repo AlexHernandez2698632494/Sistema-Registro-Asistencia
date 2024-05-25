@@ -57,6 +57,7 @@ Route::prefix('invitado')->group(function(){
     route::get('/',[GuestSiteController::class,'site'])->name('guestSite.site');
     route::get('show/{id}', [GuestSiteController::class, 'show'])->name('guestSite.showInfo');
     Route::get('/miPerfil', [guestSiteController::class, 'miPerfil'])->name('guestSite.miPerfil');
+    route::put('/updateInfor',[guestSiteController::class,'updateInfor'])->name('guestSite.updateInfor');
 });
 
 
@@ -79,7 +80,10 @@ Route::get('/estudiantes', [GuestStudentSiteController::class, 'index'])->name('
 Route::prefix('estudiante/UDB')->group(function(){
     route::get('/',[UDBStudentGuestSiteController::class, 'studentUDB'])->name('UDBStudentGuestSite.index');
     route::post('/add',[UDBStudentGuestSiteController::class,'store'])->name('UDBStudentGuestSite.add');
-
+    route::get('/',[UDBStudentGuestSiteController::class,'site'])->name('UDBStudentGuestSite.site');
+    route::get('show/{id}', [UDBStudentGuestSiteController::class, 'show'])->name('UDBStudentGuestSite.showInfo');
+    Route::get('/miPerfil', [UDBStudentGuestSiteController::class, 'miPerfil'])->name('UDBStudentGuestSite.miPerfil');
+    route::put('/updateInfor',[UDBStudentGuestSiteController::class,'updateInfor'])->name('UDBStudentGuestSite.updateInfor');
 });
 
 //Rutas relacionadas con el controlador de areas (AreaController)
