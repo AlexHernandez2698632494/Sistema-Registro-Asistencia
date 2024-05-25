@@ -36,5 +36,21 @@ $(document).ready(function () {
         };
         var mask = IMask(txtCarnetAdmin, maskOptions);
     }
+
+    //Iniciando máscara para campos de carnetEstudianteUDB
+
+    var txtCarnetEstudianteUDB = document.getElementById('txtCarnetEstudianteUDB');
+    
+    if(txtCarnetEstudianteUDB != null) //Verificando  que exista un elemento con el id txtPhone
+    {
+        var maskOptions = {
+            mask: 'LL000000',  // L representa una letra del abecedario (A-Z)
+            definitions: {
+                'L': /[A-Z]/,
+            }
+        };
+        var mask = IMask(txtCarnetEstudianteUDB, maskOptions);
+    }
+    
     
 });

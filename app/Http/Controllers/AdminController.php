@@ -164,26 +164,38 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if(session()->has('administrador')){
-            $adminEdit = admin::find($id);
-            $usuarios = DB::table('usuario')->where('idUsuario','=',$id)->get();
-        
-
-           // echo($id);
-             $adminEdit->nombreAdmin = $request->post('nombre');
-             $adminEdit->apellidosAdmin = $request->post('apellido');
-             $adminEdit->cargoAdmin = $request->post('cargo');
-             $adminEdit->telefonoAdmin = $request->post('telefono');
-             $adminEdit->correoAdmin = $request->post('correo');
-             $adminEdit->save();
+         if(session()->has('administrador')){
+           $adminEdit = admin::find($id);
+           try {
+            DB::beginTransaction();
             
+            // Buscar el usuario relacionado
+            $usuario = DB::table('Usuario')
+                ->join('administrador', 'Usuario.idUsuario', '=', 'administrador.carnetAdmin')
+                ->where('administrador.idAdmin', '=', $id)
+                ->select('Usuario.*')
+                ->first();
+            
+            if ($usuario) {
+                // Actualizar el usuario
+                DB::table('Usuario')
+                    ->where('idUsuario', $usuario->idUsuario)
+                    ->update(['usuario' => $request->post('usuario')]);
+            }
+          
+            $adminEdit->nombreAdmin = $request->post('nombre');
+            $adminEdit->apellidosAdmin = $request->post('apellido');
+            $adminEdit->cargoAdmin = $request->post('cargo');
+            $adminEdit->telefonoAdmin = $request->post('telefono');
+            $adminEdit->correoAdmin = $request->post('correo');
+            $adminEdit->save();
 
-        
-    
-            return redirect()->route("admin.index")->with("exitoAgregar", "Actualizado con exito");
-        }else{
-            return view('layout.403');            
-        }   
+             DB::commit();
+             return to_route("admin.index")->with("exitoAgregar", "Actualizado con exito");
+           }catch(Exception $e){}
+         }else{
+             return view('layout.403');            
+         }   
     }
 
     /**

@@ -46,7 +46,7 @@
                     <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                         <div class="card shadow-2-strong" style="border-radius: 1rem;">
                             <div class="card-body p-5 text-center">
-                                <form method="POST" action="{{ route('guestSite.add') }}">
+                                <form method="POST" action="{{ route('UDBStudentGuestSite.add') }}">
                                     @csrf
                                     <div class="row">
                                         <div class="col-12">
@@ -54,16 +54,30 @@
                                                 información que se solicita</p>
                                         </div>
                                     </div>
+                                    @if ($errors->any())
+                                <div class="alert alert-danger my-2 pb-0">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            @if(session('error'))
+                                <div class="alert alert-danger">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
 									<div class="col-lg-12 col-md-6 col-xs-12">
 										<div class="input-group mb-3">
 											<span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user"></i></span>
-											<input type="text" class="form-control" placeholder="Ingrese nombre" aria-label="name" name="nombre" value="{{ old('nombre') }}">
+											<input type="text" class="form-control" placeholder="Ingrese nombre" aria-label="name" name="nombreUDB" value="{{ old('nombreUDB') }}">
 										</div>
 									</div>
 									<div class="col-lg-12 col-md-6 col-xs-12">
 										<div class="input-group mb-3">
 											<span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user"></i></span>
-											<input type="text" class="form-control" placeholder="Ingrese apellido" aria-label="lastName" name="apellido" value="{{ old('apellido') }}">
+											<input type="text" class="form-control" placeholder="Ingrese apellido" aria-label="lastName" name="apellidosUDB" value="{{ old('apellidosUDB') }}">
 										</div>
 									</div>
 									<div class="col-lg-12  col-md-6 col-xs-12">
@@ -79,7 +93,7 @@
 									 <div class="col-lg-12 col-md-6 col-xs-12">
 										<div class="input-group mb-3">
 											<span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-address-card"></i></span>
-											<input type="text" class="form-control" placeholder="Ingrese dui" aria-label="carnet" id="txtCarnetAdmin" name="carnet" value="{{ old('carnet') }}">
+											<input type="text" class="form-control" placeholder="Ingrese su carnet" aria-label="carnet" id="txtCarnetEstudianteUDB" name="carnetUDB" value="{{ old('carnetUDB') }}">
 										</div>
 									</div>
                                     <div class="col-lg-12  col-md-6 col-xs-12">
@@ -188,13 +202,13 @@
 									<div class="col-lg-12 col-md-6 col-xs-12">
 										<div class="input-group mb-3">
 											<span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-envelope"></i></span>
-											<input type="email" class="form-control" placeholder="Correo" aria-label="correo" name="correo" value="{{ old('correo') }}">
+											<input type="email" class="form-control" placeholder="Correo" aria-label="correo" name="correoUDB" value="{{ old('correoUDB') }}">
 										</div>
 									</div>
 									<div class="col-lg-12 col-md-6 col-xs-12">
 										<div class="input-group mb-3">
 											<span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-phone"></i></span>
-											<input type="text" class="form-control" placeholder="Ingrese telefono" aria-label="phone" id="txtPhone" name="telefono" value="{{ old('telefono') }}">
+											<input type="text" class="form-control" placeholder="Ingrese telefono" aria-label="phone" id="txtPhone" name="telefonoUDB" value="{{ old('telefonoUDB') }}">
 										</div>
 									</div>
 									<div class="col-lg-12  col-md-6 col-xs-12">
@@ -222,7 +236,7 @@
 									<div class="col-lg-12  col-md-6 col-xs-12">
 										<div class="input-group mb-3">
 											<span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-map-location-dot"></i></span>
-											<select class="form-select" aria-label="Default select example" id="txtSex" name="sexo">
+											<select class="form-select" aria-label="Default select example" id="txtSex" name="municipio">
                                                 <option value="" disabled selected>Ingrese su municipio</option>
                                                 <option value="La Unión Norte">La Unión Norte</option>
                                                 <option value="Chalatenango Centro">Chalatenango Centro</option>
@@ -271,50 +285,6 @@
                                             </select>
 										</div>
 									</div>
-                                    {{-- <div class="row justify-content">
-                                        <div class="col-lg-6 col-xs-12 mt-2">
-                                            <label for="nombre" class="form-label">Nombre</label>
-                                            <input type="text" id="nombre" name="nombre"
-                                                placeholder="Ingrese nombre" class="form-control input"
-                                                value="{{ old('nombre') }}" required>
-                                        </div>
-                                        <div class="col-lg-6 col-xs-12 mt-2">
-                                            <label for="apellido" class="form-label">Apellido</label>
-                                            <input type="text" id="Apellido" name="apellido"
-                                                placeholder="Ingrese apellido" class="form-control input"
-                                                value="{{ old('apellido') }}" required>
-                                        </div>
-                                    </div> --}}
-                                    {{-- <div class="row mt-2 justify-content-center">
-                                        <div class="col-lg-6 col-xs-12 mt-2">
-                                            <label for="dui" class="form-label">DUI</label>
-                                            <input type="text" class="form-control" placeholder="Ingrese DUI"
-                                                aria-label="dui" id="txtDui" name="dui"
-                                                value="{{ old('dui') }}">
-                                        </div>
-                                        <div class="col-lg-6 col-xs-12 mt-2">
-                                            <label for="telefono" class="form-label">Número de teléfono</label>
-                                            <input type="text" class="form-control txtPhone" id="txtPhone"
-                                                placeholder="Ingrese número de teléfono" aria-label="phone"
-                                                name="telefono" value="{{ old('telefono') }}">
-                                        </div>
-                                    </div> --}}
-                                    {{-- <div class="row mt-2 justify-content">
-                                        <div class="col-lg-6 col-xs-12 mt-2">
-                                            <label for="direccion" class="form-label">Direccion</label>
-                                            <input type="text" id="direccion" name="direccion"
-                                                placeholder="Ingrese direccion" class="form-control input"
-                                                value="{{ old('direccion') }}">
-                                        </div>
-                                        <div class="col-lg-6 col-xs-12 mt-2">
-                                            <label for="correo" class="form-label">Correo electrónico</label>
-                                            <input type="email" id="correo" placeholder="Ingrese correo"
-                                                name="correo" class="form-control  input" value="{{ old('correo') }}"
-                                                required>
-                                        </div>
-                                    </div> --}}
-
-
                                     <div class="row mx-2 my-2 mt-6">
                                         <div class="col d-flex justify-content-center">
                                             <button type="submit" class="btn btn-block btn-Add">Registrar </button>
