@@ -61,7 +61,7 @@
 								<a href="{{route('UDBStudentGuestSite.index') }}" class="nav-link" id="tab-register" data-mdb-toggle="pill" role="tab" aria-controls="pills-register" aria-selected="false" style="color: #0060B4;">Registrar Estudiante UDB</a>
 							</li>
 								<li class="nav-item" role="presentation">
-									<a href="{{route('student.index')}}" class="nav-link" id="tab-register" data-mdb-toggle="pill"  role="tab" aria-controls="pills-register" aria-selected="false" style="color: #0060B4;">Registrar Personal UDB</a>
+									<a href="{{route('UDBStaffGuestSite.index')}}" class="nav-link" id="tab-register" data-mdb-toggle="pill"  role="tab" aria-controls="pills-register" aria-selected="false" style="color: #0060B4;">Registrar Personal UDB</a>
 								</li>
 							</ul>
                             <div class="row">

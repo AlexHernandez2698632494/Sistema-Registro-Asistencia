@@ -8,6 +8,7 @@ use App\Http\Controllers\GuestStudentSiteController;
 use App\Http\Controllers\UDBStudentGuestSiteController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\GuestSiteController;
+use App\Http\Controllers\UDBStaffGuestSiteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -97,3 +98,7 @@ Route::prefix('area')->group(function(){
     route::put('/restore',[AreaController::class, 'restore'])->name('area.restore');
 });
 
+Route::prefix('personal/UDB')->group(function(){
+    route::get('/',[UDBStaffGuestSiteController::class, 'personalUDB'])->name('UDBStaffGuestSite.index');
+    route::post('/add',[UDBStaffGuestSiteController::class,'store'])->name('UDBStaffGuestSite.add');
+});

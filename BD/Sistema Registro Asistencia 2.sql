@@ -28,7 +28,7 @@ CREATE TABLE estudianteUDB(
     estadoEliminacion INT NOT NULL DEFAULT 1
 ); 
 
-CREATE TABLE docenteUDB(
+CREATE TABLE personalUDB(
     idUDB INT AUTO_INCREMENT PRIMARY KEY,
     nombreUDB VARCHAR(256) NOT NULL,
     apellidosUDB VARCHAR(256) NOT NULL,
