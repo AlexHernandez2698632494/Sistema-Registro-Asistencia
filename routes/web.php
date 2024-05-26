@@ -74,7 +74,8 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 //Route::post('/recuperarContra', [LoginController::class, 'recuperarContra'])->name('recuperarContra');
 
 //Rutas relacionadas con el controlador de estudiantes (GuestStudentSiteController)
-Route::get('/estudiantes', [GuestStudentSiteController::class, 'index'])->name('student.index');
+Route::get('/UDB', [GuestStudentSiteController::class, 'index'])->name('student.index');
+Route::get('/invitado', [GuestStudentSiteController::class, 'guest'])->name('student.guest');
 
 //Rutas relacionadas con el controlador de estudiantes UDB(UDBStudentGuestSiteController)
 Route::prefix('estudiante/UDB')->group(function(){

@@ -28,6 +28,19 @@ CREATE TABLE estudianteUDB(
     estadoEliminacion INT NOT NULL DEFAULT 1
 ); 
 
+CREATE TABLE docenteUDB(
+    idUDB INT AUTO_INCREMENT PRIMARY KEY,
+    nombreUDB VARCHAR(256) NOT NULL,
+    apellidosUDB VARCHAR(256) NOT NULL,
+    sexoUDB VARCHAR(10) NOT NULL,
+    carnetUDB VARCHAR(9) NOT NULL,
+    profesionUDB TEXT NOT NULL,
+    correoUDB TEXT NOT NULL,
+    telefonoUDB VARCHAR(10) NOT NULL,
+    departamentoUDB TEXT NOT NULL,
+    municipioUDB TEXT NOT NULL,
+    estadoEliminacion INT NOT NULL DEFAULT 1
+); 
 CREATE TABLE estudianteInstitucion(
     idInstitucion INT AUTO_INCREMENT PRIMARY KEY,
     nombreInstitucion VARCHAR(256) NOT NULL,

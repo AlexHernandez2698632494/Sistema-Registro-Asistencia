@@ -55,7 +55,7 @@
 							<!-- Pills navs -->
 							<ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
 							<li class="nav-item" role="presentation">
-								<a href="{{route('guestSite.index') }}" class="nav-link" id="tab-register" data-mdb-toggle="pill" role="tab" aria-controls="pills-register" aria-selected="false" style="color: #0060B4;">Registrar Invitado</a>
+								<a href="{{route('student.guest') }}" class="nav-link" id="tab-register" data-mdb-toggle="pill" role="tab" aria-controls="pills-register" aria-selected="false" style="color: #0060B4;">Registrar Invitado</a>
 							</li>
 								<li class="nav-item" role="presentation">
 									<a href="{{route('student.index')}}" class="nav-link" id="tab-register" data-mdb-toggle="pill"  role="tab" aria-controls="pills-register" aria-selected="false" style="color: #0060B4;">Registrar Estudiante</a>
