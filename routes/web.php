@@ -8,6 +8,7 @@ use App\Http\Controllers\GuestStudentSiteController;
 use App\Http\Controllers\UDBStudentGuestSiteController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\GuestSiteController;
+use App\Http\Controllers\UDBStaffGuestSiteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -75,6 +76,7 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 //Rutas relacionadas con el controlador de estudiantes (GuestStudentSiteController)
 Route::get('/UDB', [GuestStudentSiteController::class, 'index'])->name('student.index');
+Route::get('/invitados', [GuestStudentSiteController::class, 'guest'])->name('student.guest');
 
 //Rutas relacionadas con el controlador de estudiantes UDB(UDBStudentGuestSiteController)
 Route::prefix('estudiante/UDB')->group(function(){
@@ -96,4 +98,11 @@ Route::prefix('area')->group(function(){
     route::put('/restore',[AreaController::class, 'restore'])->name('area.restore');
 });
 
-
+Route::prefix('personal/UDB')->group(function(){
+    route::get('/',[UDBStaffGuestSiteController::class, 'personalUDB'])->name('UDBStaffGuestSite.index');
+    route::post('/add',[UDBStaffGuestSiteController::class,'store'])->name('UDBStaffGuestSite.add');
+    route::get('/index',[UDBStaffGuestSiteController::class,'site'])->name('UDBStaffGuestSite.site');
+    route::get('show/{id}', [UDBStaffGuestSiteController::class, 'show'])->name('UDBStaffGuestSite.showInfo');
+    Route::get('/miPerfil', [UDBStaffGuestSiteController::class, 'miPerfil'])->name('UDBStaffGuestSite.miPerfil');
+    route::put('/updateInfor',[UDBStaffGuestSiteController::class,'updateInfor'])->name('UDBStaffGuestSite.updateInfor');
+});

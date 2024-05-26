@@ -54,6 +54,16 @@ class LoginController extends Controller
                         }else{
                             return redirect()->back()->with('error','Acceso denegado');
                         }
+                    }else if($accessLevel == 3){
+                        $carnetUDB = $user[0]->idUsuario;
+                        $UDBStaffGuestStatus = DB::table('personalUDB')->where('carnetUDB','=',$carnetUDB)->get();
+                        if($UDBStaffGuestStatus && $UDBStaffGuestStatus[0]->estadoEliminacion == 1){
+                            $request->session()->put('user',$user);
+                            session()->put('personalUDB',$UDBStaffGuestStatus);
+                            return to_route('UDBStaffGuestSite.site');
+                        }else{
+                            return redirect()->back()->with('error','Acceso denegado');
+                        }
                     }else if($accessLevel == 0){ //administrador
                         $adminDui = $user[0]->idUsuario;
                         $adminStatus = DB::table('administrador')
@@ -91,6 +101,8 @@ class LoginController extends Controller
             session()->forget('invitado');
         }else if(session()->has('estudianteUDB')){
             session()->forget('estudianteUDB');
+        }else if(session()->has('personalUDB')){
+            session()->forget('personalUDB');
         }else if(session()->has('administrador')){
             session()->forget('administrador');            
         }
@@ -120,6 +132,8 @@ class LoginController extends Controller
             session()->forget('invitado');
         }else if(session()->has('estudianteUDB')){
             session()->forget('estudianteUDB');
+        }else if(session()->has('personalUDB')){
+            session()->forget('personalUDB');
         }else if(session()->has('administrador')){
             session()->forget('administrador');            
         }
@@ -207,6 +221,8 @@ class LoginController extends Controller
             session()->forget('invitado');
         }else if(session()->has('estudianteUDB')){
             session()->forget('estudianteUDB');
+        }else if(session()->has('personalUDB')){
+            session()->forget('personalUDB');
         }else if(session()->has('administrador')){
             session()->forget('administrador');            
         }

@@ -102,4 +102,73 @@ class UDBStaffGuestSiteController extends Controller
             return redirect()->back()->with('errorAgregar','Ha ocurrido un error al registrarse'.$e->getMessage());
         } 
     }
+
+    public function site () {
+        if(session()->has('personalUDB')){
+            // $guestInfo = DB::table('Eventos')
+            //                 ->select('NombreEvento','fecha','hora','precio','idEvento')
+            //                 ->get();
+            $guestInfo = DB::table('areaFormativaEntretenimientoEvento as afee')
+                                ->join('eventos as e','e.idEvento','=', 'afee.idEvento')
+                                ->join('areas as a','a.idAreas','=','afee.idAreas') 
+                                ->join('areaFormativaEntretenimiento as afe','afe.idAreaFormativaEntretenimiento','=','a.idAreaFormativaEntretenimiento')
+                                ->select('e.NombreEvento','e.fecha','e.hora','e.precio','e.idEvento','e.descripcion','a.nombre','afe.nombreArea')
+                                ->get();
+           // return $guestInfo;
+            return view('UDBStaffGuestSite.site',compact('guestInfo'));
+         }else{
+             return view('layout.403');            
+        }  
+     }
+
+     public function show(string $id)
+    {
+        if(session()->has('personalUDB')){
+            $eventInfo = eventos::find($id);
+        //return $eventInfo;
+        return view('UDBStaffGuestSite.eventInformation',compact('eventInfo'));
+    }else{
+        return view('layout.403');            
+   }  
+}
+
+public function miPerfil(){
+    if(session()->has('personalUDB')){
+        $id= session()->get('personalUDB');
+        $informacionUDB = DB::table('personalUDB')->where('idUDB','=',$id[0]->idUDB)->get();
+        return view('UDBStaffGuestSite.miPerfil', compact('informacionUDB'));
+    } else{
+        return view('layout.403');
+    }
+}
+
+public function updateInfor(Request $request)
+{
+    if (session()->has('personalUDB')) {
+        $validator = Validator::make($request->all(), [
+            'correoUDB' => 'required|email',
+            'telefonoUDB' => [
+                'required',
+                'regex:/^[267]\d{3}-\d{4}$/'
+            ]
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        try {
+            $UDB = personalUDB::findOrFail($request->input('idInvitadoActualizar'));
+            $UDB->correoUDB = $request->input('correoUDB');
+            $UDB->telefonOUDB = $request->input('telefonoUDB');
+            $UDB->save();
+
+            return redirect()->back()->with('exitoModificar', 'Información actualizada correctamente');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('errorModificar', 'Hubo un error al actualizar la información');
+        }
+    } else {
+        return view('layout.403');
+    }
+}
 }

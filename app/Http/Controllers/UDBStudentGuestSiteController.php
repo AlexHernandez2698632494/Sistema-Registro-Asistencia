@@ -49,12 +49,6 @@ class UDBStudentGuestSiteController extends Controller
         return view('layout.403');            
    }  
 }
-
-    public function guestSite(){
-        return view('UDBStudentGuestSite.index');
-    }
-
-
 	public function generatePass()
 	{
 		$permittedChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
