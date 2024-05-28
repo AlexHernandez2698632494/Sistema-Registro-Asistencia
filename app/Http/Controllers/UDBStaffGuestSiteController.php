@@ -212,8 +212,7 @@ public function addEntry(Request $request)
 
         // Generar el código QR
         $qrData = $validated['nombre'] . ' - ' . $validated['institucion']; // Personaliza los datos del QR
-        $qrCode = QrCode::format('png')->size(200)->generate($qrData);
-        
+        $qrCode = QrCode::size(300)->generate($qrData);        
         // Guardar el código QR como base64
         $entrada->qr = base64_encode($qrCode);
         $entrada->save();

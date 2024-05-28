@@ -97,6 +97,7 @@
                                     <option value="Básica">Básica</option>
                                     <option value="Tercer Ciclo">Tercer Ciclo</option>
                                     <option value="Bachillerato">Bachillerato</option>
+                                    <option value="Universidad">Universidad</option>
                                 </select>
                             </div>
                         </div>
