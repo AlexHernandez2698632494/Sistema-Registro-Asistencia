@@ -9,13 +9,10 @@
                 </a>
                 <ul class="collapse list-unstyled" id="menuEventos">
                     <li>
-                        <a href="" id="registroDocentes">Registro de eventos</a>
+                        <a href="" id="areaFormativa">Area Formativa</a>
                     </li>
                     <li>
-                        <a href="" id="controlDocentes">Control de eventos</a>
-                    </li>
-                    <li>
-                        <a href="" id="docentesEliminados">Eventos eliminados</a>
+                        <a href="" id="areaEntretenimiento">Area Entretenimiento</a>
                     </li>
                 </ul>
             </li>  

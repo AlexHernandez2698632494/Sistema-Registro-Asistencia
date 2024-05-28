@@ -13,6 +13,8 @@ use App\Mail\Credentials;
 use App\Models\Usuarios;
 use App\Models\eventos;
 use Exception;
+use App\Models\AdquirirEntrada;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class UDBStaffGuestSiteController extends Controller
 {
     //
@@ -102,35 +104,48 @@ class UDBStaffGuestSiteController extends Controller
             return redirect()->back()->with('errorAgregar','Ha ocurrido un error al registrarse'.$e->getMessage());
         } 
     }
-
-    public function site () {
-        if(session()->has('personalUDB')){
-            // $guestInfo = DB::table('Eventos')
-            //                 ->select('NombreEvento','fecha','hora','precio','idEvento')
-            //                 ->get();
-            $guestInfo = DB::table('areaFormativaEntretenimientoEvento as afee')
-                                ->join('eventos as e','e.idEvento','=', 'afee.idEvento')
-                                ->join('areas as a','a.idAreas','=','afee.idAreas') 
-                                ->join('areaFormativaEntretenimiento as afe','afe.idAreaFormativaEntretenimiento','=','a.idAreaFormativaEntretenimiento')
-                                ->select('e.NombreEvento','e.fecha','e.hora','e.precio','e.idEvento','e.descripcion','a.nombre','afe.nombreArea')
-                                ->get();
-           // return $guestInfo;
-            return view('UDBStaffGuestSite.site',compact('guestInfo'));
-         }else{
-             return view('layout.403');            
-        }  
-     }
-
-     public function show(string $id)
+    public function site()
     {
-        if(session()->has('personalUDB')){
-            $eventInfo = eventos::find($id);
-        //return $eventInfo;
-        return view('UDBStaffGuestSite.eventInformation',compact('eventInfo'));
-    }else{
-        return view('layout.403');            
-   }  
-}
+        if (session()->has('personalUDB')) {
+            $guestInfo = DB::table('Eventos')
+                             ->select('NombreEvento','fecha','hora','precio','idEvento')
+                             ->get();
+            $formativa = DB::table('areaFormativaEntretenimientoEvento as afee')
+                ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
+                ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
+                ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
+                ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea')
+                ->where('afe.nombreArea', '=', 'Area Formativa')
+                ->get();
+            $entrenimiento = DB::table('areaFormativaEntretenimientoEvento as afee')
+            ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
+            ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
+            ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
+            ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea')
+            ->where('afe.nombreArea', '=', 'Area Entretenimiento')
+            ->get();
+            return view('UDBStaffGuestSite.site', compact('formativa','entrenimiento','guestInfo'));
+        } else {
+            return view('layout.403');
+        }
+    }
+ 
+ 
+    public function show(string $id)
+    {
+        if (session()->has('personalUDB')) {
+            $eventInfo = DB::table('eventos as e')
+                            ->join('areaformativaentretenimientoevento as afee', 'afee.idEvento', '=', 'e.idEvento')
+                            ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
+                            ->join('areaformativaentretenimiento as afe', 'afe.idAreaformativaentretenimiento', '=', 'a.idAreaformativaentretenimiento')
+                            ->where('e.idEvento','=',$id)
+                            ->get();
+            //return $eventInfo;
+            return view('UDBStaffGuestSite.eventInformation<', compact('eventInfo'));
+        } else {
+            return view('layout.403');
+        }
+    }
 
 public function miPerfil(){
     if(session()->has('personalUDB')){
@@ -171,4 +186,50 @@ public function updateInfor(Request $request)
         return view('layout.403');
     }
 }
+public function buyIndividualGroupTicket (){
+    return view('UDBStaffGuestSite.ticketIG');
+}
+public function purchaseTicketI(){
+return view('UDBStaffGuestSite.ticketI');
+}
+
+public function addEntry(Request $request)
+    {
+        // Validar los datos entrantes
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:256',
+            'sexo' => 'required|string|max:10',
+            'nivel_educativo' => 'required|string',
+            'institucion' => 'required|string',
+        ]);
+
+        // Crear una nueva entrada
+        $entrada = new AdquirirEntrada;
+        $entrada->nombres = $validated['nombre'];
+        $entrada->sexo = $validated['sexo'];
+        $entrada->nivelEducativo = $validated['nivel_educativo'];
+        $entrada->institucion = $validated['institucion'];
+
+        // Generar el código QR
+        $qrData = $validated['nombre'] . ' - ' . $validated['institucion']; // Personaliza los datos del QR
+        $qrCode = QrCode::format('png')->size(200)->generate($qrData);
+        
+        // Guardar el código QR como base64
+        $entrada->qr = base64_encode($qrCode);
+        $entrada->save();
+
+        return redirect()->back()->with('exitoAgregar', 'Entrada Adquirida Exitosamente');
+    }
+    public function scan($id)
+    {
+        // Buscar la entrada por ID
+        $entrada = AdquirirEntrada::findOrFail($id);
+
+        // Actualizar el estado a true
+        $entrada->estado = true;
+        $entrada->save();
+        
+        return redirect()->back()->with('exitoAgregar', 'Entrada Adquirida Exitosamente');
+
+    }
 }
