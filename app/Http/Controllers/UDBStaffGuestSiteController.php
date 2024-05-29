@@ -141,7 +141,7 @@ class UDBStaffGuestSiteController extends Controller
                             ->where('e.idEvento','=',$id)
                             ->get();
             //return $eventInfo;
-            return view('UDBStaffGuestSite.eventInformation<', compact('eventInfo'));
+            return view('UDBStaffGuestSite.eventInformation', compact('eventInfo'));
         } else {
             return view('layout.403');
         }
@@ -211,11 +211,10 @@ public function addEntry(Request $request)
         $entrada->institucion = $validated['institucion'];
 
         // Generar el código QR
-        $qrData = $validated['nombre'] . ' - ' . $validated['institucion']; // Personaliza los datos del QR
-        $qrCode = QrCode::size(300)->generate($qrData);        
-        // Guardar el código QR como base64
-        $entrada->qr = base64_encode($qrCode);
-        $entrada->save();
+
+        $qrData = $validated['nombre'] . ' - ' . $validated['institucion'];
+         $entrada->qr = '';
+         $entrada->save();
 
         return redirect()->back()->with('exitoAgregar', 'Entrada Adquirida Exitosamente');
     }
