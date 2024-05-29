@@ -41,14 +41,18 @@ class UDBStudentGuestSiteController extends Controller
 
      public function show(string $id)
     {
-        if(session()->has('estudianteUDB')){
-            $eventInfo = eventos::find($id);
-        //return $eventInfo;
-        return view('guestSite.eventInformation',compact('eventInfo'));
-    }else{
-        return view('layout.403');            
-   }  
-}
+        if (session()->has('invitado')) {
+            $eventInfo = DB::table('eventos as e')
+                            ->join('areaformativaentretenimientoevento as afee', 'afee.idEvento', '=', 'e.idEvento')
+                            ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
+                            ->join('areaformativaentretenimiento as afe', 'afe.idAreaformativaentretenimiento', '=', 'a.idAreaformativaentretenimiento')
+                            ->get();
+            //return $eventInfo;
+            return view('guestSite.eventInformation', compact('eventInfo'));
+        } else {
+            return view('layout.403');
+        }
+    }
 	public function generatePass()
 	{
 		$permittedChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

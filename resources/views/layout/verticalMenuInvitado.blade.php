@@ -22,7 +22,7 @@
             </li>
             
             <li id="opcionesCambiarContra">
-                <a href="">
+                <a href="{{route('users.formContra')}}">
                     Cambiar contraseña
                 </a>
             </li>                                                        

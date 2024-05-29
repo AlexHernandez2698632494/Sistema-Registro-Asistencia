@@ -35,16 +35,27 @@
             })            
         </script>
     @endif
-	@if (session('exitoSolicitud'))
-        <script>
-            swal({
-                title: "Solicitud realizada",
-                text: "{{ session('exitoSolicitud') }}",
-                icon: "success",
-                button: "OK",
-            })            
-        </script>
-    @endif
+	@if (session('exitoRestablecer'))
+	<script>
+		swal({
+			title: "Contraseña restablecida",
+			text: "{{ session('exitoRestablecer') }}",
+			icon: "success",
+			button: "OK",
+		})
+	</script>
+@endif
+
+@if (session('errorRestablecer'))
+	<script>
+		swal({
+			title: "Error al restablecer",
+			text: "{{ session('errorRestablecer') }}",
+			icon: "error",
+			button: "OK",
+		})            
+	</script>
+@endif
 <body>
 	<section class="vh-200" style="background-color: #0060B4;">
 		<div class="container py-5 h-200">
@@ -81,7 +92,7 @@
 									<button class="btn btn-primary btn-lg btn-block mt-2" style="background-color: #0060B4;" type="submit">Ingresar</button>
 								</div>
 								<div class="row">
-									<p class="mt-3"><a href="#" class="link-underline-primary">Olvide mi contraseña</a></p>
+									<p class="mt-3"><a href="{{ route('recuperarView') }}" class="link-underline-primary">Olvide mi contraseña</a></p>
 								</div>
 							</form>
 						</div>

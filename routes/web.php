@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 // });
 Route::get('/',[LoginController::class, 'welcome'])->name('welcome');
 
+//Rutas relacionadas con el controlador de administrador (AdminController)
 Route::prefix('admin')->group(function(){
     route::get('/index',[AdminController::class, 'index'])->name('admin.index');
     route::get('/create',[AdminController::class, 'create'])->name('admin.create');
@@ -36,9 +37,9 @@ Route::prefix('admin')->group(function(){
     route::delete('/delete',[AdminController::class,'destroy'])->name('admin.delete');
     route::get('/restoreView',[AdminController::class,'restoreView'])->name('admin.restoreView');
     route::put('/restore',[AdminController::class, 'restore'])->name('admin.restore');
-
 });
 
+//Rutas relacionadas con el controlador de eventos (EventController)
 Route::prefix('event')->group(function(){
     route::get('/index',[EventController::class,'index'])->name('events.index');
     route::get('create',[EventController::class,'create'])->name('events.create');
@@ -52,6 +53,7 @@ Route::prefix('event')->group(function(){
     route::delete('/destroyer',[EventController::class,'destroyer'])->name('events.destroyer');
 });
 
+//Rutas relacionadas con el controlador de invitados (GuestSiteController)
 Route::prefix('invitado')->group(function(){
     route::get('/index',[GuestSiteController::class,'guestSite'])->name('guestSite.index');
     route::post('/add',[GuestSiteController::class,'store'])->name('guestSite.add');
@@ -59,11 +61,15 @@ Route::prefix('invitado')->group(function(){
     route::get('show/{id}', [GuestSiteController::class, 'show'])->name('guestSite.showInfo');
     Route::get('/miPerfil', [guestSiteController::class, 'miPerfil'])->name('guestSite.miPerfil');
     route::put('/updateInfor',[guestSiteController::class,'updateInfor'])->name('guestSite.updateInfor');
-});
+    route::get('/adquirir',[guestSiteController::class,'buyIndividualGroupTicket'])->name('guestSite.ticketIG');   
+    route::get('/adquirir/entrada',[guestSiteController::class,'purchaseTicketI'])->name('guestSite.ticketI');   
+    Route::post('/QR', [GuestSiteController::class, 'addEntry'])->name('guestSite.addEntry');});
 
-
+//Rutas relacionadas con el controlador de usuarios (usuarioController)
 Route::prefix('user')->group(function(){
     route::get('/index',[usuarioController::class, 'index'])->name('user.index');
+    route::get('/cambiarContraFormulario',[usuarioController::class,'formContra'])->name('users.formContra');
+    route::put('/cambiarContra',[usuarioController::class, 'cambiarContra'])->name('user.cambiarContra');
 });
 
 //Rutas relacionadas con el controlador de login (LoginController)
@@ -71,8 +77,9 @@ Route::post('/login',[LoginController::class, 'login'])->name('login');
 Route::get('/loginView', [LoginController::class, 'showLogin'])->name('showLogin');
 Route::post('/firsAdmin', [LoginController::class, 'storeFirstAdmin'])->name('storeFirstAdmin');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
-//Route::get('/recuperarView', [LoginController::class, 'recuperarView'])->name('recuperarView');
-//Route::post('/recuperarContra', [LoginController::class, 'recuperarContra'])->name('recuperarContra');
+Route::get('/recuperarView', [LoginController::class, 'recuperarView'])->name('recuperarView');
+Route::post('/recuperarContra', [LoginController::class, 'recuperarContra'])->name('recuperarContra');
+
 
 //Rutas relacionadas con el controlador de estudiantes (GuestStudentSiteController)
 Route::get('/UDB', [GuestStudentSiteController::class, 'index'])->name('student.index');
@@ -98,6 +105,7 @@ Route::prefix('area')->group(function(){
     route::put('/restore',[AreaController::class, 'restore'])->name('area.restore');
 });
 
+//Rutas relacionadas con el controlador de personal UDB (UDBStaffGuestSiteController)
 Route::prefix('personal/UDB')->group(function(){
     route::get('/',[UDBStaffGuestSiteController::class, 'personalUDB'])->name('UDBStaffGuestSite.index');
     route::post('/add',[UDBStaffGuestSiteController::class,'store'])->name('UDBStaffGuestSite.add');

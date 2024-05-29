@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\UsuarioController;
 use App\Models\admin;
 use App\Http\Controllers\GuestSiteController;
+use App\Mail\Credentials;
 use App\Models\Usuarios;
 use App\Models\persona;
+use Illuminate\Support\Facades\Mail;
 
 class LoginController extends Controller
 {
@@ -44,7 +46,7 @@ class LoginController extends Controller
                         }else{
                             return redirect()->back()->with('error','Acceso denegado');
                         }
-                    }else if($accessLevel == 2){
+                    }else if($accessLevel == 2){ //estudiante UDB
                         $carnetUDB = $user[0]->idUsuario;
                         $UDBStudentGuestStatus = DB::table('estudianteUDB')->where('carnetUDB','=',$carnetUDB)->get();
                         if($UDBStudentGuestStatus && $UDBStudentGuestStatus[0]->estadoEliminacion == 1){
@@ -54,7 +56,7 @@ class LoginController extends Controller
                         }else{
                             return redirect()->back()->with('error','Acceso denegado');
                         }
-                    }else if($accessLevel == 3){
+                    }else if($accessLevel == 3){ //Personal UDB
                         $carnetUDB = $user[0]->idUsuario;
                         $UDBStaffGuestStatus = DB::table('personalUDB')->where('carnetUDB','=',$carnetUDB)->get();
                         if($UDBStaffGuestStatus && $UDBStaffGuestStatus[0]->estadoEliminacion == 1){
@@ -122,8 +124,7 @@ class LoginController extends Controller
     /**
      * Función para mostrar vista de login
      */
-    public function showLogin()
-    {
+    public function showLogin(){
         if(session()->has('user')){
             session()->forget('user');
         }  
@@ -228,5 +229,61 @@ class LoginController extends Controller
         }
         
         return to_route('showLogin');
+    }
+
+    public function generatePass()
+    {
+        $permittedChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $pass = '';
+        $strength = 10;
+
+        $stringLenght = strlen($permittedChars);
+
+        for ($i = 0; $i < $strength; $i++) {
+            $randomCharacter = $permittedChars[mt_rand(0, $stringLenght - 1)];
+            $pass .= $randomCharacter;
+        }
+        return $pass;
+    }
+
+    public function recuperarView(){
+        return view('recuperarContra');
+    }
+
+    public function recuperarContra(Request $request){
+        $request->validate([
+            'user' => 'required|string|max:255',
+        ]);
+        $userName = $request->input('user');
+
+        $user = DB::table('usuario')->where('usuario','=', $userName)->first();
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'Usuario no encontrado.');
+        }
+        if($user->nivel ==1){
+            $guest = DB::table('invitado')->where('duiInvitado','=', $user->idUsuario)->first();
+            $guestEmail = $guest->correoInvitado;
+            $newPassword = $this->generatePass();
+            DB::table('usuario')->where('usuario', $userName)->update([
+                'password' => hash('SHA256', $newPassword),
+            ]);
+    
+            $guestName = $guest->nombreInvitado . ' ' . $guest->apellidosInvitado;
+            $email = new Credentials($userName, $newPassword, $guestName);
+            Mail::to($guestEmail)->send($email);
+            return to_route('showLogin')->with('exitoRestablecer','La contraseña del usuario ha sido restablecida');
+        } else if($user->nivel ==2){
+            $studentUDB = DB::table('estudianteUDB')->where('carnetUDB','=', $user->idUsuario)->first();   
+            $studentUDBEmail = $studentUDB->correoUDB;  
+            $newPassword = $this->generatePass();
+            DB::table('usuario')->where('usuario', $userName)->update([
+                'password' => hash('SHA256', $newPassword),
+            ]);
+            $studentUDBName = $studentUDB->nombreUDB . ' ' . $studentUDB->apellidosUDB;
+            $email = new Credentials($userName, $newPassword, $studentUDBName);
+            Mail::to($studentUDBEmail)->send($email);
+            return to_route('showLogin')->with('exitoRestablecer','La contraseña del usuario ha sido restablecida');
+        }
     }
 }
