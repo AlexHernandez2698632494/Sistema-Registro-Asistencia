@@ -94,9 +94,6 @@
                                         <p><b>Hora del Evento: </b>{{$info->hora}}</p>
                                         <img src="{{ asset($info->qr_code) }}" alt="Código QR">
                                     </div>
-                                    <div class="card-footer text-body-secondary d-flex justify-content-center">
-                                        <a href="{{ route('UDBStaffGuestSite.showInfo', $info->idEvento) }}" class="btn btn-primary my-1 mx-1" style="background-color: #2F98FE;">Información</a>
-                                    </div>
                                 </div>
                             </div>
                       @endif
