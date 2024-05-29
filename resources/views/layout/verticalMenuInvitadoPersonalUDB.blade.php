@@ -10,10 +10,13 @@
                 <ul class="collapse list-unstyled" id="menuEventos">
                 <li>
                         <a href="" id="areaFormativa">Area Formativa</a>
-                    </li>
-                    <li>
-                        <a href="" id="areaEntretenimiento">Area Entretenimiento</a>
-                    </li>
+                </li>
+                <li>
+                    <a href="" id="areaEntretenimiento">Area Entretenimiento</a>
+                </li>
+                <li>
+                    <a href="{{route('UDBStaffGuestSite.purchasedTicket')}}" id="entradasAdquiridas">Entradas Adquiridas</a>
+                </li>
                 </ul>
             </li>  
             <li id="opcionesMiPerfil">

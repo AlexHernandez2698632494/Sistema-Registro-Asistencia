@@ -114,7 +114,9 @@ Route::prefix('personal/UDB')->group(function(){
     Route::get('/miPerfil', [UDBStaffGuestSiteController::class, 'miPerfil'])->name('UDBStaffGuestSite.miPerfil');
     route::put('/updateInfor',[UDBStaffGuestSiteController::class,'updateInfor'])->name('UDBStaffGuestSite.updateInfor');
     route::get('/adquirir', [UDBStaffGuestSiteController::class, 'buyIndividualGroupTicket'])->name('UDBStaffGuestSite.ticketIG');
-    route::get('/adquirir/entrada', [UDBStaffGuestSiteController::class, 'purchaseTicketI'])->name('UDBStaffGuestSite.ticketI');
+    route::get('/adquirir/entrada', [UDBStaffGuestSiteController::class, 'purchaseTicketI'])->name('UDBStaffGuestSite.ticketI');    
+    route::get('/adquirir/entradas', [UDBStaffGuestSiteController::class, 'purchaseTicketG'])->name('UDBStaffGuestSite.ticketG');
+    route::get('/entradas/adquiridas', [UDBStaffGuestSiteController::class, 'purchasedTicket'])->name('UDBStaffGuestSite.purchasedTicket');     
     route::post('/QR', [UDBStaffGuestSiteController::class, 'addEntry'])->name('UDBStaffGuestSite.addEntry');
 });
 

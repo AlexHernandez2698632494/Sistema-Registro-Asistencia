@@ -4,7 +4,6 @@
 @section('title','Mi Perfil')
 
 <script src="{{ asset('js/sweetalert.js') }}"></script>
-<script src="{{ asset('js/guestSite/miPerfil.js') }}"></script>
 
 <body style="overflow-x: hidden">    
 	<script src="{{ asset('js/inactividad.js') }}"></script>
@@ -42,7 +41,7 @@
 
    @include('layout.horizontalMenu')    
     <div class="wrapper">
-        @include('layout.verticalMenuInvitado')
+        @include('layout.verticalMenuInvitadoPersonalUDB')
         <div id="content" class="mt-0 pt-0">            
             <nav class="navbar navbar-expand-lg navbar-light bg-light mt-3 mx-5">
                 <div class="container-fluid">                    
@@ -62,7 +61,7 @@
                     </a>
                    
                     {{-- Botón de inscripción grupal --}}
-                    <a href="" class="btn btn-secondary mx-2">
+                    <a href="{{ route('UDBStaffGuestSite.ticketG') }}" class="btn btn-secondary mx-2">
                         Inscripción Grupal
                     </a>
                 </div>
