@@ -54,13 +54,13 @@
                 </div>
             </nav>
             <div class="row mx-5">
-                @if($guestInfo->isEmpty())
+                @if($purchaseTicket->isEmpty())
                    <div class="alert alert-warning" role="alert">
-                        No se han encontrado Eventos Disponibles
+                        No se han encontrado registro de entradas Adquiridas
                     </div>  
                     @else 
                     <div class="alert alert-primary" role="alert">
-                    Eventos Disponibles<b></b>
+                    Entradas Adquiridas<b></b>
                     </div>
                      <div class="col-md-6">
                       @foreach($formativa as $info)

@@ -215,11 +215,13 @@ public function addEntry(Request $request)
     
     try {
         DB::beginTransaction();
+        $idEvento = $request->input('idEvento');
+        $nombreEvento = DB::table('eventos')->where('idEvento','=',$idEvento)->value('nombreEvento');
         
         // Generate QR code content
         $qrContent = json_encode([
             'nombre' => $request->input('nombre'),
-            'evento' => $request->input('idEvento'),
+            'evento' => $nombreEvento,
             'institucion' => $request->input('institucion')
         ]);
 
@@ -227,7 +229,8 @@ public function addEntry(Request $request)
         $qrCode = QrCode::size(150)->generate($qrContent);
 
         // Save the QR code as an image
-        $qrPath = 'qr/'.$request->input('nombre').'_'.time().'.svg'; // Save as SVG
+        $currentDateTime = date('Ymd_His');
+        $qrPath = 'qr/'.$request->input('nombre').'_'.$nombreEvento.'_'.$currentDateTime.'.svg'; // Save as SVG
         file_put_contents(public_path($qrPath), $qrCode);
 
         
@@ -253,10 +256,7 @@ public function addEntry(Request $request)
 
 public function purchasedTicket() {
     if (session()->has('personalUDB')) {
-        $guestInfo = DB::table('Eventos as e')
-            ->join('entradas as en','en.idEvento', '=', 'e.idEvento')
-            ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento','en.qr_code')
-            ->get();
+        $purchaseTicket = DB::table('entradas')->get();
 
         $formativa = DB::table('areaFormativaEntretenimientoEvento as afee')
             ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
@@ -280,10 +280,10 @@ public function purchasedTicket() {
         $eventos = [
             'formativa' => $formativa,
             'entretenimiento' => $entretenimiento,
-            'guestInfo' => $guestInfo
+            'purchaseTicket' => $purchaseTicket
         ];
 
-        return view('UDBStaffGuestSite.purchasedTicket', compact('eventos','formativa','entretenimiento','guestInfo'));
+        return view('UDBStaffGuestSite.purchasedTicket', compact('eventos','formativa','entretenimiento','purchaseTicket'));
     } else {
         return view('layout.403');
     }
