@@ -146,3 +146,5 @@ Route::prefix('invitado/estudiante')->group(function(){
 // Rutas relacionadas al controlador para ver el registro de entradas adquiridas (viewEventLogController)
 Route::get('/entry/{id}', [viewEventLogController::class, 'show'])->name('viewEventLog.entry');
 Route::put('/entry/confirm/{entradaId}', [viewEventLogController::class, 'confirmAsistencia'])->name('confirmAsistencia');
+Route::get('/registro', [viewEventLogController::class, 'viewAttendanceRecordEntertainmentArea'])->name('viewEventLog.viewAttendanceRecordEntertainmentArea');
+Route::get('/attendance/records', [viewEventLogController::class, 'viewAttendanceRecordEntertainmentArea'])->name('attendance.records');

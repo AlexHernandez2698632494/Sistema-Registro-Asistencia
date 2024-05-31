@@ -57,7 +57,7 @@
                 </a>
                 <ul class="collapse list-unstyled" id="menuRegistro">
                     <li><a href="#formativa">Area Formativa</a></li>
-                    <li><a href="#entretenimiento">Area Entretenimiento</a></li>               
+                    <li><a href="{{route('viewEventLog.viewAttendanceRecordEntertainmentArea')}}">Area Entretenimiento</a></li>               
                 </ul>
             </li>
             <li id="opcionesUsuarios">

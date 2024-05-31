@@ -138,3 +138,13 @@ CREATE TABLE entradas(
     asistencia BOOLEAN DEFAULT FALSE,
     FOREIGN KEY(idEvento) REFERENCES Eventos(idEvento)
 );
+
+CREATE TABLE registro(
+    idRegistro INT AUTO_INCREMENT PRIMARY KEY,
+    NombreEvento VARCHAR(255) NOT NULL,
+    fecha DATE NOT NULL,
+    hora TIME NOT NULL,
+	nombreArea text not null,
+	nombre text,
+    total_asistencia int not null
+);

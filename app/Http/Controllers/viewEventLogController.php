@@ -34,10 +34,52 @@ class viewEventLogController extends Controller
                 // Actualizar el campo 'asistencia' a 1
                 Entrada::where('idEntrada', $entradaId)->update(['asistencia' => 1]);
                 $idEvento = DB::table('entradas')->where('idEntrada','=',$entradaId)->value('idEvento');
+
                 return to_route('viewEventLog.entry', ['id' => $idEvento])->with('exito', 'Asistencia confirmada correctamente.');
         } catch (Exception $e) {
             return to_route('viewEventLog.entry', ['id' => $idEvento])->with('error', 'Error al confirmar la asistencia.');
         }
+        } else {
+            return view('layout.403');
+        }
+    }
+
+    public function viewAttendanceRecordFormativeArea(){
+        if (session()->has('administrador')) {
+
+        } else {
+            return view('layout.403');
+        }
+    }
+
+    public function viewAttendanceRecordEntertainmentArea(Request $request) {
+        if (session()->has('administrador')) {
+            $idEvento = $request->get('idEvento'); // Obtener el idEvento desde la solicitud
+    
+            $records = DB::table('entradas as en')
+                        ->select(
+                            'e.nombreEvento', 
+                            'e.fecha', 
+                            'e.hora', 
+                            'afe.nombreArea', 
+                            'a.nombre', 
+                            DB::raw('COUNT(en.asistencia) AS total_registrados'),
+                            DB::raw('SUM(CASE WHEN en.asistencia = 1 THEN 1 ELSE 0 END) AS total_asistencia')
+                        )
+                        ->join('eventos as e', 'e.idEvento', '=', 'en.idEvento')
+                        ->join('areaformativaentretenimientoevento as afee', 'e.idEvento', '=', 'afee.idEvento')
+                        ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
+                        ->join('areaformativaentretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
+                        ->where('en.asistencia', '<=', 1); // Filtrar asistencias que tengan 0 o 1
+    
+            if ($idEvento) {
+                $records->where('e.idEvento', $idEvento);
+            }
+    
+            $records = $records->groupBy('e.nombreEvento', 'e.fecha', 'e.hora', 'afe.nombreArea', 'a.nombre')
+                        ->get();
+    
+            return view('viewEventLog.viewAttendanceRecordEntertainmentArea', compact('records'));
         } else {
             return view('layout.403');
         }
