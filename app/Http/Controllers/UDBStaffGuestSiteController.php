@@ -217,12 +217,13 @@ public function addEntry(Request $request)
         DB::beginTransaction();
         $idEvento = $request->input('idEvento');
         $nombreEvento = DB::table('eventos')->where('idEvento','=',$idEvento)->value('nombreEvento');
-        
+       // $url = route('viewEventLog.entry', ['id' => $idEvento]); 
         // Generate QR code content
         $qrContent = json_encode([
             'nombre' => $request->input('nombre'),
             'evento' => $nombreEvento,
-            'institucion' => $request->input('institucion')
+            'institucion' => $request->input('institucion'),
+            //'url' => $url
         ]);
 
         // Generate QR code instance
@@ -256,7 +257,9 @@ public function addEntry(Request $request)
 
 public function purchasedTicket() {
     if (session()->has('personalUDB')) {
-        $purchaseTicket = DB::table('entradas')->get();
+        $id= session()->get('personalUDB');
+        $informacionUDB = DB::table('personalUDB')->where('idUDB','=',$id[0]->idUDB)->first();
+        $purchaseTicket = DB::table('entradas')->where('nombre','=',$informacionUDB->nombreUDB. ' ' .$informacionUDB->apellidosUDB)->get();
 
         $formativa = DB::table('areaFormativaEntretenimientoEvento as afee')
             ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')

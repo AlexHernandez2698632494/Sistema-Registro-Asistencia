@@ -7,38 +7,37 @@
 
 <body style="overflow-x: hidden">    
 	<script src="{{ asset('js/inactividad.js') }}"></script>
-	@if (session('exitoModificar'))
+    @if (session('exitoAgregar'))
         <script>
             swal({
-                title: "Registro modificado",
-                text: "{{ session('exitoModificar') }}",
+                title: "Registro agregado",
+                text: "{{ session('exitoAgregar') }}",
                 icon: "success",
                 button: "OK",
                 closeOnClickOutside: false,
-                }).then((value) => {
+            }).then((value) => {
                 if (value) {
-                    location.reload(); 
+                    location.reload();
                 }
-            })            
+            })
         </script>
     @endif
-
-    @if (session('errorModificar'))
+ 
+    @if (session('errorAgregar'))
         <script>
             swal({
-                title: "Error al modificar",
-                text: "{{ session('errorModificar') }}",
+                title: "Error al adquirir",
+                text: "{{ session('errorAgregar') }}",
                 icon: "error",
                 button: "OK",
                 closeOnClickOutside: false,
-                }).then((value) => {
+            }).then((value) => {
                 if (value) {
-                    location.reload(); 
+                    location.reload();
                 }
-            })            
+            })
         </script>
-    @endif    
-
+    @endif
    @include('layout.horizontalMenu')    
     <div class="wrapper">
         @include('layout.verticalMenuInvitadoPersonalUDB')
@@ -58,7 +57,7 @@
                    <div class="alert alert-warning" role="alert">
                         No se han encontrado registro de entradas Adquiridas
                     </div>  
-                    @else 
+                @else 
                     <div class="alert alert-primary" role="alert">
                     Entradas Adquiridas<b></b>
                     </div>

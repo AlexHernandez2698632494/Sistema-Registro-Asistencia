@@ -11,6 +11,7 @@ use App\Http\Controllers\GuestSiteController;
 use App\Http\Controllers\GuestSiteOtherInstitutionController;
 use App\Http\Controllers\UDBStaffGuestSiteController;
 use App\Http\Controllers\UDBTeacherGuestSiteController;
+use App\Http\Controllers\viewEventLogController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -122,6 +123,7 @@ Route::prefix('personal/UDB')->group(function(){
     route::post('/QR', [UDBStaffGuestSiteController::class, 'addEntry'])->name('UDBStaffGuestSite.addEntry');
 });
 
+//Rutas relacionadas con el controlador de docente UDB (UDBTeacherGuestSiteController)
 Route::prefix('docente/UDB')->group(function(){
     route::get('/',[UDBTeacherGuestSiteController::class, 'docenteUDB'])->name('UDBTeacherGuestSite.index');
     route::post('/add',[UDBTeacherGuestSiteController::class,'store'])->name('UDBTeacherGuestSite.add');
@@ -131,6 +133,7 @@ Route::prefix('docente/UDB')->group(function(){
     route::put('/updateInfor',[UDBTeacherGuestSiteController::class,'updateInfor'])->name('UDBTeacherGuestSite.updateInfor');
 });
 
+//Rutas relacionadas con el controlador de estudiante otra institucion  (GuestSiteOtherInstitutionController)
 Route::prefix('invitado/estudiante')->group(function(){
     route::get('/',[GuestSiteOtherInstitutionController::class, 'student'])->name('StudentGuestSite.index');
     route::post('/add',[GuestSiteOtherInstitutionController::class,'store'])->name('StudentGuestSite.add');
@@ -140,3 +143,6 @@ Route::prefix('invitado/estudiante')->group(function(){
     route::put('/updateInfor',[GuestSiteOtherInstitutionController::class,'updateInfor'])->name('StudentGuestSite.updateInfor');
 });
 
+// Rutas relacionadas al controlador para ver el registro de entradas adquiridas (viewEventLogController)
+Route::get('/entry/{id}', [viewEventLogController::class, 'show'])->name('viewEventLog.entry');
+Route::put('/entry/confirm/{entradaId}', [viewEventLogController::class, 'confirmAsistencia'])->name('confirmAsistencia');
