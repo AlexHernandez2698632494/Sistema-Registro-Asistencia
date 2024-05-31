@@ -259,4 +259,30 @@ class AdminController extends Controller
             return view('layout.403');            
         } 
     }
+    public function destroyer(Request $request)
+    {
+        if (session()->has('administrador')) {
+            //
+            try {
+                $request->validate([
+                    'idAdminEliminar' => 'required'
+                ]);
+
+                $eventId = $request->input('idAdminEliminar');
+
+                DB::transaction(function () use ($eventId) {
+                    
+                    // Eliminar el registro en la tabla Eventos
+                    DB::table('administrador')
+                        ->where('idAdmin', $eventId)
+                        ->delete();
+                });
+                return to_route('admin.index')->with('exitoEliminacion', 'El administrador se ha sido eliminado correctamente');
+            } catch (Exception $e) {
+                return to_route('admin.index')->with('errorEliminacion', 'Ha ocurrido un error al eliminar el administrador');
+            };
+        } else {
+            return view('layout.403');
+        }
+    }
 }

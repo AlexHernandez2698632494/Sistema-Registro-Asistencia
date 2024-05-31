@@ -22,7 +22,7 @@
                 </div>
             </nav>
             <div class="row">
-                @foreach($eventInfo as $eventInfo)
+              
                 <div class="col-lg-4 col-xs-12">
                     <div class="card">
                         <div class="card-body">
@@ -83,7 +83,7 @@
                         </div>
                     </div>
                 </div>
-                @endforeach
+                
             </div>
         </div>
     </div>

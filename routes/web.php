@@ -40,6 +40,7 @@ Route::prefix('admin')->group(function(){
     route::delete('/delete',[AdminController::class,'destroy'])->name('admin.delete');
     route::get('/restoreView',[AdminController::class,'restoreView'])->name('admin.restoreView');
     route::put('/restore',[AdminController::class, 'restore'])->name('admin.restore');
+    route::delete('/destroyer',[AdminController::class,'destroyer'])->name('admin.destroyer');
 });
 
 //Rutas relacionadas con el controlador de eventos (EventController)
