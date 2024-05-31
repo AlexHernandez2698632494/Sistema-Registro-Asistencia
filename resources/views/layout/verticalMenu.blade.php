@@ -53,11 +53,11 @@
             </li>
             <li id="opcionesVerRegistro">
                 <a class="dropdown-toggle" data-bs-toggle="collapse" href="#menuRegistro" role="button" aria-expanded="false" aria-controls="collapseExample">
-                    Ver registro eventos
+                    Ver registros eventos
                 </a>
                 <ul class="collapse list-unstyled" id="menuRegistro">
-                    <li><a href="#formativa">Area Formativa</a></li>
-                    <li><a href="{{route('viewEventLog.viewAttendanceRecordEntertainmentArea')}}">Area Entretenimiento</a></li>               
+                    <li><a href="#formativa">Registro de asistencia UDB</a></li>
+                    <li><a href="{{route('viewEventLog.viewAttendanceRecordEntertainmentArea')}}">Registro de asistencia</a></li>               
                 </ul>
             </li>
             <li id="opcionesUsuarios">

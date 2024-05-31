@@ -141,51 +141,94 @@
 											<span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-map-location-dot"></i></span>
 											<select class="form-select" aria-label="Default select example" id="txtSex" name="municipio">
                                                 <option value="" disabled selected>Ingrese su municipio</option>
-                                                <option value="La Unión Norte">La Unión Norte</option>
-                                                <option value="Chalatenango Centro">Chalatenango Centro</option>
-                                                <option value="San Miguel Centro">San Miguel Centro</option>
-                                                <option value="Santa Ana Norte">Santa Ana Norte</option>
-                                                <option value="La Unión Sur">La Unión Sur</option>
-                                                <option value="Usulután Este">Usulután Este</option>
-                                                <option value="San Miguel Norte">San Miguel Norte</option>
-                                                <option value="Usulután Oeste">Usulután Oeste</option>
-                                                <option value="Morazán Norte">Morazán Norte</option>
-                                                <option value="Chalatenango Sur">Chalatenango Sur</option>
-                                                <option value="Morazán Sur">Morazán Sur</option>
-                                                <option value="Cabañas Este">Cabañas Este</option>
-                                                <option value="San Vicente Sur">San Vicente Sur</option>
-                                                <option value="Ahuachapán Sur">Ahuachapán Sur</option>
-                                                <option value="San Vicente Norte">San Vicente Norte</option>
-                                                <option value="Usulután Norte">Usulután Norte</option>
-                                                <option value="Sonsonate Este">Sonsonate Este</option>
-                                                <option value="Ahuachapán Centro">Ahuachapán Centro</option>
-                                                <option value="Cuscatlan Norte">Cuscatlan Norte</option>
-                                                <option value="La Paz Centro">La Paz Centro</option>
-                                                <option value="Santa Ana Oeste">Santa Ana Oeste</option>
-                                                <option value="La Libertad Costa">La Libertad Costa</option>
-                                                <option value="Cabañas Oeste">Cabañas Oeste</option>
-                                                <option value="Santa Ana Centro">Santa Ana Centro</option>
-                                                <option value="La Paz Este">La Paz Este</option>
-                                                <option value="La Paz Oeste">La Paz Oeste</option>
-                                                <option value="Sonsonate Centro">Sonsonate Centro</option>
-                                                <option value="San Miguel Oeste">San Miguel Oeste</option>
-                                                <option value="La Libertad Norte">La Libertad Norte</option>
-                                                <option value="La Libertad Centro">La Libertad Centro</option>
-                                                <option value="Chalatenango Norte">Chalatenango Norte</option>
-                                                <option value="La Libertad Oeste">La Libertad Oeste</option>
-                                                <option value="Cuscatlan Sur">Cuscatlan Sur</option>
-                                                <option value="San Salvador Norte">San Salvador Norte</option>
-                                                <option value="Santa Ana Este">Santa Ana Este</option>
-                                                <option value="San Salvador Sur">San Salvador Sur</option>
-                                                <option value="San Salvador Este">San Salvador Este</option>
-                                                <option value="La Libertad Sur">La Libertad Sur</option>
-                                                <option value="Sonsonate Norte">Sonsonate Norte</option>
-                                                <option value="Sonsonate Oeste">Sonsonate Oeste</option>
-                                                <option value="Ahuachapán Norte">Ahuachapán Norte</option>
-                                                <option value="San Salvador Centro">San Salvador Centro</option>
-                                                <option value="San Salvador Oeste">San Salvador Oeste</option>
-                                                <option value="La Libertad Este">La Libertad Este</option>
+                                                <!-- Ahuachapán -->
+                                                <optgroup label="Ahuachapán">
+                                                    <option value="Ahuachapán Centro">Ahuachapán Centro</option>
+                                                    <option value="Ahuachapán Norte">Ahuachapán Norte</option>
+                                                    <option value="Ahuachapán Sur">Ahuachapán Sur</option>
+                                                </optgroup>
+                                                <!-- Cabañas -->
+                                                <optgroup label="Cabañas">
+                                                    <option value="Cabañas Este">Cabañas Este</option>
+                                                    <option value="Cabañas Oeste">Cabañas Oeste</option>
+                                                </optgroup>
+                                                <!-- Chalatenango -->
+                                                <optgroup label="Chalatenango">
+                                                    <option value="Chalatenango Centro">Chalatenango Centro</option>
+                                                    <option value="Chalatenango Norte">Chalatenango Norte</option>
+                                                    <option value="Chalatenango Sur">Chalatenango Sur</option>
+                                                </optgroup>
+                                                <!-- Cuscatlán -->
+                                                <optgroup label="Cuscatlán">
+                                                    <option value="Cuscatlan Norte">Cuscatlan Norte</option>
+                                                    <option value="Cuscatlan Sur">Cuscatlan Sur</option>
+                                                </optgroup>
+                                                <!-- La Libertad -->
+                                                <optgroup label="La Libertad">
+                                                    <option value="La Libertad Centro">La Libertad Centro</option>
+                                                    <option value="La Libertad Costa">La Libertad Costa</option>
+                                                    <option value="La Libertad Este">La Libertad Este</option>
+                                                    <option value="La Libertad Norte">La Libertad Norte</option>
+                                                    <option value="La Libertad Oeste">La Libertad Oeste</option>
+                                                    <option value="La Libertad Sur">La Libertad Sur</option>
+                                                </optgroup>
+                                                <!-- La Paz -->
+                                                <optgroup label="La Paz">
+                                                    <option value="La Paz Centro">La Paz Centro</option>
+                                                    <option value="La Paz Este">La Paz Este</option>
+                                                    <option value="La Paz Oeste">La Paz Oeste</option>
+                                                </optgroup>
+                                                <!-- La Unión -->
+                                                <optgroup label="La Unión">
+                                                    <option value="La Unión Norte">La Unión Norte</option>
+                                                    <option value="La Unión Sur">La Unión Sur</option>
+                                                </optgroup>
+                                                <!-- Morazán -->
+                                                <optgroup label="Morazán">
+                                                    <option value="Morazán Norte">Morazán Norte</option>
+                                                    <option value="Morazán Sur">Morazán Sur</option>
+                                                </optgroup>
+                                                <!-- San Miguel -->
+                                                <optgroup label="San Miguel">
+                                                    <option value="San Miguel Centro">San Miguel Centro</option>
+                                                    <option value="San Miguel Norte">San Miguel Norte</option>
+                                                    <option value="San Miguel Oeste">San Miguel Oeste</option>
+                                                </optgroup>
+                                                <!-- San Salvador -->
+                                                <optgroup label="San Salvador">
+                                                    <option value="San Salvador Centro">San Salvador Centro</option>
+                                                    <option value="San Salvador Este">San Salvador Este</option>
+                                                    <option value="San Salvador Norte">San Salvador Norte</option>
+                                                    <option value="San Salvador Oeste">San Salvador Oeste</option>
+                                                    <option value="San Salvador Sur">San Salvador Sur</option>
+                                                </optgroup>
+                                                <!-- San Vicente -->
+                                                <optgroup label="San Vicente">
+                                                    <option value="San Vicente Norte">San Vicente Norte</option>
+                                                    <option value="San Vicente Sur">San Vicente Sur</option>
+                                                </optgroup>
+                                                <!-- Santa Ana -->
+                                                <optgroup label="Santa Ana">
+                                                    <option value="Santa Ana Centro">Santa Ana Centro</option>
+                                                    <option value="Santa Ana Este">Santa Ana Este</option>
+                                                    <option value="Santa Ana Norte">Santa Ana Norte</option>
+                                                    <option value="Santa Ana Oeste">Santa Ana Oeste</option>
+                                                </optgroup>
+                                                <!-- Sonsonate -->
+                                                <optgroup label="Sonsonate">
+                                                    <option value="Sonsonate Centro">Sonsonate Centro</option>
+                                                    <option value="Sonsonate Este">Sonsonate Este</option>
+                                                    <option value="Sonsonate Norte">Sonsonate Norte</option>
+                                                    <option value="Sonsonate Oeste">Sonsonate Oeste</option>
+                                                </optgroup>
+                                                <!-- Usulután -->
+                                                <optgroup label="Usulután">
+                                                    <option value="Usulután Este">Usulután Este</option>
+                                                    <option value="Usulután Norte">Usulután Norte</option>
+                                                    <option value="Usulután Oeste">Usulután Oeste</option>
+                                                </optgroup>
                                             </select>
+                                            
 										</div>
 									</div>
                                     <div class="row mx-2 my-2 mt-6">
