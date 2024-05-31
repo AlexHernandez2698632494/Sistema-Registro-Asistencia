@@ -9,6 +9,7 @@ use App\Http\Controllers\UDBStudentGuestSiteController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\GuestSiteController;
 use App\Http\Controllers\UDBStaffGuestSiteController;
+use App\Http\Controllers\UDBTeacherGuestSiteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -118,5 +119,14 @@ Route::prefix('personal/UDB')->group(function(){
     route::get('/adquirir/entradas', [UDBStaffGuestSiteController::class, 'purchaseTicketG'])->name('UDBStaffGuestSite.ticketG');
     route::get('/entradas/adquiridas', [UDBStaffGuestSiteController::class, 'purchasedTicket'])->name('UDBStaffGuestSite.purchasedTicket');     
     route::post('/QR', [UDBStaffGuestSiteController::class, 'addEntry'])->name('UDBStaffGuestSite.addEntry');
+});
+
+Route::prefix('docente/UDB')->group(function(){
+    route::get('/',[UDBTeacherGuestSiteController::class, 'docenteUDB'])->name('UDBTeacherGuestSite.index');
+    route::post('/add',[UDBTeacherGuestSiteController::class,'store'])->name('UDBTeacherGuestSite.add');
+    route::get('/index',[UDBTeacherGuestSiteController::class,'site'])->name('UDBTeacherGuestSite.site');
+    route::get('show/{id}', [UDBTeacherGuestSiteController::class, 'show'])->name('UDBTeacherGuestSite.showInfo');
+    Route::get('/miPerfil', [UDBTeacherGuestSiteController::class, 'miPerfil'])->name('UDBTeacherGuestSite.miPerfil');
+    route::put('/updateInfor',[UDBTeacherGuestSiteController::class,'updateInfor'])->name('UDBTeacherGuestSite.updateInfor');
 });
 
