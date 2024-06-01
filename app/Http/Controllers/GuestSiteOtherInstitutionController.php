@@ -10,9 +10,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Models\estudianteUDB;
 use App\Mail\Credentials;
+use App\Models\Entrada;
 use App\Models\estudianteOtraInstitucion;
 use App\Models\Usuarios;
 use App\Models\eventos;
+use Illuminate\Support\Facades\Redirect;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
 use Exception;
 
 class GuestSiteOtherInstitutionController extends Controller
@@ -47,17 +51,16 @@ class GuestSiteOtherInstitutionController extends Controller
         }  
      }
 
-     public function show(string $id)
-    {
+    public function show(string $id){
         if (session()->has('estudianteInstitucion')) {
             $eventInfo = DB::table('eventos as e')
                             ->join('areaformativaentretenimientoevento as afee', 'afee.idEvento', '=', 'e.idEvento')
                             ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
                             ->join('areaformativaentretenimiento as afe', 'afe.idAreaformativaentretenimiento', '=', 'a.idAreaformativaentretenimiento')
-                            ->where('idEvento','=',$id)
+                            ->where('e.idEvento','=',$id)
                             ->get();
             //return $eventInfo;
-            return view('guestSite.eventInformation', compact('eventInfo'));
+            return view('StudentGuestSite.eventInformation', compact('eventInfo'));
         } else {
             return view('layout.403');
         }
@@ -150,35 +153,35 @@ class GuestSiteOtherInstitutionController extends Controller
 
     public function miPerfil(){
         if(session()->has('estudianteInstitucion')){
-            $id= session()->get('estudiante');
-            $informacionUDB = DB::table('estudiante')->where('idUDB','=',$id[0]->idUDB)->get();
-            return view('StudentGuestSite.miPerfil', compact('informacionUDB'));
+            $id= session()->get('estudianteInstitucion');
+            $informacionInstitucion = DB::table('estudianteInstitucion')->where('idInstitucion','=',$id[0]->idInstitucion)->get();
+            return view('StudentGuestSite.miPerfil', compact('informacionInstitucion'));
         } else{
             return view('layout.403');
         }
     }
-
+    
     public function updateInfor(Request $request)
     {
-        if (session()->has('estudiante')) {
+        if (session()->has('estudianteInstitucion')) {
             $validator = Validator::make($request->all(), [
-                'correoUDB' => 'required|email',
-                'telefonoUDB' => [
+                'correoInstitucion' => 'required|email',
+                'telefonoInstitucion' => [
                     'required',
                     'regex:/^[267]\d{3}-\d{4}$/'
                 ]
             ]);
-
+    
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-
+    
             try {
                 $UDB = estudianteOtraInstitucion::findOrFail($request->input('idInvitadoActualizar'));
-                $UDB->correoInstitucion = $request->input('correoUDB');
-                $UDB->telefonoInstitucion = $request->input('telefonoUDB');
+                $UDB->correoInstitucion = $request->input('correoInstitucion');
+                $UDB->telefonoInstitucion = $request->input('telefonoInstitucion');
                 $UDB->save();
-
+    
                 return redirect()->back()->with('exitoModificar', 'Información actualizada correctamente');
             } catch (\Exception $e) {
                 return redirect()->back()->with('errorModificar', 'Hubo un error al actualizar la información');
@@ -187,4 +190,107 @@ class GuestSiteOtherInstitutionController extends Controller
             return view('layout.403');
         }
     }
+
+    public function buyIndividualGroupTicket (){
+        return view('StudentGuestSite.ticketIG');
+    }
+    public function purchaseTicketI(){
+        if(session()->has('estudianteInstitucion')){
+            $id= session()->get('estudianteInstitucion');
+            $informacionInstitucion = DB::table('estudianteInstitucion')->where('idInstitucion','=',$id[0]->idInstitucion)->get();
+            $eventos = DB::table('Eventos')->get();
+            return view('StudentGuestSite.ticketI', compact('eventos','informacionInstitucion'));
+        
+        }
+    }
+    
+    public function purchaseTicketG(){
+        return view('StudentGuestSite.ticketG');
+    }
+    
+    public function addEntry(Request $request)
+    {
+        // Validate the incoming request data
+        $request->validate([
+            'idEvento' => 'required|integer|exists:eventos,idEvento' // Ensure 'eventos' matches your actual table name
+        ]);
+        
+        try {
+            DB::beginTransaction();
+            $idEvento = $request->input('idEvento');
+            $evento = DB::table('eventos')->where('idEvento', '=', $idEvento)->first();
+            $capacidadEvento = $evento->capacidad;
+    
+            // Contar las entradas vendidas para este evento
+            $entradasVendidas = DB::table('entradas')->where('idEvento', '=', $idEvento)->count();
+    
+            // Verificar si hay capacidad disponible
+            if ($entradasVendidas >= $capacidadEvento) {
+                throw new Exception('No hay capacidad disponible para este evento.');
+            }
+    
+            // Generar contenido y guardar QR
+            $nombreEvento = $evento->NombreEvento;              
+            $id= session()->get('estudianteInstitucion');
+            // $url = route('viewEventLog.entry', ['id' => $idEvento]); 
+            // Generate QR code content
+            $qrContent = json_encode([
+                'nombre' => $request->input('nombre'),
+                'evento' => $nombreEvento,
+                'institucion' => $request->input('institucion'),
+                //'url' => $url
+            ]);
+    
+            // Generate QR code instance
+            $qrCode = QrCode::size(150)->generate($qrContent);
+    
+            // Save the QR code as an image
+            $currentDateTime = date('Ymd_His');
+            $qrPath = 'qr/'.$request->input('nombre').'_'.$nombreEvento.'_'.$currentDateTime.'.svg'; // Save as SVG
+            file_put_contents(public_path($qrPath), $qrCode);
+    
+            $idEstudianteUDB = 0;
+            $idDocenteUDB = 0 ;
+            $idPersonalUDB = 0;
+            $idEstudianteInstitucion = $id[0]->idInstitucion ;
+    
+            // Store the entry in the database
+            $entrada = new Entrada();
+            $entrada->idEvento = $request->input('idEvento');
+            $entrada->idEstudianteUDB = $idEstudianteUDB;
+            $entrada->idDocenteUDB = $idDocenteUDB ;
+            $entrada->idPersonalUDB = $idPersonalUDB;
+            $entrada->idEstudianteInstitucion = $idEstudianteInstitucion ;
+            $entrada->nombre = $request->input('nombre');
+            $entrada->sexo = $request->input('sexo');
+            $entrada->institucion = $request->input('institucion');
+            $entrada->nivel_educativo = $request->input('nivelEducativo');
+            $entrada->qr_code = $qrPath;
+            $entrada->save();
+    
+            DB::commit();
+    
+            return Redirect::back()->with('exitoAgregar', 'Entrada Adquirida Exitosamente');
+        } catch(Exception $e){
+            DB::rollback();
+            return Redirect::back()->with('errorAgregar', 'Ha ocurrido un error al adquirir la entrada, vuelva a intentarlo más tarde');
+        }
+    }
+    
+    public function purchasedTicket() {
+        if (session()->has('estudianteInstitucion')) {
+            $id= session()->get('estudianteInstitucion');
+            $informacionUDB = DB::table('estudianteInstitucion')->where('idInstitucion','=',$id[0]->idInstitucion)->first();
+            $purchaseTicket = DB::table('entradas')
+            ->join('Eventos', 'entradas.idEvento', '=', 'Eventos.idEvento')
+            ->select('Eventos.NombreEvento', 'Eventos.fecha', 'Eventos.hora', 'entradas.qr_code')
+            ->where('entradas.nombre', '=', $informacionUDB->nombreInstitucion . ' ' . $informacionUDB->apellidosInstitucion)
+            ->get();
+            //return $purchaseTicket;
+            return view('StudentGuestSite.purchasedTicket', compact('purchaseTicket'));
+        } else {
+            return view('layout.403');
+        }
+    }
+    
 }

@@ -127,8 +127,8 @@ class LoginController extends Controller
             session()->forget('personalUDB');
         }else if(session()->has('docenteUDB')){
             session()->forget('docenteUDB');
-        }else if(session()->has('estudianteinstitucion')){
-            session()->forget('estudianteinstitucion');
+        }else if(session()->has('estudianteInstitucion')){
+            session()->forget('estudianteInstitucion');
         }else if(session()->has('administrador')){
             session()->forget('administrador');            
         }
@@ -161,8 +161,8 @@ class LoginController extends Controller
             session()->forget('personalUDB');
         }else if(session()->has('docenteUDB')){
             session()->forget('docenteUDB');
-        }else if(session()->has('estudianteinstitucion')){
-            session()->forget('estudianteinstitucion');
+        }else if(session()->has('estudianteInstitucion')){
+            session()->forget('estudianteInstitucion');
         }else if(session()->has('administrador')){
             session()->forget('administrador');            
         }
@@ -254,8 +254,8 @@ class LoginController extends Controller
             session()->forget('personalUDB');
         }else if(session()->has('docenteUDB')){
             session()->forget('docenteUDB');
-        }else if(session()->has('estudianteinstitucion')){
-            session()->forget('estudianteinstitucion');
+        }else if(session()->has('estudianteInstitucion')){
+            session()->forget('estudianteInstitucion');
         }else if(session()->has('administrador')){
             session()->forget('administrador');            
         }

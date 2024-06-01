@@ -269,34 +269,12 @@ class UDBStudentGuestSiteController extends Controller
         if (session()->has('estudianteUDB')) {
             $id= session()->get('estudianteUDB');
             $informacionUDB = DB::table('estudianteUDB')->where('idUDB','=',$id[0]->idUDB)->first();
-            $purchaseTicket = DB::table('entradas')->where('nombre','=',$informacionUDB->nombreUDB. ' ' .$informacionUDB->apellidosUDB)->get();
-    
-            $formativa = DB::table('areaFormativaEntretenimientoEvento as afee')
-                ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
-                ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
-                ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
-                ->join('entradas as en','en.idEvento', '=', 'e.idEvento')
-                ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea','en.qr_code')
-                ->where('afe.nombreArea', '=', 'Area Formativa')
-                ->get();
-    
-            $entretenimiento = DB::table('areaFormativaEntretenimientoEvento as afee')
-                ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
-                ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
-                ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
-                ->join('entradas as en','en.idEvento', '=', 'e.idEvento')
-                ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea','en.qr_code')
-                ->where('afe.nombreArea', '=', 'Area Entretenimiento')
-                ->get();
-            
-            // Aquí creamos un array de eventos para estructurar los datos por áreas
-            $eventos = [
-                'formativa' => $formativa,
-                'entretenimiento' => $entretenimiento,
-                'purchaseTicket' => $purchaseTicket
-            ];
-    
-            return view('UDBStudentGuestSite.purchasedTicket', compact('eventos','formativa','entretenimiento','purchaseTicket'));
+            $purchaseTicket = DB::table('entradas')
+            ->join('Eventos', 'entradas.idEvento', '=', 'Eventos.idEvento')
+            ->select('Eventos.NombreEvento', 'Eventos.fecha', 'Eventos.hora', 'entradas.qr_code')
+            ->where('entradas.nombre', '=', $informacionUDB->nombreUDB . ' ' . $informacionUDB->apellidosUDB)
+            ->get();
+            return view('UDBStudentGuestSite.purchasedTicket', compact('purchaseTicket'));
         } else {
             return view('layout.403');
         }

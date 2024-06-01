@@ -12,7 +12,7 @@
  
     @include('layout.horizontalMenu')    
     <div class="wrapper">
-        @include('layout.verticalMenuInvitado')
+        @include('layout.verticalMenuInvitadoEstudiante')
         <div id="content" class="mt-0 pt-0">
             <nav class="navbar navbar-expand-lg navbar-light bg-light mt-3 mx-5">
                 <div class="container-fluid">                    
@@ -48,8 +48,8 @@
                                         <p><b>Descripcion </b>{{$info->descripcion}}</p>
                                     </div>
                                     <div class="card-footer text-body-secondary d-flex justify-content-center">
-                                        <a href="{{ route('guestSite.showInfo', $info->idEvento) }}" class="btn btn-primary my-1 mx-1" style="background-color: #2F98FE;">Información</a>
-                                        <a href="{{route('guestSite.ticketIG')}}" class="btn btn-primary my-1" style="background-color: #2F98FE;">Adquirir Entrada</a>
+                                        <a href="{{ route('StudentGuestSite.showInfo', $info->idEvento) }}" class="btn btn-primary my-1 mx-1" style="background-color: #2F98FE;">Información</a>
+                                        <a href="{{route('StudentGuestSite.ticketIG')}}" class="btn btn-primary my-1" style="background-color: #2F98FE;">Adquirir Entrada</a>
                                     </div>
                                 </div>
                             </div>

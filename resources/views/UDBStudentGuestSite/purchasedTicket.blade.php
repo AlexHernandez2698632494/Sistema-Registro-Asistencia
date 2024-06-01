@@ -53,52 +53,29 @@
                 </div>
             </nav>
             <div class="row mx-5">
-                @if($purchaseTicket->isEmpty())
-                   <div class="alert alert-warning" role="alert">
-                        No se han encontrado registro de entradas Adquiridas
-                    </div>  
-                @else 
-                    <div class="alert alert-primary" role="alert">
-                    Entradas Adquiridas<b></b>
-                    </div>
-                     <div class="col-md-6">
-                      @foreach($formativa as $info)
-                      @if($info->nombreArea == 'Area Formativa')
-                      <div class="col-lg-4 col-xl-6 col-md-6 col-xs-12 my-2">
-                                <div class="card" style="height: 350px; max-height: 350px; width:450px; overflow-y: auto">
-                                    <div class="card-header" style="background-color: #2F98FE">                          
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{$info->NombreEvento}}</h5>
-                                        <p><b>Fecha del Evento: </b>{{$info->fecha}}</p>
-                                        <p><b>Hora del Evento: </b>{{$info->hora}}</p>
-                                        <img src="{{ asset($info->qr_code) }}" alt="Código QR">
-                                    </div>
-                                </div>
+                @if ($purchaseTicket->isEmpty())
+                <div class="alert alert-warning" role="alert">
+                    No se han encontrado registro de entradas Adquiridas
+                </div>
+            @else
+                <div class="alert alert-primary" role="alert">
+                    Entradas Adquiridas
+                </div>
+                @foreach ($purchaseTicket as $ticket)
+                    <div class="col-lg-4 col-xl-6 col-md-6 col-xs-12 my-2">
+                        <div class="card" style="height: 350px; max-height: 350px; width:450px; overflow-y: auto">
+                            <div class="card-header" style="background-color: #2F98FE">
                             </div>
-                      @endif
-                      @endforeach
-                    </div>
-                    <!-- Area Entretenimiento -->
-                    <div class="col-md-6">
-                      @foreach($entretenimiento as $info)
-                      @if($info->nombreArea == 'Area Entretenimiento')
-                      <div class="col-lg-4 col-xl-6 col-md-6 col-xs-12 my-2">
-                                <div class="card" style="height: 350px; max-height: 350px; width:475px; overflow-y: auto">
-                                    <div class="card-header" style="background-color: #2F98FE">                          
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{$info->NombreEvento}}</h5>
-                                        <p><b>Fecha del Evento: </b>{{$info->fecha}}</p>
-                                        <p><b>Hora del Evento: </b>{{$info->hora}}</p>
-                                        <img src="{{ asset($info->qr_code) }}" alt="Código QR">
-                                    </div>
-                                </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $ticket->NombreEvento }}</h5>
+                                <p><b>Fecha del Evento: </b>{{ $ticket->fecha }}</p>
+                                <p><b>Hora del Evento: </b>{{ $ticket->hora }}</p>
+                                <img src="{{ asset($ticket->qr_code) }}" alt="Código QR">
                             </div>
-                      @endif
-                      @endforeach
-                    </div> 
-                @endif
+                        </div>
+                    </div>
+                @endforeach
+            @endif
             </div>                                              
         </div>
     </div>  

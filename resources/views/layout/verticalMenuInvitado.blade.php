@@ -15,7 +15,7 @@
                     <a href="" id="areaEntretenimiento">Area Entretenimiento</a>
                 </li>
                 <li>
-                    <a href="{{route('UDBStaffGuestSite.purchasedTicket')}}" id="entradasAdquiridas">Entradas Adquiridas</a>
+                    <a href="{{route('guestSite.purchasedTicket')}}" id="entradasAdquiridas">Entradas Adquiridas</a>
                 </li>
                 </ul>
             </li>  

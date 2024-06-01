@@ -42,11 +42,11 @@
 
     @include('layout.horizontalMenu')    
     <div class="wrapper">
-        @include('layout.verticalMenuInvitado')
+        @include('layout.verticalMenuInvitadoEstudiante')
         <div id="content" class="mt-0 pt-0">            
             <nav class="navbar navbar-expand-lg navbar-light bg-light mt-3 mx-5">
                 <div class="container-fluid">                    
-                    <a href="{{ route('guestSite.site') }}" class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Regresar">
+                    <a href="{{ route('StudentGuestSite.site') }}" class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Regresar">
                         <i class="fas fa-arrow-left"></i>
                     </a>                    
                     <div class="col text-center">
@@ -70,26 +70,26 @@
                     <div class="row mx-1">
                          <div class="col-lg-6 col-xs-12">
                             <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Nombre</p>
-                            {{ $informacionInvitado[0]->nombreInvitado.' '.$informacionInvitado[0]->apellidosInvitado}}
+                            {{ $informacionInstitucion[0]->nombreInstitucion.' '.$informacionInstitucion[0]->apellidosInstitucion}}
                         </div>
                         <div class="col-lg-6 col-xs-12">
-                            <p style="margin-bottom: 0; font-weight: bold" class="mt-2">DUI</p>
-                            {{$informacionInvitado[0]->duiInvitado}}
+                            <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Carnet</p>
+                            {{$informacionInstitucion[0]->carnetInstitucion}}
                         </div>
                         <div class="col-lg-6 col-xs-12">
                             <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Teléfono</p>
-                            {{$informacionInvitado[0]->telefonoInvitado}}
+                            {{$informacionInstitucion[0]->telefonoInstitucion}}
                         </div>
                         <div class="col-lg-6 col-xs-12">
                             <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Correo electrónico</p>
-                            {{$informacionInvitado[0]->correoInvitado}}
+                            {{$informacionInstitucion[0]->correoInstitucion}}
                         </div>                                                                
                     </div>  
                     <div class="separator mb-3 mt-3"></div>                 	       
                     <div class="row mx-1 mt-3 d-flex justify-content-center">                        
                         <div class="col-lg-4">
                             <div class="btn-group d-flex justify-content-center">
-                                <a type="button" onclick="updateInformacionModal({{$informacionInvitado[0]->idInvitado}})" class="btn btn-primary mt-2 btn-block" style="background-color: #2F98FE;">Actualizar información</a>
+                                <a type="button" onclick="updateInformacionModal({{$informacionInstitucion[0]->idInstitucion}})" class="btn btn-primary mt-2 btn-block" style="background-color: #2F98FE;">Actualizar información</a>
                             </div>
                         </div>                       
                     </div>         																												
@@ -106,20 +106,20 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Actualización de información</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form method="POST" action="{{ route('guestSite.updateInfor') }}">
+                <form method="POST" action="{{ route('StudentGuestSite.updateInfor') }}">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
                         <div class="row mt-2">
                             <div class="col-lg-6 col-xs-12">
                                 <label for="txtCorreoInvitado" class="form-label" style="font-weight: bold">Correo del invitado</label>                                
-                                <input type="email" id="txtCorreoInvitado" name="correoInvitado" placeholder="Ingrese correo electrónico del invitado" class="form-control inputTxt" value="{{$informacionInvitado[0]->correoInvitado}}">
+                                <input type="email" id="txtCorreoInvitado" name="correoInstitucion" placeholder="Ingrese correo electrónico del invitado" class="form-control inputTxt" value="{{$informacionInstitucion[0]->correoInstitucion}}">
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <label for="txtTelefonoInvitado" class="form-label" style="font-weight: bold">Teléfono del invitado</label>                                
-                                <input type="text" id="txtTelefonoInvitado" name="telefonoInvitado" placeholder="Ingrese teléfono del invitado" class="form-control inputTxt" value="{{$informacionInvitado[0]->telefonoInvitado}}">
+                                <input type="text" id="txtTelefonoInvitado" name="telefonoInstitucion" placeholder="Ingrese teléfono del invitado" class="form-control inputTxt" value="{{$informacionInstitucion[0]->telefonoInstitucion}}">
                             </div>    
-                            <input type="text" id="txtIdInvitado" name="idInvitadoActualizar" value="{{$informacionInvitado[0]->idInvitado}}" hidden>                    
+                            <input type="text" id="txtIdInvitado" name="idInvitadoActualizar" value="{{$informacionInstitucion[0]->idInstitucion}}" hidden>                    
                         </div>
                     </div>
                     <div class="modal-footer">                        
