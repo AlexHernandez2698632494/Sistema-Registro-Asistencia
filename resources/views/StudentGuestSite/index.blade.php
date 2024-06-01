@@ -46,7 +46,7 @@
                     <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                         <div class="card shadow-2-strong" style="border-radius: 1rem;">
                             <div class="card-body p-5 text-center">
-                                <form method="POST" action="{{ route('UDBStudentGuestSite.add') }}">
+                                <form method="POST" action="{{ route('StudentGuestSite.add') }}">
                                     @csrf
                                     <div class="row">
                                         <div class="col-12">
@@ -105,7 +105,7 @@
                                     <div class="col-lg-12 col-md-6 col-xs-12">
 										<div class="input-group mb-3">
 											<span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user"></i></span>
-											<input type="text" class="form-control" placeholder="Ingrese Nombre Institución" aria-label="institución" name="institución" value="{{ old('institucion') }}">
+											<input type="text" class="form-control" placeholder="Ingrese Nombre Institución" aria-label="institución" name="institucion" value="{{ old('institucion') }}">
 										</div>
 									</div>
                                     <div class="col-lg-12 col-md-6 col-xs-12">

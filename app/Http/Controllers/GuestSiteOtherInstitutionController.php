@@ -118,7 +118,7 @@ class GuestSiteOtherInstitutionController extends Controller
          $pass = $this->generatePass();
         
          $userObj = new Usuarios();
-         $userObj->idUsuario = $request->input('carnetUDB');
+         $userObj->idUsuario = $request->input('carnet');
          $userObj->usuario = $userName;
          $userObj->password = hash('SHA256',$pass);
          $userObj->nivel = 5;
