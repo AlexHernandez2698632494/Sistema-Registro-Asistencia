@@ -143,3 +143,16 @@ CREATE TABLE entradas(
     asistencia BOOLEAN DEFAULT FALSE,
     FOREIGN KEY(idEvento) REFERENCES Eventos(idEvento)
 );
+
+CREATE TABLE entradasG(
+    idEntradaG INT AUTO_INCREMENT PRIMARY KEY,
+    idEvento INT NOT NULL,
+    idEntrada INT NOT NULL,
+	nombre VARCHAR(256) NOT NULL,
+    sexo VARCHAR(10) NOT NULL,
+    institucion VARCHAR(256) NOT NULL,
+    nivel_educativo VARCHAR(50) NOT NULL,
+    qr_code TEXT NOT NULL,
+    asistencia BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY(idEntrada) REFERENCES entradas(idEntrada)
+);
