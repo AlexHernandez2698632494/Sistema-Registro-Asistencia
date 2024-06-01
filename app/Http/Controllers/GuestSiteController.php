@@ -16,6 +16,8 @@ use App\Models\AdquirirEntrada;
 use App\Models\Usuarios;
 use App\Models\eventos;
 use Exception;
+use App\Models\Entrada;
+use Illuminate\Support\Facades\Redirect;
 
 class GuestSiteController extends Controller
 {

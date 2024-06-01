@@ -50,6 +50,10 @@
                                 <div class="col-12"><b>Precio del evento</b></div>
                                 <div class="col-12">{{ $event->precio }}</div>
                             </div>
+                            <div class="row mt-2">
+                                <div class="col-12"><b>Capacidad Maxima</b></div>
+                                <div class="col-12">{{ $event->capacidad }} Personas</div>
+                            </div>
                         </div>
                     </div>
                 </div>

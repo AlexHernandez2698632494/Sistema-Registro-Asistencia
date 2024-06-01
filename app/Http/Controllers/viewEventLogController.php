@@ -44,9 +44,37 @@ class viewEventLogController extends Controller
         }
     }
 
-    public function viewAttendanceRecordFormativeArea(){
+    public function viewAttendanceRecordUDB(Request $request){
         if (session()->has('administrador')) {
+            $idEvento = $request->get('idEvento'); // Obtener el idEvento desde la solicitud
+    
+            $records = DB::table('entradas as en')
+                        ->select(
+                            'e.nombreEvento', 
+                            'e.fecha', 
+                            'e.hora', 
+                            'e.capacidad', 
+                            'a.nombre', 
+                            'p.profesionUDB',
+                            DB::raw('COUNT(en.asistencia) AS total_registrados'),
+                            DB::raw('SUM(CASE WHEN en.asistencia = 1 THEN 1 ELSE 0 END) AS total_asistencia')
+                        )
+                        ->join('eventos as e', 'e.idEvento', '=', 'en.idEvento')
+                        ->join('areaformativaentretenimientoevento as afee', 'e.idEvento', '=', 'afee.idEvento')
+                        ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
+                        ->join('areaformativaentretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
+                        ->join('personalUDB as p','p.idUDB', '=', 'en.idPersonalUDB')
+                        ->where('en.asistencia', '<=', 1); // Filtrar asistencias que tengan 0 o 1
+    
+            if ($idEvento) {
+                $records->where('e.idEvento', $idEvento);
+            }
+    
+            $records = $records->groupBy('e.nombreEvento', 'e.fecha', 'e.hora', 'e.capacidad', 'a.nombre','p.profesionUDB')
+                        ->get();
 
+            //return $records;
+            return view('viewEventLog.viewAttendanceRecordUDB', compact('records'));
         } else {
             return view('layout.403');
         }
@@ -61,7 +89,7 @@ class viewEventLogController extends Controller
                             'e.nombreEvento', 
                             'e.fecha', 
                             'e.hora', 
-                            'afe.nombreArea', 
+                            'e.capacidad', 
                             'a.nombre', 
                             DB::raw('COUNT(en.asistencia) AS total_registrados'),
                             DB::raw('SUM(CASE WHEN en.asistencia = 1 THEN 1 ELSE 0 END) AS total_asistencia')
@@ -76,10 +104,10 @@ class viewEventLogController extends Controller
                 $records->where('e.idEvento', $idEvento);
             }
     
-            $records = $records->groupBy('e.nombreEvento', 'e.fecha', 'e.hora', 'afe.nombreArea', 'a.nombre')
+            $records = $records->groupBy('e.nombreEvento', 'e.fecha', 'e.hora', 'e.capacidad', 'a.nombre')
                         ->get();
     
-            return view('viewEventLog.viewAttendanceRecordEntertainmentArea', compact('records'));
+            //return view('viewEventLog.viewAttendanceRecordEntertainmentArea', compact('records'));
         } else {
             return view('layout.403');
         }

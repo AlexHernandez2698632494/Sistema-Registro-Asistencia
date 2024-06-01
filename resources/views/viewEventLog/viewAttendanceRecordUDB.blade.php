@@ -59,6 +59,7 @@
                                             <th>Fecha</th>
                                             <th>Hora</th>
                                             <th>Nombre del Area</th>
+                                            <th>Carrera/Profesion</th>
                                             <th>Capacidad</th>
                                             <th>Total de Registrados</th>
                                             <th>Total de Asistencia</th>
@@ -72,6 +73,7 @@
                                                 <td>{{ $record->fecha }}</td>
                                                 <td>{{ $record->hora }}</td>
                                                 <td>{{ $record->nombre }}</td>
+                                                <td>{{ $record->profesionUDB}}</td>
                                                 <td>{{ $record->capacidad}}</td>
                                                 <td>{{ $record->total_registrados }}</td>
                                                 <td>{{ $record->total_asistencia }}</td>

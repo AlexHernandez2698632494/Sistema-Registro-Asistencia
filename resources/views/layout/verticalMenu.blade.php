@@ -56,7 +56,7 @@
                     Ver registros eventos
                 </a>
                 <ul class="collapse list-unstyled" id="menuRegistro">
-                    <li><a href="#formativa">Registro de asistencia UDB</a></li>
+                    <li><a href="{{route('viewEventLog.viewAttendanceRecordUDB')}}">Registro de asistencia UDB</a></li>
                     <li><a href="{{route('viewEventLog.viewAttendanceRecordEntertainmentArea')}}">Registro de asistencia</a></li>               
                 </ul>
             </li>

@@ -216,8 +216,19 @@ public function addEntry(Request $request)
     try {
         DB::beginTransaction();
         $idEvento = $request->input('idEvento');
-        $nombreEvento = DB::table('eventos')->where('idEvento','=',$idEvento)->value('nombreEvento');
-       // $url = route('viewEventLog.entry', ['id' => $idEvento]); 
+        $evento = DB::table('eventos')->where('idEvento', '=', $idEvento)->first();
+        $capacidadEvento = $evento->capacidad;
+
+        // Contar las entradas vendidas para este evento
+        $entradasVendidas = DB::table('entradas')->where('idEvento', '=', $idEvento)->count();
+
+        // Verificar si hay capacidad disponible
+        if ($entradasVendidas >= $capacidadEvento) {
+            throw new Exception('No hay capacidad disponible para este evento.');
+        }
+
+        // Generar contenido y guardar QR
+        $nombreEvento = $evento->NombreEvento;       // $url = route('viewEventLog.entry', ['id' => $idEvento]); 
         // Generate QR code content
         $qrContent = json_encode([
             'nombre' => $request->input('nombre'),
@@ -234,11 +245,19 @@ public function addEntry(Request $request)
         $qrPath = 'qr/'.$request->input('nombre').'_'.$nombreEvento.'_'.$currentDateTime.'.svg'; // Save as SVG
         file_put_contents(public_path($qrPath), $qrCode);
 
-        
+        $idEstudianteUDB = 0;
+        $idDocenteUDB = 0 ;
+        $id= session()->get('personalUDB');
+        $idPersonalUDB = $id[0]->idUDB;
+        $idEstudianteInstitucion = 0 ;
 
         // Store the entry in the database
         $entrada = new Entrada();
         $entrada->idEvento = $request->input('idEvento');
+        $entrada->idEstudianteUDB = $idEstudianteUDB;
+        $entrada->idDocenteUDB = $idDocenteUDB ;
+        $entrada->idPersonalUDB = $idPersonalUDB;
+        $entrada->idEstudianteInstitucion = $idEstudianteInstitucion ;
         $entrada->nombre = $request->input('nombre');
         $entrada->sexo = $request->input('sexo');
         $entrada->institucion = $request->input('institucion');

@@ -115,6 +115,7 @@ CREATE TABLE Eventos(
     descripcion TEXT DEFAULT NULL,
     precio VARCHAR(8) ,
     imagen VARCHAR(255) NOT NULL,
+    capacidad int NOT NULL,
     estadoEliminacion INT NOT NULL DEFAULT 1
 );
 
@@ -130,21 +131,15 @@ CREATE TABLE areaFormativaEntretenimientoEvento(
 CREATE TABLE entradas(
     idEntrada INT AUTO_INCREMENT PRIMARY KEY,
     idEvento INT NOT NULL,
-    nombre VARCHAR(256) NOT NULL,
+    idEstudianteUDB INT NOT NULL,
+	idDocenteUDB INT NOT NULL,
+    idPersonalUDB INT NOT NULL,
+    idEstudianteInstitucion INT NOT NULL,
+	nombre VARCHAR(256) NOT NULL,
     sexo VARCHAR(10) NOT NULL,
     institucion VARCHAR(256) NOT NULL,
     nivel_educativo VARCHAR(50) NOT NULL,
     qr_code TEXT NOT NULL,
     asistencia BOOLEAN DEFAULT FALSE,
     FOREIGN KEY(idEvento) REFERENCES Eventos(idEvento)
-);
-
-CREATE TABLE registro(
-    idRegistro INT AUTO_INCREMENT PRIMARY KEY,
-    NombreEvento VARCHAR(255) NOT NULL,
-    fecha DATE NOT NULL,
-    hora TIME NOT NULL,
-	nombreArea text not null,
-	nombre text,
-    total_asistencia int not null
 );

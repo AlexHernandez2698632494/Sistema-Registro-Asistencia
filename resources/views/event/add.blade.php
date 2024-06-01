@@ -114,6 +114,10 @@
                                     <input type="file" class="form-control" placeholder="Ingrese imagen promocional"
                                         aria-label="Image" name="eventImage" accept="image/jpeg, image/jpg, image/png">
                                 </div>
+                                <div class="input-group mb-3 mt-3">
+                                    <span class="input-group-text" id="eventCapacity"><i class="fa-solid fa-users"></i></span>
+                                    <input type="number" class="form-control" placeholder="Ingrese capacidad del evento" aria-label="Capacity" name="eventCapacity" min="1" value="{{old('eventCapacity')}}">
+                                </div>
                             </div>
                             <div class="col-lg-7 col-xs-12 subjects-container">
                                 <p class="d-flex justify-content-center mt-2 mb-0">Seleccione la area del evento</p>

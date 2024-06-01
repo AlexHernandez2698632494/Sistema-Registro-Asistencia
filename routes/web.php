@@ -148,4 +148,5 @@ Route::prefix('invitado/estudiante')->group(function(){
 Route::get('/entry/{id}', [viewEventLogController::class, 'show'])->name('viewEventLog.entry');
 Route::put('/entry/confirm/{entradaId}', [viewEventLogController::class, 'confirmAsistencia'])->name('confirmAsistencia');
 Route::get('/registro', [viewEventLogController::class, 'viewAttendanceRecordEntertainmentArea'])->name('viewEventLog.viewAttendanceRecordEntertainmentArea');
+Route::get('/registros/UDB', [viewEventLogController::class, 'viewAttendanceRecordUDB'])->name('viewEventLog.viewAttendanceRecordUDB');
 Route::get('/attendance/records', [viewEventLogController::class, 'viewAttendanceRecordEntertainmentArea'])->name('attendance.records');
