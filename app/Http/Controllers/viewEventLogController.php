@@ -107,7 +107,7 @@ class viewEventLogController extends Controller
             $records = $records->groupBy('e.nombreEvento', 'e.fecha', 'e.hora', 'e.capacidad', 'a.nombre')
                         ->get();
     
-            //return view('viewEventLog.viewAttendanceRecordEntertainmentArea', compact('records'));
+            return view('viewEventLog.viewAttendanceRecordEntertainmentArea', compact('records'));
         } else {
             return view('layout.403');
         }

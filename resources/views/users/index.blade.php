@@ -81,7 +81,21 @@
                                             <td>{{$estudianteOtra->usuario}}</td>
                                             <td>{{ $estudianteOtra->nombreInstitucion.' '.$estudianteOtra->apellidosInstitucion }}</td>
                                         </tr>
-                                    @endforeach                                                                                                                                                              
+                                    @endforeach    
+                                    @foreach ($docentesUDB as $docenteUDB)
+                                    <tr>
+                                        <td>Docente</td>
+                                        <td>{{$docenteUDB->usuario}}</td>
+                                        <td>{{ $docenteUDB->nombreUDB.' '.$docenteUDB->apellidosUDB }}</td>
+                                    </tr>
+                                    @endforeach                                                                                                                                                    
+                                    @foreach ($personalesUDB as $personalUDB)
+                                    <tr>
+                                        <td>Personal</td>
+                                        <td>{{$personalUDB->usuario}}</td>
+                                        <td>{{ $personalUDB->nombreUDB.' '.$personalUDB->apellidosUDB }}</td>
+                                    </tr>
+                                    @endforeach                                  
                                 </tbody>
                             </div>
                         </table>                                                                

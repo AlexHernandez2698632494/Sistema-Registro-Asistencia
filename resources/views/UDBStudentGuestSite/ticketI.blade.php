@@ -85,10 +85,10 @@
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Institución</p>
-                                <input type="text" id="institucion" name="institucion" placeholder="Ingrese institución" class="form-control input" required>
+                                 <p class="mt-2" value="UDB" name="institucionUDB">Universidad Don Bosco</p>
                             </div>
                             <div class="col-lg-6 col-xs-12">
-                                <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Nivel Educativo</p>
+                                <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Carrera</p>
                                 {{ $informacionUDB[0]->carreraUDB}}
                                 <input type="hidden" name="nivel_educativo" value="{{ $informacionUDB[0]->carreraUDB }}">
                             </div>

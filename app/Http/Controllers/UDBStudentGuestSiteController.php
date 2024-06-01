@@ -201,7 +201,6 @@ class UDBStudentGuestSiteController extends Controller
     {
         // Validate the incoming request data
         $request->validate([
-           'institucion' => 'required|string|max:255',
             'idEvento' => 'required|integer|exists:eventos,idEvento' // Ensure 'eventos' matches your actual table name
         ]);
         
@@ -225,7 +224,7 @@ class UDBStudentGuestSiteController extends Controller
             $qrContent = json_encode([
                 'nombre' => $request->input('nombre'),
                 'evento' => $nombreEvento,
-                'institucion' => $request->input('institucion'),
+                'institucion' => 'UDB',
                 //'url' => $url
             ]);
     
@@ -237,10 +236,10 @@ class UDBStudentGuestSiteController extends Controller
             $qrPath = 'qr/'.$request->input('nombre').'_'.$nombreEvento.'_'.$currentDateTime.'.svg'; // Save as SVG
             file_put_contents(public_path($qrPath), $qrCode);
     
-            $idEstudianteUDB = 0;
-            $idDocenteUDB = 0 ;
             $id= session()->get('estudianteUDB');
-            $idPersonalUDB = $id[0]->idUDB;
+            $idEstudianteUDB = $id[0]->idUDB;
+            $idDocenteUDB = 0 ;
+            $idPersonalUDB = 0;
             $idEstudianteInstitucion = 0 ;
     
             // Store the entry in the database
@@ -252,7 +251,7 @@ class UDBStudentGuestSiteController extends Controller
             $entrada->idEstudianteInstitucion = $idEstudianteInstitucion ;
             $entrada->nombre = $request->input('nombre');
             $entrada->sexo = $request->input('sexo');
-            $entrada->institucion = $request->input('institucion');
+            $entrada->institucion = 'UDB';
             $entrada->nivel_educativo = $request->input('nivel_educativo');
             $entrada->qr_code = $qrPath;
             $entrada->save();
