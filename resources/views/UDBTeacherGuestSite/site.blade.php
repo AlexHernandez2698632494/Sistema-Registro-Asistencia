@@ -34,59 +34,59 @@
                         <div class="alert alert-primary" role="alert">
                             Eventos Formativos
                     </div>
-                      @foreach($guestInfo as $info)
-                      @if($info->nombreArea == 'Area Formativa')
-                      <div class="col-lg-4 col-xl-6 col-md-6 col-xs-12 my-2">
-                                <div class="card" style="height: 350px; max-height: 350px; width:475px; overflow-y: auto">
-                                    <div class="card-header" style="background-color: #2F98FE">                          
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{$info->NombreEvento}}</h5>
-                                        <p><b>Fecha del Evento: </b>{{$info->fecha}}</p>
-                                        <p><b>Hora del Evento: </b>{{$info->hora}}</p>
-                                        <p><b>Precio de la Entrada </b>{{$info->precio}}</p>
-                                        <p><b>Descripcion </b>{{$info->descripcion}}</p>
-                                    </div>
-                                    <div class="card-footer text-body-secondary d-flex justify-content-center">
-                                        <a href="{{ route('guestSite.showInfo', $info->idEvento) }}" class="btn btn-primary my-1 mx-1" style="background-color: #2F98FE;">Información</a>
-                                        <a href="" class="btn btn-primary my-1" style="background-color: #2F98FE;">Adquirir Entrada</a>
-                                    </div>
-                                </div>
-                            </div>
-                      @endif
-                      @endforeach
-                    </div>
-                    <!-- Area Entretenimiento -->
-                    <div class="col-md-6">
-                        <div class="alert alert-primary" role="alert">
-                            Eventos de Entrenimiento
-                    </div>
-                      @foreach($guestInfo as $info)
-                      @if($info->nombreArea == 'Area Entretenimiento')
-                      <div class="col-lg-4 col-xl-6 col-md-6 col-xs-12 my-2">
-                                <div class="card" style="height: 350px; max-height: 350px; width:475px; overflow-y: auto">
-                                    <div class="card-header" style="background-color: #2F98FE">                          
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{$info->NombreEvento}}</h5>
-                                        <p><b>Fecha del Evento: </b>{{$info->fecha}}</p>
-                                        <p><b>Hora del Evento: </b>{{$info->hora}}</p>
-                                        <p><b>Precio de la Entrada </b>{{$info->precio}}</p>
-                                        <p><b>Descripcion </b>{{$info->descripcion}}</p>
-                                    </div>
-                                    <div class="card-footer text-body-secondary d-flex justify-content-center">
-                                        <a href="{{ route('guestSite.showInfo', $info->idEvento) }}" class="btn btn-primary my-1 mx-1" style="background-color: #2F98FE;">Información</a>
-                                        <a href="" class="btn btn-primary my-1" style="background-color: #2F98FE;">Adquirir Entrada</a>
-                                    </div>
-                                </div>
-                            </div>
-                      @endif
-                      @endforeach
-                    </div> 
-                @endif
-            </div>                                              
-        </div>
-    </div>  
-   
+                    @foreach($formativa as $info)
+                    @if($info->nombreArea == 'Area Formativa')
+                    <div class="col-lg-4 col-xl-6 col-md-6 col-xs-12 my-2">
+                              <div class="card" style="height: 350px; max-height: 350px; width:475px; overflow-y: auto">
+                                  <div class="card-header" style="background-color: #2F98FE">                          
+                                  </div>
+                                  <div class="card-body">
+                                      <h5 class="card-title">{{$info->NombreEvento}}</h5>
+                                      <p><b>Fecha del Evento: </b>{{$info->fecha}}</p>
+                                      <p><b>Hora del Evento: </b>{{$info->hora}}</p>
+                                      <p><b>Precio de la Entrada </b>{{$info->precio}}</p>
+                                      <p><b>Descripcion </b>{{$info->descripcion}}</p>
+                                  </div>
+                                  <div class="card-footer text-body-secondary d-flex justify-content-center">
+                                      <a href="{{ route('UDBTeacherGuestSite.showInfo', $info->idEvento) }}" class="btn btn-primary my-1 mx-1" style="background-color: #2F98FE;">Información</a>
+                                      <a href="{{ route('UDBTeacherGuestSite.ticketIG')}}" class="btn btn-primary my-1" style="background-color: #2F98FE;">Adquirir Entrada</a>
+                                  </div>
+                              </div>
+                          </div>
+                    @endif
+                    @endforeach
+                  </div>
+                  <!-- Area Entretenimiento -->
+                  <div class="col-md-6">
+                      <div class="alert alert-primary" role="alert">
+                          Eventos de Entrenimiento
+                  </div>
+                    @foreach($entrenimiento as $info)
+                    @if($info->nombreArea == 'Area Entretenimiento')
+                    <div class="col-lg-4 col-xl-6 col-md-6 col-xs-12 my-2">
+                              <div class="card" style="height: 350px; max-height: 350px; width:475px; overflow-y: auto">
+                                  <div class="card-header" style="background-color: #2F98FE">                          
+                                  </div>
+                                  <div class="card-body">
+                                      <h5 class="card-title">{{$info->NombreEvento}}</h5>
+                                      <p><b>Fecha del Evento: </b>{{$info->fecha}}</p>
+                                      <p><b>Hora del Evento: </b>{{$info->hora}}</p>
+                                      <p><b>Precio de la Entrada </b>{{$info->precio}}</p>
+                                      <p><b>Descripcion </b>{{$info->descripcion}}</p>
+                                  </div>
+                                  <div class="card-footer text-body-secondary d-flex justify-content-center">
+                                      <a href="{{ route('UDBTeacherGuestSite.showInfo', $info->idEvento) }}" class="btn btn-primary my-1 mx-1" style="background-color: #2F98FE;">Información</a>
+                                      <a href="{{ route('UDBTeacherGuestSite.ticketIG')}}" class="btn btn-primary my-1" style="background-color: #2F98FE;">Adquirir Entrada</a>
+                                  </div>
+                              </div>
+                          </div>
+                    @endif
+                    @endforeach
+                  </div> 
+              @endif
+          </div>                                              
+      </div>
+  </div>  
+ 
 </body>
 </html>
