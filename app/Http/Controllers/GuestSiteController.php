@@ -175,10 +175,6 @@ class GuestSiteController extends Controller
         }
     }
 
-    // public function pdf(){
-    //     return view('pdf.invitado');
-    // }
-
     public function miPerfil()
     {
         if (session()->has('invitado')) {
@@ -220,83 +216,127 @@ class GuestSiteController extends Controller
         }
     }
 
-    public function buyIndividualGroupTicket(){
+    public function buyIndividualGroupTicket (){
         return view('guestSite.ticketIG');
     }
     public function purchaseTicketI(){
-        return view('guestSite.ticketI');
+        if(session()->has('invitado')){
+            $id= session()->get('invitado');
+            $informacionInvitado = DB::table('invitado')->where('idInvitado','=',$id[0]->idInvitado)->get();
+            $eventos = DB::table('Eventos')->get();
+            return view('guestSite.ticketI', compact('eventos','informacionInvitado'));
+        
+        }
     }
-
-    public function addEntry(Request $request){
-        $validatedData = $request->validate([
-         'nombre' => 'required|string|max:255',
-         'sexo' => 'required|string|max:10',
-         'institucion' => 'required|string|max:255',
-         'nivel_educativo' => 'required|string|max:255',
-     ]);
-     DB::beginTransaction();
-     try{
-        $entry = new AdquirirEntrada();
-        $entry->nombres = $request->input('nombre');
-        $entry->sexo = $request->input('sexo');
-        $entry->nivelEducativo = $request->input('nivel_educativo');
-        $entry->institucion = $request->input('institucion');
-        $entry->qr = '';
-        $entry->save();
-        DB::commit();
-        return to_route('guestSite.ticketIG')->with('exitoAdquirir', 'Entrada adquirida correctamente.');
-     }catch(Exception $e){
-
-     }
+    
+    public function purchaseTicketG(){
+        return view('guestSite.ticketG');
     }
-
-    // public function addEntry(Request $request)
-    // {
-    //     // Validar los datos del formulario
-    //     $validatedData = $request->validate([
-    //         'nombre' => 'required|string|max:255',
-    //         'sexo' => 'required|string|max:10',
-    //         'institucion' => 'required|string|max:255',
-    //         'nivel_educativo' => 'required|string|max:255',
-    //     ]);
-
-    //     DB::beginTransaction();
-
-    //     try {
-    //         // Crear una nueva instancia del modelo AdquirirEntrada
-    //         $entry = new AdquirirEntrada();
-    //         $entry->nombres = $validatedData['nombre'];
-    //         $entry->sexo = $validatedData['sexo'];
-    //         $entry->institucion = $validatedData['institucion'];
-    //         $entry->nivelEducativo = $validatedData['nivel_educativo'];
-    //         $entry->qr = ''; // El QR se genera después
-    //         $entry->save();
-
-    //         // Contar el total de registros en la tabla adquirirEntrada
-    //         $totalEntries = AdquirirEntrada::count();
-
-    //         // Generar el código QR
-    //         $qrCode = QrCode::size(200)->generate("Total de registros: $totalEntries");
-
-    //         // Actualizar el registro con el código QR generado
-    //         $entry->qr = $qrCode;
-    //         $entry->save();
-
-    //         // Confirmar la transacción
-    //         DB::commit();
-
-    //         // Redirigir con mensaje de éxito
-    //         return redirect()->route('guestSite.ticketIG')->with('exitoModificar', 'Entrada adquirida correctamente.');
-
-    //     } catch (\Exception $e) {
-    //         // Revertir la transacción
-    //         DB::rollBack();
-
-    //         // Agregar mensaje de error detallado
-    //         $errorMessage = $e->getMessage();
-
-    //         // Redirigir con mensaje de error
-    //         return redirect()->route('guestSite.ticketIG')->with('errorModificar', 'Error al adquirir la entrada: ' . $errorMessage);
-    //     }
-    // }
-}
+    
+    public function addEntry(Request $request)
+    {
+        // Validate the incoming request data
+        $request->validate([
+           'institucion' => 'required|string|max:255',
+            'idEvento' => 'required|integer|exists:eventos,idEvento' // Ensure 'eventos' matches your actual table name
+        ]);
+        
+        try {
+            DB::beginTransaction();
+            $idEvento = $request->input('idEvento');
+            $evento = DB::table('eventos')->where('idEvento', '=', $idEvento)->first();
+            $capacidadEvento = $evento->capacidad;
+    
+            // Contar las entradas vendidas para este evento
+            $entradasVendidas = DB::table('entradas')->where('idEvento', '=', $idEvento)->count();
+    
+            // Verificar si hay capacidad disponible
+            if ($entradasVendidas >= $capacidadEvento) {
+                throw new Exception('No hay capacidad disponible para este evento.');
+            }
+    
+            // Generar contenido y guardar QR
+            $nombreEvento = $evento->NombreEvento;       // $url = route('viewEventLog.entry', ['id' => $idEvento]); 
+            // Generate QR code content
+            $qrContent = json_encode([
+                'nombre' => $request->input('nombre'),
+                'evento' => $nombreEvento,
+                'institucion' => $request->input('institucion'),
+                //'url' => $url
+            ]);
+    
+            // Generate QR code instance
+            $qrCode = QrCode::size(150)->generate($qrContent);
+    
+            // Save the QR code as an image
+            $currentDateTime = date('Ymd_His');
+            $qrPath = 'qr/'.$request->input('nombre').'_'.$nombreEvento.'_'.$currentDateTime.'.svg'; // Save as SVG
+            file_put_contents(public_path($qrPath), $qrCode);
+    
+            $idEstudianteUDB = 0;
+            $idDocenteUDB = 0 ;
+            $idPersonalUDB = 0;
+            $idEstudianteInstitucion = 0 ;
+    
+            // Store the entry in the database
+            $entrada = new Entrada();
+            $entrada->idEvento = $request->input('idEvento');
+            $entrada->idEstudianteUDB = $idEstudianteUDB;
+            $entrada->idDocenteUDB = $idDocenteUDB ;
+            $entrada->idPersonalUDB = $idPersonalUDB;
+            $entrada->idEstudianteInstitucion = $idEstudianteInstitucion ;
+            $entrada->nombre = $request->input('nombre');
+            $entrada->sexo = $request->input('sexo');
+            $entrada->institucion = $request->input('institucion');
+            $entrada->nivel_educativo = $request->input('nivel_educativo');
+            $entrada->qr_code = $qrPath;
+            $entrada->save();
+    
+            DB::commit();
+    
+            return Redirect::back()->with('exitoAgregar', 'Entrada Adquirida Exitosamente');
+        } catch(Exception $e){
+            DB::rollback();
+            return Redirect::back()->with('errorAgregar', 'Ha ocurrido un error al adquirir la entrada, vuelva a intentarlo más tarde');
+        }
+    }
+    
+    public function purchasedTicket() {
+        if (session()->has('invitado')) {
+            $id= session()->get('invitado');
+            $informacionUDB = DB::table('invitado')->where('idUDB','=',$id[0]->idUDB)->first();
+            $purchaseTicket = DB::table('entradas')->where('nombre','=',$informacionUDB->nombreUDB. ' ' .$informacionUDB->apellidosUDB)->get();
+    
+            $formativa = DB::table('areaFormativaEntretenimientoEvento as afee')
+                ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
+                ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
+                ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
+                ->join('entradas as en','en.idEvento', '=', 'e.idEvento')
+                ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea','en.qr_code')
+                ->where('afe.nombreArea', '=', 'Area Formativa')
+                ->get();
+    
+            $entretenimiento = DB::table('areaFormativaEntretenimientoEvento as afee')
+                ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
+                ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
+                ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
+                ->join('entradas as en','en.idEvento', '=', 'e.idEvento')
+                ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea','en.qr_code')
+                ->where('afe.nombreArea', '=', 'Area Entretenimiento')
+                ->get();
+            
+            // Aquí creamos un array de eventos para estructurar los datos por áreas
+            $eventos = [
+                'formativa' => $formativa,
+                'entretenimiento' => $entretenimiento,
+                'purchaseTicket' => $purchaseTicket
+            ];
+    
+            return view('guestSite.purchasedTicket', compact('eventos','formativa','entretenimiento','purchaseTicket'));
+        } else {
+            return view('layout.403');
+        }
+    }
+    
+    }
+    

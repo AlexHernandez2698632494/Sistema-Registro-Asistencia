@@ -7,12 +7,16 @@
                 <a class="dropdown-toggle" data-bs-toggle="collapse" href="#menuEventos" role="button" aria-expanded="false" aria-controls="collapseExample">
                     Eventos
                 </a>
-                <ul class="collapse list-unstyled" id="menuDocentes">
-                    
-                            <li>
-                                <a href=""> </a>
-                            </li>
-                                    
+                <ul class="collapse list-unstyled" id="menuEventos">
+                <li>
+                        <a href="" id="areaFormativa">Area Formativa</a>
+                </li>
+                <li>
+                    <a href="" id="areaEntretenimiento">Area Entretenimiento</a>
+                </li>
+                <li>
+                    <a href="{{route('UDBStaffGuestSite.purchasedTicket')}}" id="entradasAdquiridas">Entradas Adquiridas</a>
+                </li>
                 </ul>
             </li>  
             <li id="opcionesMiPerfil">
