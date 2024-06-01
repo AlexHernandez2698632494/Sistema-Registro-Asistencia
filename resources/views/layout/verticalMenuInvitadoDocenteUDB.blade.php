@@ -14,10 +14,13 @@
                     <li>
                         <a href="" id="areaEntretenimiento">Area Entretenimiento</a>
                     </li>
+                    <li>
+                        <a href="{{route('UDBTeacherGuestSite.purchasedTicket')}}" id="entradasAdquiridas">Entradas Adquiridas</a>
+                    </li>
                 </ul>
             </li>  
             <li id="opcionesMiPerfil">
-                <a href="{{route('UDBStudentGuestSite.miPerfil')}}">
+                <a href="{{route('UDBTeacherGuestSite.miPerfil')}}">
                     Mi perfil
                 </a>
             </li>

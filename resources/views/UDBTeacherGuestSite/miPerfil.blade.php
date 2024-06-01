@@ -46,7 +46,7 @@
         <div id="content" class="mt-0 pt-0">            
             <nav class="navbar navbar-expand-lg navbar-light bg-light mt-3 mx-5">
                 <div class="container-fluid">                    
-                    <a href="{{ route('UDBStudentGuestSite.site') }}" class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Regresar">
+                    <a href="{{ route('UDBTeacherGuestSite.site') }}" class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Regresar">
                         <i class="fas fa-arrow-left"></i>
                     </a>                    
                     <div class="col text-center">
@@ -106,7 +106,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Actualización de información</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form method="POST" action="{{ route('UDBStudentGuestSite.updateInfor') }}">
+                <form method="POST" action="{{ route('UDBTeacherGuestSite.updateInfor') }}">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">

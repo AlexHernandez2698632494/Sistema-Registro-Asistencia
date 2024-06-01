@@ -14,6 +14,9 @@
                     <li>
                         <a href="" id="areaEntretenimiento">Area Entretenimiento</a>
                     </li>
+                    <li>
+                        <a href="{{route('UDBStudentGuestSite.purchasedTicket')}}" id="entradasAdquiridas">Entradas Adquiridas</a>
+                    </li>
                 </ul>
             </li>  
             <li id="opcionesMiPerfil">
