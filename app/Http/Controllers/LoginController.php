@@ -78,10 +78,10 @@ class LoginController extends Controller
                         }
                     }else if($accessLevel == 5){
                         $carnetInstitucion = $user[0]->idUsuario;
-                        $studentGuestStatus = DB::table('estudianteinstitucion')->where('carnetinstitucion','=',$carnetInstitucion)->get();
-                        if($studentGuestStatus && $studentGuestStatus[0]->estadoEliminacion == 1){
+                        $studentGuestStatus = DB::table('estudianteInstitucion')->where('carnetInstitucion','=',$carnetInstitucion)->get();
+                        if($studentGuestStatus && $studentGuestStatus[0]->estadoEliminacion ==1 ){
                             $request->session()->put('user',$user);
-                            session()->put('estudianteinstitucion',$studentGuestStatus);
+                            session()->put('estudianteInstitucion',$studentGuestStatus);
                             return to_route('StudentGuestSite.site');
                         }else{
                             return redirect()->back()->with('error','Acceso denegado');

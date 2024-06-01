@@ -64,7 +64,7 @@ CREATE TABLE estudianteInstitucion(
     telefonoInstitucion VARCHAR(10) NOT NULL,
     nivelEducativo TEXT NOT NULL,
     institucion TEXT NOT NULL,
-    carnetinstitucion TEXT NOT NULL,
+    carnetInstitucion TEXT NOT NULL,
     departamentoInstitucion TEXT NOT NULL,
     municipioInstitucion TEXT NOT NULL,
     estadoEliminacion INT NOT NULL DEFAULT 1

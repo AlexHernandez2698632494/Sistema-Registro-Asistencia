@@ -23,18 +23,25 @@ class GuestSiteOtherInstitutionController extends Controller
     }
 
     public function site () {
-        if(session()->has('estudiante')){
-            // $guestInfo = DB::table('Eventos')
-            //                 ->select('NombreEvento','fecha','hora','precio','idEvento')
-            //                 ->get();
-            $guestInfo = DB::table('areaFormativaEntretenimientoEvento as afee')
-                                ->join('eventos as e','e.idEvento','=', 'afee.idEvento')
-                                ->join('areas as a','a.idAreas','=','afee.idAreas') 
-                                ->join('areaFormativaEntretenimiento as afe','afe.idAreaFormativaEntretenimiento','=','a.idAreaFormativaEntretenimiento')
-                                ->select('e.NombreEvento','e.fecha','e.hora','e.precio','e.idEvento','e.descripcion','a.nombre','afe.nombreArea')
-                                ->get();
-           // return $guestInfo;
-            return view('StudentGuestSite.site',compact('guestInfo'));
+        if(session()->has('estudianteInstitucion')){
+            $guestInfo = DB::table('Eventos')
+                             ->select('NombreEvento','fecha','hora','precio','idEvento')
+                             ->get();
+            $formativa = DB::table('areaFormativaEntretenimientoEvento as afee')
+                ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
+                ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
+                ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
+                ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea')
+                ->where('afe.nombreArea', '=', 'Area Formativa')
+                ->get();
+            $entrenimiento = DB::table('areaFormativaEntretenimientoEvento as afee')
+            ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
+            ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
+            ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
+            ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea')
+            ->where('afe.nombreArea', '=', 'Area Entretenimiento')
+            ->get();
+            return view('StudentGuestSite.site',compact('formativa','entrenimiento','guestInfo'));
          }else{
              return view('layout.403');            
         }  
@@ -42,7 +49,7 @@ class GuestSiteOtherInstitutionController extends Controller
 
      public function show(string $id)
     {
-        if (session()->has('estudiante')) {
+        if (session()->has('estudianteInstitucion')) {
             $eventInfo = DB::table('eventos as e')
                             ->join('areaformativaentretenimientoevento as afee', 'afee.idEvento', '=', 'e.idEvento')
                             ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
@@ -142,7 +149,7 @@ class GuestSiteOtherInstitutionController extends Controller
     }
 
     public function miPerfil(){
-        if(session()->has('estudiante')){
+        if(session()->has('estudianteInstitucion')){
             $id= session()->get('estudiante');
             $informacionUDB = DB::table('estudiante')->where('idUDB','=',$id[0]->idUDB)->get();
             return view('StudentGuestSite.miPerfil', compact('informacionUDB'));
