@@ -40,7 +40,7 @@
  
     @include('layout.horizontalMenu')
     <div class="wrapper">
-        @include('layout.verticalMenuInvitadoPersonalUDB')
+        @include('layout.verticalMenuInvitadoEstudianteUDB')
         <div id="content" class="mt-0 pt-0">
             <nav class="navbar navbar-expand-lg navbar-light bg-light mt-3 mx-5">
                 <div class="container-fluid">
@@ -89,8 +89,8 @@
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Nivel Educativo</p>
-                                {{ $informacionUDB[0]->profesionUDB}}
-                                <input type="hidden" name="nivel_educativo" value="{{ $informacionUDB[0]->profesionUDB }}">
+                                {{ $informacionUDB[0]->carreraUDB}}
+                                <input type="hidden" name="nivel_educativo" value="{{ $informacionUDB[0]->carreraUDB }}">
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Evento</p>
