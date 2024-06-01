@@ -50,6 +50,7 @@ class UDBStudentGuestSiteController extends Controller
                             ->join('areaformativaentretenimientoevento as afee', 'afee.idEvento', '=', 'e.idEvento')
                             ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
                             ->join('areaformativaentretenimiento as afe', 'afe.idAreaformativaentretenimiento', '=', 'a.idAreaformativaentretenimiento')
+                            ->where('e.idEvento','=',$id)
                             ->get();
             //return $eventInfo;
             return view('UDBStudentGuestSite.eventInformation', compact('eventInfo'));
