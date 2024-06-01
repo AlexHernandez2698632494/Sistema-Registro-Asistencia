@@ -98,7 +98,8 @@
                                                     <option value="Parvularia">Parvularia</option>
                                                     <option value="Basica">Basica</option>
                                                     <option value="Tercer Ciclo">Tercer Ciclo</option>
-                                                    <option value="Bachillerato">Bachillerato</option>                                                  
+                                                    <option value="Bachillerato">Bachillerato</option>    
+                                                    <option value="Universitario">Universitario</option>                                              
                                             </select>
 										</div>
 									</div>
