@@ -82,7 +82,7 @@ class LoginController extends Controller
                         if($studentGuestStatus && $studentGuestStatus[0]->estadoEliminacion == 1){
                             $request->session()->put('user',$user);
                             session()->put('estudianteinstitucion',$studentGuestStatus);
-                            return to_route('studentGuestSite.site');
+                            return to_route('StudentGuestSite.site');
                         }else{
                             return redirect()->back()->with('error','Acceso denegado');
                         }
