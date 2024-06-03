@@ -66,17 +66,7 @@ class LoginController extends Controller
                         }else{
                             return redirect()->back()->with('error','Acceso denegado');
                         }
-                    }else if($accessLevel == 4){ //docente UDB
-                        $carnetUDB = $user[0]->idUsuario;
-                        $UDBTeacherGuestStatus = DB::table('docenteUDB')->where('carnetUDB','=',$carnetUDB)->get();
-                        if($UDBTeacherGuestStatus && $UDBTeacherGuestStatus[0]->estadoEliminacion == 1){
-                            $request->session()->put('user',$user);
-                            session()->put('docenteUDB',$UDBTeacherGuestStatus);
-                            return to_route('UDBTeacherGuestSite.site');
-                        }else{
-                            return redirect()->back()->with('error','Acceso denegado');
-                        }
-                    }else if($accessLevel == 5){
+                    }else if($accessLevel == 4){ //estudiante OTRA
                         $carnetInstitucion = $user[0]->idUsuario;
                         $studentGuestStatus = DB::table('estudianteInstitucion')->where('carnetInstitucion','=',$carnetInstitucion)->get();
                         if($studentGuestStatus && $studentGuestStatus[0]->estadoEliminacion ==1 ){
@@ -125,8 +115,6 @@ class LoginController extends Controller
             session()->forget('estudianteUDB');
         }else if(session()->has('personalUDB')){
             session()->forget('personalUDB');
-        }else if(session()->has('docenteUDB')){
-            session()->forget('docenteUDB');
         }else if(session()->has('estudianteInstitucion')){
             session()->forget('estudianteInstitucion');
         }else if(session()->has('administrador')){
@@ -159,8 +147,6 @@ class LoginController extends Controller
             session()->forget('estudianteUDB');
         }else if(session()->has('personalUDB')){
             session()->forget('personalUDB');
-        }else if(session()->has('docenteUDB')){
-            session()->forget('docenteUDB');
         }else if(session()->has('estudianteInstitucion')){
             session()->forget('estudianteInstitucion');
         }else if(session()->has('administrador')){
@@ -252,8 +238,6 @@ class LoginController extends Controller
             session()->forget('estudianteUDB');
         }else if(session()->has('personalUDB')){
             session()->forget('personalUDB');
-        }else if(session()->has('docenteUDB')){
-            session()->forget('docenteUDB');
         }else if(session()->has('estudianteInstitucion')){
             session()->forget('estudianteInstitucion');
         }else if(session()->has('administrador')){

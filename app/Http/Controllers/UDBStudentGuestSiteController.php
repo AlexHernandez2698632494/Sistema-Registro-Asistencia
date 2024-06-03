@@ -13,6 +13,7 @@ use App\Mail\Credentials;
 use App\Models\Usuarios;
 use App\Models\eventos;
 use App\Models\Entrada;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -25,23 +26,39 @@ class UDBStudentGuestSiteController extends Controller
         return view('UDBStudentGuestSite.index');
     }
 
-    public function site () {
-        if(session()->has('estudianteUDB')){
-            // $guestInfo = DB::table('Eventos')
-            //                 ->select('NombreEvento','fecha','hora','precio','idEvento')
-            //                 ->get();
-            $guestInfo = DB::table('areaFormativaEntretenimientoEvento as afee')
-                                ->join('eventos as e','e.idEvento','=', 'afee.idEvento')
-                                ->join('areas as a','a.idAreas','=','afee.idAreas') 
-                                ->join('areaFormativaEntretenimiento as afe','afe.idAreaFormativaEntretenimiento','=','a.idAreaFormativaEntretenimiento')
-                                ->select('e.NombreEvento','e.fecha','e.hora','e.precio','e.idEvento','e.descripcion','a.nombre','afe.nombreArea')
-                                ->get();
-           // return $guestInfo;
-            return view('UDBStudentGuestSite.site',compact('guestInfo'));
-         }else{
-             return view('layout.403');            
-        }  
-     }
+    public function site()
+{
+    if (session()->has('docenteUDB')) {
+        $now = Carbon::now(); // Obtener la fecha y hora actual
+
+        $guestInfo = DB::table('Eventos')
+            ->select('NombreEvento','fecha','hora','precio','idEvento')
+            ->where(DB::raw('CONCAT(fecha, " ", hora)'), '>', $now) // Filtrar eventos
+            ->get();
+
+        $formativa = DB::table('areaFormativaEntretenimientoEvento as afee')
+            ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
+            ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
+            ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
+            ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea')
+            ->where('afe.nombreArea', '=', 'Area Formativa')
+            ->where(DB::raw('CONCAT(e.fecha, " ", e.hora)'), '>', $now) // Filtrar eventos
+            ->get();
+
+        $entrenimiento = DB::table('areaFormativaEntretenimientoEvento as afee')
+            ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
+            ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
+            ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
+            ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea')
+            ->where('afe.nombreArea', '=', 'Area Entretenimiento')
+            ->where(DB::raw('CONCAT(e.fecha, " ", e.hora)'), '>', $now) // Filtrar eventos
+            ->get();
+
+        return view('UDBTeacherGuestSite.site', compact('formativa', 'entrenimiento', 'guestInfo'));
+    } else {
+        return view('layout.403');
+    }
+}
 
      public function show(string $id)
     {

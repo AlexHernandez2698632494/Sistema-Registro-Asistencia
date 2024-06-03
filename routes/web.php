@@ -131,20 +131,6 @@ Route::prefix('personal/UDB')->group(function(){
     route::post('/QR', [UDBStaffGuestSiteController::class, 'addEntry'])->name('UDBStaffGuestSite.addEntry');
 });
 
-//Rutas relacionadas con el controlador de docente UDB (UDBTeacherGuestSiteController)
-Route::prefix('docente/UDB')->group(function(){
-    route::get('/',[UDBTeacherGuestSiteController::class, 'docenteUDB'])->name('UDBTeacherGuestSite.index');
-    route::post('/add',[UDBTeacherGuestSiteController::class,'store'])->name('UDBTeacherGuestSite.add');
-    route::get('/index',[UDBTeacherGuestSiteController::class,'site'])->name('UDBTeacherGuestSite.site');
-    route::get('show/{id}', [UDBTeacherGuestSiteController::class, 'show'])->name('UDBTeacherGuestSite.showInfo');
-    Route::get('/miPerfil', [UDBTeacherGuestSiteController::class, 'miPerfil'])->name('UDBTeacherGuestSite.miPerfil');
-    route::put('/updateInfor',[UDBTeacherGuestSiteController::class,'updateInfor'])->name('UDBTeacherGuestSite.updateInfor');
-    route::get('/adquirir', [UDBTeacherGuestSiteController::class, 'buyIndividualGroupTicket'])->name('UDBTeacherGuestSite.ticketIG');
-    route::get('/adquirir/entrada', [UDBTeacherGuestSiteController::class, 'purchaseTicketI'])->name('UDBTeacherGuestSite.ticketI');    
-    route::get('/adquirir/entradas', [UDBTeacherGuestSiteController::class, 'purchaseTicketG'])->name('UDBTeacherGuestSite.ticketG');
-    route::get('/entradas/adquiridas', [UDBTeacherGuestSiteController::class, 'purchasedTicket'])->name('UDBTeacherGuestSite.purchasedTicket');     
-    route::post('/QR', [UDBTeacherGuestSiteController::class, 'addEntry'])->name('UDBTeacherGuestSite.addEntry');
-});
 
 //Rutas relacionadas con el controlador de estudiante otra institucion  (GuestSiteOtherInstitutionController)
 Route::prefix('invitado/estudiante')->group(function(){
