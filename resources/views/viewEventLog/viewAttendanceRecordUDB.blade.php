@@ -67,18 +67,42 @@
 							</thead>
 							<div class="table-body">
 								<tbody>	
-									@foreach ($records as $record)
+									@foreach ($records as $personalUDB)
 									<tr>
-										<td>{{ $record->nombreEvento }}</td>
-                                                <td>{{ $record->fecha }}</td>
-                                                <td>{{ $record->hora }}</td>
-                                                <td>{{ $record->nombre }}</td>
-                                                <td>{{ $record->profesionUDB}}</td>
-                                                <td>{{ $record->capacidad}}</td>
-                                                <td>{{ $record->total_registrados }}</td>
-                                                <td>{{ $record->total_asistencia }}</td>
+										<td>{{ $personalUDB->nombreEvento }}</td>
+                                                <td>{{ $personalUDB->fecha }}</td>
+                                                <td>{{ $personalUDB->hora }}</td>
+                                                <td>{{ $personalUDB->nombre }}</td>
+                                                <td>{{ $personalUDB->profesionUDB}}</td>
+                                                <td>{{ $personalUDB->capacidad}}</td>
+                                                <td>{{ $personalUDB->total_registrados }}</td>
+                                                <td>{{ $personalUDB->total_asistencia }}</td>
 										</tr> 
-									@endforeach																																									
+									@endforeach
+                                    @foreach ($recordSUDB as $estudianteUDB)
+									<tr>
+										        <td>{{ $estudianteUDB->nombreEvento }}</td>
+                                                <td>{{ $estudianteUDB->fecha }}</td>
+                                                <td>{{ $estudianteUDB->hora }}</td>
+                                                <td>{{ $estudianteUDB->nombre }}</td>
+                                                <td>{{ $estudianteUDB->carreraUDB}}</td>
+                                                <td>{{ $estudianteUDB->capacidad}}</td>
+                                                <td>{{ $estudianteUDB->total_registrados }}</td>
+                                                <td>{{ $estudianteUDB->total_asistencia }}</td>
+										</tr> 
+									@endforeach	
+                                    @foreach ($recordsDUDB as $docenteUDB)
+									<tr>
+										        <td>{{ $docenteUDB->nombreEvento }}</td>
+                                                <td>{{ $docenteUDB->fecha }}</td>
+                                                <td>{{ $docenteUDB->hora }}</td>
+                                                <td>{{ $docenteUDB->nombre }}</td>
+                                                <td>{{ $docenteUDB->profesionUDB}}</td>
+                                                <td>{{ $docenteUDB->capacidad}}</td>
+                                                <td>{{ $docenteUDB->total_registrados }}</td>
+                                                <td>{{ $docenteUDB->total_asistencia }}</td>
+										</tr> 
+									@endforeach																																							
 								</tbody>
 							</div>
 						</table>																

@@ -69,12 +69,44 @@ class viewEventLogController extends Controller
             if ($idEvento) {
                 $records->where('e.idEvento', $idEvento);
             }
-    
             $records = $records->groupBy('e.nombreEvento', 'e.fecha', 'e.hora', 'e.capacidad', 'a.nombre','p.profesionUDB')
                         ->get();
-
-            //return $records;
-            return view('viewEventLog.viewAttendanceRecordUDB', compact('records'));
+            $recordSUDB =DB::table('entradas as en')->select(
+                'e.nombreEvento', 
+                'e.fecha', 
+                'e.hora', 
+                'e.capacidad', 
+                'a.nombre', 
+                's.carreraUDB',
+                DB::raw('COUNT(en.asistencia) AS total_registrados'),
+                DB::raw('SUM(CASE WHEN en.asistencia = 1 THEN 1 ELSE 0 END) AS total_asistencia'))
+            ->join('eventos as e', 'e.idEvento', '=', 'en.idEvento')
+            ->join('areaformativaentretenimientoevento as afee', 'e.idEvento', '=', 'afee.idEvento')
+            ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
+            ->join('areaformativaentretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
+            ->join('estudianteUDB as s','s.idUDB', '=', 'en.idPersonalUDB')
+            ->where('en.asistencia', '<=', 1)->groupBy('e.nombreEvento', 'e.fecha', 'e.hora', 'e.capacidad', 'a.nombre','s.carreraUDB')
+            ->get();
+            $recordsDUDB = DB::table('entradas as en')
+            ->select(
+                'e.nombreEvento', 
+                'e.fecha', 
+                'e.hora', 
+                'e.capacidad', 
+                'a.nombre', 
+                'd.profesionUDB',
+                DB::raw('COUNT(en.asistencia) AS total_registrados'),
+                DB::raw('SUM(CASE WHEN en.asistencia = 1 THEN 1 ELSE 0 END) AS total_asistencia')
+            )
+            ->join('eventos as e', 'e.idEvento', '=', 'en.idEvento')
+            ->join('areaformativaentretenimientoevento as afee', 'e.idEvento', '=', 'afee.idEvento')
+            ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
+            ->join('areaformativaentretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
+            ->join('docenteUDB as d','d.idUDB', '=', 'en.idPersonalUDB')
+            ->where('en.asistencia', '<=', 1)->groupBy('e.nombreEvento', 'e.fecha', 'e.hora', 'e.capacidad', 'a.nombre','d.profesionUDB')
+            ->get();
+            //return $recordSUDB;
+            return view('viewEventLog.viewAttendanceRecordUDB', compact('records','recordSUDB','recordsDUDB'));
         } else {
             return view('layout.403');
         }
