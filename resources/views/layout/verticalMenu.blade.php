@@ -67,7 +67,10 @@
                 <ul class="collapse list-unstyled" id="menuUsuarios">
                     <li>
                         <a href="{{route('user.index')}}" id="controlUsuarios">Control de usuarios</a>
-                    </li>                   
+                    </li> 
+                    <li>
+                        <a href="{{route('user.site')}}" id="propaganda">Propaganda</a>
+                    </li>                  
                 </ul>
             </li>
             

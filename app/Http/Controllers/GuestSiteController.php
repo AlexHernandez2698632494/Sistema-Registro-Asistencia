@@ -316,5 +316,29 @@ class GuestSiteController extends Controller
         }
     }
     
+    public function formative(){
+        if (session()->has('invitado')) {
+            $guestInfo = DB::table('Eventos')
+                             ->select('NombreEvento','fecha','hora','precio','idEvento')
+                             ->get();
+            $formativa = DB::table('areaFormativaEntretenimientoEvento as afee')
+                ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
+                ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
+                ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
+                ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea')
+                ->where('afe.nombreArea', '=', 'Area Formativa')
+                ->get();
+            $entrenimiento = DB::table('areaFormativaEntretenimientoEvento as afee')
+            ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
+            ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
+            ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
+            ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea')
+            ->where('afe.nombreArea', '=', 'Area Entretenimiento')
+            ->get();
+            return view('guestSite.formative', compact('formativa','entrenimiento','guestInfo'));
+        } else {
+            return view('layout.403');
+        }
+    }
     }
     

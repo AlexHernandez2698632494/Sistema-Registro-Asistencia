@@ -76,6 +76,8 @@ Route::prefix('user')->group(function(){
     route::get('/index',[usuarioController::class, 'index'])->name('user.index');
     route::get('/cambiarContraFormulario',[usuarioController::class,'formContra'])->name('users.formContra');
     route::put('/cambiarContra',[usuarioController::class, 'cambiarContra'])->name('user.cambiarContra');
+    route::get('/propaganda',[usuarioController::class,'propagandaEvento'])->name('user.site');
+    route::post('/user/send/{id}', [UsuarioController::class, 'send'])->name('user.send');
 });
 
 //Rutas relacionadas con el controlador de login (LoginController)
