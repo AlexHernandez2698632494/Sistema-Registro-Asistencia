@@ -54,7 +54,7 @@ class UDBStudentGuestSiteController extends Controller
             ->where(DB::raw('CONCAT(e.fecha, " ", e.hora)'), '>', $now) // Filtrar eventos
             ->get();
 
-        return view('UDBTeacherGuestSite.site', compact('formativa', 'entrenimiento', 'guestInfo'));
+        return view('UDBStudentGuestSite.site', compact('formativa', 'entrenimiento', 'guestInfo'));
     } else {
         return view('layout.403');
     }
@@ -211,7 +211,12 @@ class UDBStudentGuestSiteController extends Controller
     }
     
     public function purchaseTicketG(){
-        return view('UDBStudentGuestSite.ticketG');
+        if(session()->has('estudianteUDB')){
+            $id= session()->get('estudianteUDB');
+            $informacionUDB = DB::table('estudianteUDB')->where('idUDB','=',$id[0]->idUDB)->get();
+            $eventos = DB::table('Eventos')->get();
+        return view('UDBStudentGuestSite.ticketG', compact('eventos','informacionUDB'));
+        }
     }
     
     public function addEntry(Request $request)

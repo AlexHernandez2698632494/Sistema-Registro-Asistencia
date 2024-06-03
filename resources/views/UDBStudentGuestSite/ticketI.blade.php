@@ -94,12 +94,7 @@
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Evento</p>
-                                <select class="form-select" id="idEvento" name="idEvento" required>
-                                    <option value="" disabled selected>Seleccione un evento</option>
-                                    @foreach ($eventos as $evento)
-                                        <option value="{{ $evento->idEvento }}">{{ $evento->NombreEvento }}</option>
-                                    @endforeach
-                                </select>
+                                <p value="{{ $eventos[0]->idEvento }}">{{ $eventos[0]->NombreEvento }}</p>
                             </div>
                         </div>
                         <div class="row mx-1 mt-3 d-flex justify-content-center">

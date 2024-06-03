@@ -100,6 +100,11 @@
                                     <option value="Universidad">Universidad</option>
                                 </select>
                             </div>
+                            <div class="col-lg-6 col-xs-12">
+                                <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Institución</p>
+                                <input type="text" id="institucion" name="institucion" placeholder="Ingrese institución" class="form-control input" required>
+                            </div>
+
                         </div>
                         <div class="row mx-1 mt-3 d-flex justify-content-center">
                             <div class="col-lg-4">
