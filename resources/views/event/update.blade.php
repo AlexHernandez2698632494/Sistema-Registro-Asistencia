@@ -86,13 +86,19 @@
                                 </div>                               
                             </div>  
                             <div class="row justify-content-center">
-                                <div class="col-lg-3 col-xs-12 mt-2">
+                                <div class="col-lg-6 col-xs-12 mt-2">
                                     <label for="descripcion" class="form-label">Descripcion</label>                                
                                     <input type="text" id="descripcion" name="descripcion" placeholder="Ingrese número" class="form-control input Phone" value="{{$eventEdit->descripcion}}">                                                                                                    
                                 </div>
+                            </div>
+                            <div class="row justify-content-center">
                                 <div class="col-lg-3 col-xs-12 mt-2">                                    
                                     <label for="precio" class="form-label">precio</label>                                
                                     <input type="text" id="precio" name="precio" placeholder="Ingrese precio" class="form-control input"  value="{{$eventEdit->precio}}" >                                    
+                                </div>
+                                <div class="col-lg-3 col-xs-12 mt-2">                                    
+                                    <label for="capacidad" class="form-label">Capacidad</label>                                
+                                    <input type="number" id="capacidad" name="capacidad" placeholder="Ingrese capacidad" class="form-control input"  value="{{$eventEdit->capacidad}}" >                                    
                                 </div>
                             </div>  
                             <div class="row justify-content-center">
@@ -100,7 +106,8 @@
                                     <label for="imagen" class="form-label">imagen</label>                                
                                     <input type="file" id="imagen" name="imagen" placeholder="Ingrese imagen" class="form-control input"  value="{{$eventEdit->imagen}}" >                                    
                                 </div>
-                            </div>                                                                                                                                                     
+                            </div>     
+
                             <div class="row mx-2 my-2">
                                 <div class="col d-flex justify-content-center">
                                     <button type="submit" class="btn btn-block btn-Add">Registrar evento</button>

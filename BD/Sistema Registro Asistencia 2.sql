@@ -28,20 +28,6 @@ CREATE TABLE estudianteUDB(
     estadoEliminacion INT NOT NULL DEFAULT 1
 ); 
 
-CREATE TABLE docenteUDB(
-    idUDB INT AUTO_INCREMENT PRIMARY KEY,
-    nombreUDB VARCHAR(256) NOT NULL,
-    apellidosUDB VARCHAR(256) NOT NULL,
-    sexoUDB VARCHAR(10) NOT NULL,
-    carnetUDB VARCHAR(9) NOT NULL,
-    profesionUDB TEXT NOT NULL,
-    correoUDB TEXT NOT NULL,
-    telefonoUDB VARCHAR(10) NOT NULL,
-    departamentoUDB TEXT NOT NULL,
-    municipioUDB TEXT NOT NULL,
-    estadoEliminacion INT NOT NULL DEFAULT 1
-); 
-
 CREATE TABLE personalUDB(
     idUDB INT AUTO_INCREMENT PRIMARY KEY,
     nombreUDB VARCHAR(256) NOT NULL,
@@ -140,8 +126,7 @@ CREATE TABLE entradas(
     institucion VARCHAR(256) NOT NULL,
     nivel_educativo VARCHAR(50) NOT NULL,
     qr_code TEXT NOT NULL,
-    asistencia BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY(idEvento) REFERENCES Eventos(idEvento)
+    asistencia BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE entradasG(
@@ -153,6 +138,5 @@ CREATE TABLE entradasG(
     institucion VARCHAR(256) NOT NULL,
     nivel_educativo VARCHAR(50) NOT NULL,
     qr_code TEXT NOT NULL,
-    asistencia BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY(idEntrada) REFERENCES entradas(idEntrada)
+    asistencia BOOLEAN DEFAULT FALSE
 );

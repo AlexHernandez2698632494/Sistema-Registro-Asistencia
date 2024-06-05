@@ -189,6 +189,7 @@ class EventController extends Controller
             $eventEdit->hora = $request->post('hora');
             $eventEdit->descripcion = $request->post('descripcion');
             $eventEdit->precio = $request->post('precio');
+            $eventEdit->capacidad = $request->post('capacidad');
 
             // Verificar si se proporciona una nueva imagen
             if ($request->hasFile('imagen')) {
