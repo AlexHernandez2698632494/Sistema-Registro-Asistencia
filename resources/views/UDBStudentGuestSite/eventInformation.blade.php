@@ -8,7 +8,7 @@
     <script src="{{ asset('js/inactividad.js') }}"></script>
     @include('layout.horizontalMenu')
     <div class="wrapper">
-        @include('layout.verticalMenuInvitadoEstudianteUDB')
+        @include('layout.verticalMenuInvitado')
         <div id="content" class="mt-0 pt-0">
             <nav class="navbar navbar-expand-lg navbar-light bg-light mt-3 mx-5">
                 <div class="container-fluid">
@@ -45,7 +45,7 @@
                                 <div class="col-12">{{ $eventInfo->hora }}</div>
                             </div>
                             <div class="row mt-2">
-                                <div class="col-12"><b>Descripción del evento</b></div>
+                                <div class="col-12"><b>Descripcion del evento</b></div>
                                 <div class="col-12">{{ $eventInfo->descripcion }}</div>
                             </div>
                             <div class="row mt-2">
@@ -80,14 +80,23 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="card-body cardBody-Teachers text-center">
+                                {{-- Botón de inscripción individual --}}
+                                <a href="{{ route('UDBStudentGuestSite.ticketI', $eventInfo->idEvento) }}" class="btn btn-primary mx-2">
+                                    Inscripción Individual
+                                </a>
+                                {{-- Botón de inscripción grupal --}}
+                                <a href="{{ route('UDBStudentGuestSite.ticketG',  $eventInfo->idEvento) }}" class="btn btn-secondary mx-2">
+                                    Inscripción Grupal
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
                 @endforeach
             </div>
-        </div>
+        </div> 
     </div>
-
 </body>
 
 </html>

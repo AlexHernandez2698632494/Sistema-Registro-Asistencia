@@ -1,9 +1,9 @@
 @extends('layout.header')
- 
+
 @section('title', 'Adquirir entrada')
- 
+
 <script src="{{ asset('js/sweetalert.js') }}"></script>
- 
+
 <body style="overflow-x: hidden">
     <script src="{{ asset('js/inactividad.js') }}"></script>
     @if (session('exitoAgregar'))
@@ -21,7 +21,7 @@
             })
         </script>
     @endif
- 
+
     @if (session('errorAgregar'))
         <script>
             swal({
@@ -37,14 +37,14 @@
             })
         </script>
     @endif
- 
+
     @include('layout.horizontalMenu')
     <div class="wrapper">
         @include('layout.verticalMenuInvitadoEstudianteUDB')
         <div id="content" class="mt-0 pt-0">
             <nav class="navbar navbar-expand-lg navbar-light bg-light mt-3 mx-5">
                 <div class="container-fluid">
-                    <a href="{{ route('UDBStudentGuestSite.site') }}" class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Regresar">
+                    <a href="{{ route('guestSite.site') }}" class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Regresar">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                     <div class="col text-center">
@@ -57,32 +57,33 @@
                     <p class="d-flex justify-content-center">Información general</p>
                     <div class="separator mb-3"></div>
                     @if ($errors->any())
-                                <div class="alert alert-danger my-2 pb-0">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-                            @if(session('error'))
-                                <div class="alert alert-danger">
-                                    {{ session('error') }}
-                                </div>
-                            @endif
-                    <form id="entradaForm" method="POST" action="{{ route('UDBStaffGuestSite.addEntry') }}">
+                        <div class="alert alert-danger my-2 pb-0">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    <form id="entradaForm" method="POST" action="{{ route('UDBStudentGuestSite.addEntryG') }}">
                         @csrf
                         <div class="row mx-1">
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Nombre Completo</p>
-                                <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre y apellido" class="form-control input" required>
+                                <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre y apellido" class="form-control input" value="{{ $informacionUDB->nombreUDB }}" required>
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Sexo</p>
                                 <select class="form-select" id="sexo" name="sexo" required>
-                                    <option value="" disabled selected>Ingrese su sexo</option>
-                                    <option value="Masculino">Masculino</option>
-                                    <option value="Femenino">Femenino</option>
+                                    <option value="" disabled>Ingrese su género</option>
+                                    <option value="Masculino" {{ $informacionUDB->sexoUDB == 'Masculino' ? 'selected' : '' }}>Masculino</option>
+                                    <option value="Femenino" {{ $informacionUDB->sexoUDB == 'Femenino' ? 'selected' : '' }}>Femenino</option>
                                 </select>
                             </div>
                             <div class="col-lg-6 col-xs-12">
@@ -102,8 +103,9 @@
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Evento</p>
-                                <p value="{{ $eventos[0]->idEvento }}">{{ $eventos[0]->NombreEvento }}</p>
-                            </div>
+                                <input type="hidden" name="idEvento" value="{{ $evento->idEvento }}">
+                                {{ $evento->NombreEvento }}
+                            </div>  
                         </div>
                         <div class="row mx-1 mt-3 d-flex justify-content-center">
                             <div class="col-lg-4">
@@ -115,7 +117,7 @@
                     </form>
                 </div>
             </div>
- 
+
             <div class="card mx-5">
                 <div class="card-body">
                     <p class="d-flex justify-content-center">Tabla de Información</p>
@@ -145,33 +147,47 @@
             </div>
         </div>
     </div>
- 
+
     <script>
         function ingresarDatos() {
             const nombre = document.getElementById('nombre').value;
             const sexo = document.getElementById('sexo').value;
             const institucion = document.getElementById('institucion').value;
             const nivel_educativo = document.getElementById('nivel_educativo').value;
- 
+
             if (nombre && sexo && institucion && nivel_educativo) {
                 const tbody = document.querySelector('#tablaInformacion tbody');
                 const row = document.createElement('tr');
- 
+
                 row.innerHTML = `
                     <td>${nombre}</td>
                     <td>${sexo}</td>
                     <td>${institucion}</td>
                     <td>${nivel_educativo}</td>
                     <td>
-                        <button type="button" class="btn btn-warning icon-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Actualizar"><i class="fa-solid fa-arrows-rotate" style="color: white"></i></button>
-                        <button type="button" class="btn btn-danger icon-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                        <button type="button" class="btn btn-danger icon-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar" onclick="eliminarFila(this)">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
                     </td>
                 `;
- 
+
                 tbody.appendChild(row);
+
+                // Clear form fields
+                document.getElementById('nombre').value = '';
+                document.getElementById('sexo').value = '';
+                document.getElementById('institucion').value = '';
+                document.getElementById('nivel_educativo').value = '';
             }
         }
- 
+
+        function eliminarFila(button) {
+            // Obtener la fila a eliminar
+            const row = button.closest('tr');
+            // Eliminar la fila del DOM
+            row.remove();
+        }
+
         function adquirirEntradas() {
             document.getElementById('entradaForm').submit();
         }

@@ -102,10 +102,12 @@ Route::prefix('estudiante/UDB')->group(function(){
     Route::get('/miPerfil', [UDBStudentGuestSiteController::class, 'miPerfil'])->name('UDBStudentGuestSite.miPerfil');
     route::put('/updateInfor',[UDBStudentGuestSiteController::class,'updateInfor'])->name('UDBStudentGuestSite.updateInfor');
     route::get('/adquirir', [UDBStudentGuestSiteController::class, 'buyIndividualGroupTicket'])->name('UDBStudentGuestSite.ticketIG');
-    route::get('/adquirir/entrada', [UDBStudentGuestSiteController::class, 'purchaseTicketI'])->name('UDBStudentGuestSite.ticketI');    
-    route::get('/adquirir/entradas', [UDBStudentGuestSiteController::class, 'purchaseTicketG'])->name('UDBStudentGuestSite.ticketG');
+    route::get('/adquirir/entrada/{id}', [UDBStudentGuestSiteController::class, 'purchaseTicketI'])->name('UDBStudentGuestSite.ticketI');    
+    route::get('/adquirir/entradas/{id}', [UDBStudentGuestSiteController::class, 'purchaseTicketG'])->name('UDBStudentGuestSite.ticketG');
     route::get('/entradas/adquiridas', [UDBStudentGuestSiteController::class, 'purchasedTicket'])->name('UDBStudentGuestSite.purchasedTicket');     
     route::post('/QR', [UDBStudentGuestSiteController::class, 'addEntry'])->name('UDBStudentGuestSite.addEntry');
+    route::post('/QR/grupo', [UDBStudentGuestSiteController::class, 'addEntryG'])->name('UDBStudentGuestSite.addEntryG');
+    
 });
 
 //Rutas relacionadas con el controlador de areas (AreaController)
