@@ -70,8 +70,7 @@ class GuestSiteController extends Controller
         return view('guestSite.index');
     }
 
-    public function generateUser(string $name, string $lastName)
-    {
+    public function generateUser(string $name, string $lastName){
         $nameElements = explode(' ', $name);
         $lastNameElements = explode(' ', $lastName);
 
@@ -93,8 +92,7 @@ class GuestSiteController extends Controller
         return $user;
     }
 
-    public function generatePass()
-    {
+    public function generatePass(){
         $permittedChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $pass = '';
         $strength = 10;
@@ -175,8 +173,7 @@ class GuestSiteController extends Controller
         }
     }
 
-    public function miPerfil()
-    {
+    public function miPerfil(){
         if (session()->has('invitado')) {
             $id = session()->get('invitado');
             $informacionInvitado = DB::table('invitado')->where('idInvitado', '=', $id[0]->idInvitado)->get();
@@ -186,8 +183,7 @@ class GuestSiteController extends Controller
         }
     }
 
-    public function updateInfor(Request $request)
-    {
+    public function updateInfor(Request $request){
         if (session()->has('invitado')) {
             $validator = Validator::make($request->all(), [
                 'correoInvitado' => 'required|email',
@@ -216,19 +212,22 @@ class GuestSiteController extends Controller
         }
     }
 
-    public function buyIndividualGroupTicket (){
-        return view('guestSite.ticketIG');
-    }
-    public function purchaseTicketI(){
-        if(session()->has('invitado')){
-            $id= session()->get('invitado');
-            $informacionInvitado = DB::table('invitado')->where('idInvitado','=',$id[0]->idInvitado)->get();
-            $eventos = DB::table('Eventos')->get();
-            return view('guestSite.ticketI', compact('eventos','informacionInvitado'));
-        
+    public function purchaseTicketI(string $id){
+        if (session()->has('invitado')) {
+            $idInvitado = session()->get('invitado');
+            $informacionInvitado = DB::table('invitado')->where('idInvitado', '=', $idInvitado[0]->idInvitado)->first();
+            $evento = DB::table('Eventos')->where('idEvento', '=', $id)->first();
+            
+            if (!$informacionInvitado || !$evento) {
+                return redirect()->route('guestSite.site')->with('error', 'Información no disponible');
+            }
+    
+            return view('guestSite.ticketI', compact('evento', 'informacionInvitado'));
+        } else {
+            return redirect()->route('guestSite.site')->with('error', 'Sesión no iniciada');
         }
     }
-    
+        
     public function purchaseTicketG(){
         return view('guestSite.ticketG');
     }
@@ -294,6 +293,7 @@ class GuestSiteController extends Controller
     
             DB::commit();
     
+            //return to_route('guestSite.purchasedTicket')->with('exitoAgregar', 'Entrada Adquirida Exitosamente');
             return Redirect::back()->with('exitoAgregar', 'Entrada Adquirida Exitosamente');
         } catch(Exception $e){
             DB::rollback();
@@ -307,7 +307,7 @@ class GuestSiteController extends Controller
             $informacionUDB = DB::table('invitado')->where('idInvitado','=',$id[0]->idInvitado)->first();
             $purchaseTicket = DB::table('entradas')
             ->join('Eventos', 'entradas.idEvento', '=', 'Eventos.idEvento')
-            ->select('Eventos.NombreEvento', 'Eventos.fecha', 'Eventos.hora', 'entradas.qr_code')
+            ->select('Eventos.NombreEvento', 'Eventos.fecha', 'Eventos.hora', 'entradas.qr_code', 'entradas.idEntrada')
             ->where('entradas.nombre', '=', $informacionUDB->nombreInvitado . ' ' . $informacionUDB->apellidosInvitado)
             ->get();
             return view('guestSite.purchasedTicket', compact('purchaseTicket'));
@@ -315,6 +315,36 @@ class GuestSiteController extends Controller
             return view('layout.403');
         }
     }
+
+    public function deleteEntry(Request $request, $idEntrada)
+{
+    try {
+        DB::beginTransaction();
+
+        // Obtener la entrada
+        $entrada = DB::table('entradas')->where('idEntrada', '=', $idEntrada)->first();
+
+        if (!$entrada) {
+            throw new Exception('Entrada no encontrada.');
+        }
+
+        // Eliminar la entrada
+        DB::table('entradas')->where('idEntrada', '=', $idEntrada)->delete();
+
+        // Eliminar el archivo QR
+        if (file_exists(public_path($entrada->qr_code))) {
+            unlink(public_path($entrada->qr_code));
+        }
+
+        DB::commit();
+
+        return Redirect::back()->with('exitoEliminar', 'Entrada eliminada exitosamente');
+    } catch (Exception $e) {
+        DB::rollback();
+        return Redirect::back()->with('errorEliminar', 'Ha ocurrido un error al eliminar la entrada, vuelva a intentarlo más tarde');
+    }
+}
+
     
     public function formative(){
         if (session()->has('invitado')) {
