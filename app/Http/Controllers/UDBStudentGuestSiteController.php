@@ -28,7 +28,7 @@ class UDBStudentGuestSiteController extends Controller
 
     public function site()
 {
-    if (session()->has('docenteUDB')) {
+    if (session()->has('estudianteUDB')) {
         $now = Carbon::now(); // Obtener la fecha y hora actual
 
         $guestInfo = DB::table('Eventos')
