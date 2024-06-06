@@ -45,7 +45,7 @@
                                    <p><b>Fecha del Evento: </b>{{$info->fecha}}</p>
                                    <p><b>Hora del Evento: </b>{{$info->hora}}</p>
                                    <p><b>Precio de la Entrada </b>{{$info->precio}}</p>
-                                   <p><b>Descripcion </b>{{$info->descripcion}}</p>
+                                   <p><b>Descripción </b>{{$info->descripcion}}</p>
                                </div>
                                <div class="card-footer text-body-secondary d-flex justify-content-center">
                                    <a href="{{ route('UDBStudentGuestSite.showInfo', $info->idEvento) }}" class="btn btn-primary my-1 mx-1" style="background-color: #2F98FE;">Información</a>
@@ -72,7 +72,7 @@
                                    <p><b>Fecha del Evento: </b>{{$info->fecha}}</p>
                                    <p><b>Hora del Evento: </b>{{$info->hora}}</p>
                                    <p><b>Precio de la Entrada </b>{{$info->precio}}</p>
-                                   <p><b>Descripcion </b>{{$info->descripcion}}</p>
+                                   <p><b>Descripción </b>{{$info->descripcion}}</p>
                                </div>
                                <div class="card-footer text-body-secondary d-flex justify-content-center">
                                    <a href="{{ route('UDBStudentGuestSite.showInfo', $info->idEvento) }}" class="btn btn-primary my-1 mx-1" style="background-color: #2F98FE;">Información</a>

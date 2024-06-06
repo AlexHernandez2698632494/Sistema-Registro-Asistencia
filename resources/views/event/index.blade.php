@@ -77,7 +77,7 @@
 									<th scope="col">Nombre</th>
 									<th scope="col">Fecha</th>
 									<th scope="col">Hora</th>
-									<th scope="col">Area</th>
+									<th scope="col">Área</th>
 									<th scope="col">Acciones</th>
 							</tr>
 							</thead>

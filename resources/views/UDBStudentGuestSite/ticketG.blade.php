@@ -80,7 +80,7 @@
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Sexo</p>
                                 <select class="form-select" id="sexo" name="sexo" required>
-                                    <option value="" disabled selected>Ingrese su género</option>
+                                    <option value="" disabled selected>Ingrese su sexo</option>
                                     <option value="Masculino">Masculino</option>
                                     <option value="Femenino">Femenino</option>
                                 </select>

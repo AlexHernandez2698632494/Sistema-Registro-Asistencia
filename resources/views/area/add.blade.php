@@ -1,6 +1,6 @@
 @extends('layout.header')
 
-@section('title', 'Registro de Area')
+@section('title', 'Registro de Área')
 
 <script src="{{ asset('js/sweetalert.js') }}"></script>
 {{-- <script src="{{ asset('js/admin/addInit.js') }}"></script> --}}
@@ -48,7 +48,7 @@
                         <i class="fas fa-arrow-left"></i>
                     </a> 
                     <div class="col d-flex justify-content-center">
-                        <p style="color: black; margin: 0; font-weight: bold">Registro de Areas</p>
+                        <p style="color: black; margin: 0; font-weight: bold">Registro de Áreas</p>
                     </div>
                 </div>
             </nav>
@@ -76,10 +76,10 @@
                                     value="{{ old('nombreArea') }}" required>
                             </div>
                             <div class="col-lg-6 col-xs-12 mt-2">
-                                <label for="txtEtapa" class="form-label"><b>Area</b></label>
+                                <label for="txtEtapa" class="form-label"><b>Área</b></label>
                                 <select class="form-select" aria-label="Default select example" id="tipoArea"
                                     name="tipoArea" onchange="getPhaseDuration(this.value)">
-                                    <option value="0" selected>Seleccione una area</option>
+                                    <option value="0" selected>Seleccione una área </option>
                                      @foreach ($areas as $area)
                                         <option value={{ $area->idAreaFormativaEntretenimiento }}>{{ $area->nombreArea }}</option>
                                     @endforeach
@@ -89,7 +89,7 @@
                                               
                         <div class="row mx-2 mt-5">
                             <div class="col d-flex justify-content-center">
-                                <button type="submit" class="btn btn-block btn-Add">Registrar Area</button>                                
+                                <button type="submit" class="btn btn-block btn-Add">Registrar Área</button>                                
                             </div>
                         </div>
                     </form>

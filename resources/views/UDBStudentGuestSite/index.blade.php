@@ -84,7 +84,7 @@
 										<div class="input-group mb-3">
 											<span class="input-group-text" id="basic-addon1"><i class="bi-solid bi-gender-ambiguous"></i></span>
 											<select class="form-select" aria-label="Default select example" id="txtSex" name="sexo">
-												<option value="" disabled selected>Ingrese su genero</option>
+												<option value="" disabled selected>Ingrese su sexo</option>
 												<option value="Masculino">Masculino</option>
 												<option value="Femenino">Femenino</option>
 											</select>

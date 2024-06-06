@@ -45,7 +45,7 @@
                                 <div class="col-12">{{ $eventInfo->hora }}</div>
                             </div>
                             <div class="row mt-2">
-                                <div class="col-12"><b>Descripcion del evento</b></div>
+                                <div class="col-12"><b>Descripción del evento</b></div>
                                 <div class="col-12">{{ $eventInfo->descripcion }}</div>
                             </div>
                             <div class="row mt-2">

@@ -33,7 +33,7 @@
 										<th scope="col">Correo</th>
 										<th scope="col">Cargo</th>
 										<th scope="col">Acciones</th>
-										Mosttar registros: 
+										Mostrar registros: 
 										Buscar:
 									</tr>
 								</thead>

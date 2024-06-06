@@ -1,7 +1,7 @@
 @extends('layout.header')
 
 
-@section('title','Control de eventos')
+@section('title','Control de Áreas')
 
 <script src="{{ asset('js/sweetalert.js') }}"></script>
 <script src="{{ asset('js/Area/removedInit.js') }}"></script>
@@ -59,7 +59,7 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-light mt-3 mx-5">
                 <div class="container-fluid">					  
 					<div class="col d-flex justify-content-center">
-						<p style="color: black; margin: 0; font-weight: bold">Restauración de areas</p>
+						<p style="color: black; margin: 0; font-weight: bold">Restauración de Áreas</p>
 					</div>                                          
                 </div>
             </nav>                         				
@@ -71,7 +71,7 @@
 							<thead class="table-head">
 								<tr>
 									<th scope="col">Nombre</th>
-									<th scope="col">Area</th>
+									<th scope="col">Área</th>
 									<th scope="col">Acciones</th>
 								</tr>
 							</thead>

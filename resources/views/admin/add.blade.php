@@ -89,7 +89,7 @@
                                 <div class="col-lg-3 col-xs-12 mt-2">
                                     <label for="dui" class="form-label">Sexo</label>                        
 											<select class="form-select" aria-label="Default select example" id="txtSex" name="sexo">
-												<option value="" disabled selected>Ingrese su genero</option>
+												<option value="" disabled selected>Ingrese su sexo</option>
 												<option value="Masculino">Masculino</option>
 												<option value="Femenino">Femenino</option>
 											</select>
