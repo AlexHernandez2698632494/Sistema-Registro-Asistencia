@@ -314,12 +314,12 @@ class UDBStudentGuestSiteController extends Controller
     }
 
     public function addEntryG(Request $request){
-
         // Validate the incoming request data
         $request->validate([
-            'idEvento' => 'required|integer|exists:eventos,idEvento' // Ensure 'eventos' matches your actual table name
+            'idEvento' => 'required|integer|exists:eventos,idEvento', // Ensure 'eventos' matches your actual table name
+            'entradas' => 'required|json'
         ]);
-        
+    
         try {
             DB::beginTransaction();
             $idEvento = $request->input('idEvento');
@@ -334,53 +334,55 @@ class UDBStudentGuestSiteController extends Controller
                 throw new Exception('No hay capacidad disponible para este evento.');
             }
     
-            // Generar contenido y guardar QR
-            $nombreEvento = $evento->NombreEvento;       // $url = route('viewEventLog.entry', ['id' => $idEvento]); 
-            // Generate QR code content
+            $entradas = json_decode($request->input('entradas'), true);
+            if ($entradasVendidas + count($entradas) > $capacidadEvento) {
+                throw new Exception('No hay capacidad disponible para todos los miembros del grupo.');
+            }
+    
+            $id = session()->get('estudianteUDB');
+            $idEstudianteUDB = $id[0]->idUDB;
+            $idDocenteUDB = 0;
+            $idPersonalUDB = 0;
+            $idEstudianteInstitucion = 0;
+    
+            // Generar contenido y guardar QR para el grupo
+            $nombreEvento = $evento->NombreEvento;
             $qrContent = json_encode([
-                'nombre' => $request->input('nombre'),
+                'grupo' => $entradas,
                 'evento' => $nombreEvento,
-                'institucion' => 'UDB',
-                //'url' => $url
+                'institucion' => 'UDB'
             ]);
     
-            // Generate QR code instance
             $qrCode = QrCode::size(150)->generate($qrContent);
-    
-            // Save the QR code as an image
             $currentDateTime = date('Ymd_His');
-            $qrPath = 'qr/'.$request->input('nombre').'_'.$nombreEvento.'_'.$currentDateTime.'.svg'; // Save as SVG
+            $qrPath = 'qr/grupo_'.$nombreEvento.'_'.$currentDateTime.'.svg';
             file_put_contents(public_path($qrPath), $qrCode);
     
-            $id= session()->get('estudianteUDB');
-            $idEstudianteUDB = $id[0]->idUDB;
-            $idDocenteUDB = 0 ;
-            $idPersonalUDB = 0;
-            $idEstudianteInstitucion = 0 ;
-    
-            // Store the entry in the database
-            $entrada = new Entrada();
-            $entrada->idEvento = $request->input('idEvento');
-            $entrada->idEstudianteUDB = $idEstudianteUDB;
-            $entrada->idDocenteUDB = $idDocenteUDB ;
-            $entrada->idPersonalUDB = $idPersonalUDB;
-            $entrada->idEstudianteInstitucion = $idEstudianteInstitucion ;
-            $entrada->nombre = $request->input('nombre');
-            $entrada->sexo = $request->input('sexo');
-            $entrada->institucion = 'UDB';
-            $entrada->nivel_educativo = $request->input('nivel_educativo');
-            $entrada->qr_code = $qrPath;
-            $entrada->save();
+            foreach ($entradas as $entradaData) {
+                // Store each entry in the database
+                $entrada = new Entrada();
+                $entrada->idEvento = $idEvento;
+                $entrada->idEstudianteUDB = $idEstudianteUDB;
+                $entrada->idDocenteUDB = $idDocenteUDB;
+                $entrada->idPersonalUDB = $idPersonalUDB;
+                $entrada->idEstudianteInstitucion = $idEstudianteInstitucion;
+                $entrada->nombre = $entradaData['nombre'];
+                $entrada->sexo = $entradaData['sexo'];
+                $entrada->institucion = 'UDB';
+                $entrada->nivel_educativo = $entradaData['nivel_educativo'];
+                $entrada->qr_code = $qrPath;
+                $entrada->save();
+            }
     
             DB::commit();
     
-            return Redirect::back()->with('exitoAgregar', 'Entrada Adquirida Exitosamente');
+            return Redirect::back()->with('exitoAgregar', 'Entradas adquiridas exitosamente');
         } catch(Exception $e){
             DB::rollback();
-            return Redirect::back()->with('errorAgregar', 'Ha ocurrido un error al adquirir la entrada, vuelva a intentarlo más tarde');
+            return Redirect::back()->with('errorAgregar', 'Ha ocurrido un error al adquirir las entradas, vuelva a intentarlo más tarde')->getMessage($e);
         }
-
     }
     
+        
 }
     

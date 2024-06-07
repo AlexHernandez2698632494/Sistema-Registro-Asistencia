@@ -149,47 +149,69 @@
     </div>
 
     <script>
+        let entradas = [];
+    
         function ingresarDatos() {
             const nombre = document.getElementById('nombre').value;
             const sexo = document.getElementById('sexo').value;
             const institucion = document.getElementById('institucion').value;
             const nivel_educativo = document.getElementById('nivel_educativo').value;
-
+    
             if (nombre && sexo && institucion && nivel_educativo) {
-                const tbody = document.querySelector('#tablaInformacion tbody');
+                const entrada = {
+                    nombre: nombre,
+                    sexo: sexo,
+                    institucion: institucion,
+                    nivel_educativo: nivel_educativo
+                };
+    
+                entradas.push(entrada);
+                renderTable();
+                clearForm();
+            }
+        }
+    
+        function renderTable() {
+            const tbody = document.querySelector('#tablaInformacion tbody');
+            tbody.innerHTML = '';
+            
+            entradas.forEach((entrada, index) => {
                 const row = document.createElement('tr');
-
                 row.innerHTML = `
-                    <td>${nombre}</td>
-                    <td>${sexo}</td>
-                    <td>${institucion}</td>
-                    <td>${nivel_educativo}</td>
+                    <td>${entrada.nombre}</td>
+                    <td>${entrada.sexo}</td>
+                    <td>${entrada.institucion}</td>
+                    <td>${entrada.nivel_educativo}</td>
                     <td>
-                        <button type="button" class="btn btn-danger icon-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar" onclick="eliminarFila(this)">
+                        <button type="button" class="btn btn-danger icon-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar" onclick="eliminarFila(${index})">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </td>
                 `;
-
                 tbody.appendChild(row);
-
-                // Clear form fields
-                document.getElementById('nombre').value = '';
-                document.getElementById('sexo').value = '';
-                document.getElementById('institucion').value = '';
-                document.getElementById('nivel_educativo').value = '';
-            }
+            });
         }
-
-        function eliminarFila(button) {
-            // Obtener la fila a eliminar
-            const row = button.closest('tr');
-            // Eliminar la fila del DOM
-            row.remove();
+    
+        function clearForm() {
+            document.getElementById('nombre').value = '';
+            document.getElementById('sexo').value = '';
+            document.getElementById('institucion').value = '';
+            document.getElementById('nivel_educativo').value = '';
         }
-
+    
+        function eliminarFila(index) {
+            entradas.splice(index, 1);
+            renderTable();
+        }
+    
         function adquirirEntradas() {
-            document.getElementById('entradaForm').submit();
+            const form = document.getElementById('entradaForm');
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'entradas';
+            hiddenInput.value = JSON.stringify(entradas);
+            form.appendChild(hiddenInput);
+            form.submit();
         }
     </script>
-</body>
+        </body>
