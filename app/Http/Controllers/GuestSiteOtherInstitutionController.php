@@ -108,18 +108,18 @@ class GuestSiteOtherInstitutionController extends Controller
             $departamento = $request->input('departamento');
             $municipio = $request->input('municipio');
 
-            $UDB = new estudianteOtraInstitucion();
-            $UDB->nombreInstitucion = $nombre;
-            $UDB->apellidosInstitucion = $apellidos;
-            $UDB->sexoInstitucion = $sexo;
-            $UDB->carnetInstitucion = $carnet;
-            $UDB->nivelEducativo = $nivelEducativo;
-            $UDB->institucion = $institucion;
-            $UDB->correoInstitucion = $correo;
-            $UDB->telefonoInstitucion = $telefono;
-            $UDB->departamentoInstitucion = $departamento;
-            $UDB->municipioInstitucion = $municipio;
-            $UDB->estadoEliminacion = 1;
+            $guest = new estudianteOtraInstitucion();
+            $guest->nombreInstitucion = $nombre;
+            $guest->apellidosInstitucion = $apellidos;
+            $guest->sexoInstitucion = $sexo;
+            $guest->carnetInstitucion = $carnet;
+            $guest->nivelEducativo = $nivelEducativo;
+            $guest->institucion = $institucion;
+            $guest->correoInstitucion = $correo;
+            $guest->telefonoInstitucion = $telefono;
+            $guest->departamentoInstitucion = $departamento;
+            $guest->municipioInstitucion = $municipio;
+            $guest->estadoEliminacion = 1;
 
             //envio de credenciales al invitado
          $guestEmail = $request->input('correo');
@@ -135,7 +135,7 @@ class GuestSiteOtherInstitutionController extends Controller
          $userObj->nivel = 5;
          $userObj->save();
 
-         if($UDB->save() && $userObj->save()){
+         if($guest->save() && $userObj->save()){
             $email = new Credentials($userName, $pass, $guestName);
          Mail::to($guestEmail)->send($email);
          DB::commit();
@@ -177,10 +177,10 @@ class GuestSiteOtherInstitutionController extends Controller
             }
     
             try {
-                $UDB = estudianteOtraInstitucion::findOrFail($request->input('idInvitadoActualizar'));
-                $UDB->correoInstitucion = $request->input('correoInstitucion');
-                $UDB->telefonoInstitucion = $request->input('telefonoInstitucion');
-                $UDB->save();
+                $guest = estudianteOtraInstitucion::findOrFail($request->input('idInvitadoActualizar'));
+                $guest->correoInstitucion = $request->input('correoInstitucion');
+                $guest->telefonoInstitucion = $request->input('telefonoInstitucion');
+                $guest->save();
     
                 return redirect()->back()->with('exitoModificar', 'Información actualizada correctamente');
             } catch (\Exception $e) {
