@@ -13,6 +13,7 @@ use App\Mail\Credentials;
 use App\Models\Usuarios;
 use App\Models\eventos;
 use App\Models\Entrada;
+use App\Models\EntradaG;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -313,76 +314,84 @@ class UDBStudentGuestSiteController extends Controller
         }
     }
 
-    public function addEntryG(Request $request){
-        // Validate the incoming request data
-        $request->validate([
-            'idEvento' => 'required|integer|exists:eventos,idEvento', // Ensure 'eventos' matches your actual table name
-            'entradas' => 'required|json'
-        ]);
+     public function addEntryG(Request $request) //last
+     {
+         // Validate the incoming request data
+         $request->validate([
+             'idEvento' => 'required|integer|exists:eventos,idEvento' // Asegúrate de que 'eventos' coincida con el nombre real de tu tabla
+         ]);
+        
+         try {
+             DB::beginTransaction();
+             $idEvento = $request->input('idEvento');
+             $evento = DB::table('eventos')->where('idEvento', '=', $idEvento)->first();
+             $capacidadEvento = $evento->capacidad;
     
-        try {
-            DB::beginTransaction();
-            $idEvento = $request->input('idEvento');
-            $evento = DB::table('eventos')->where('idEvento', '=', $idEvento)->first();
-            $capacidadEvento = $evento->capacidad;
+             // Contar las entradas vendidas para este evento
+             $entradasVendidas = DB::table('entradas')->where('idEvento', '=', $idEvento)->count();
     
-            // Contar las entradas vendidas para este evento
-            $entradasVendidas = DB::table('entradas')->where('idEvento', '=', $idEvento)->count();
-    
-            // Verificar si hay capacidad disponible
-            if ($entradasVendidas >= $capacidadEvento) {
-                throw new Exception('No hay capacidad disponible para este evento.');
+             // Verificar si hay capacidad disponible
+         if ($entradasVendidas >= $capacidadEvento) {
+               throw new Exception('No hay capacidad disponible para este evento.');
             }
     
-            $entradas = json_decode($request->input('entradas'), true);
-            if ($entradasVendidas + count($entradas) > $capacidadEvento) {
-                throw new Exception('No hay capacidad disponible para todos los miembros del grupo.');
-            }
-    
-            $id = session()->get('estudianteUDB');
-            $idEstudianteUDB = $id[0]->idUDB;
-            $idDocenteUDB = 0;
-            $idPersonalUDB = 0;
-            $idEstudianteInstitucion = 0;
-    
-            // Generar contenido y guardar QR para el grupo
+            // Generar contenido y guardar QR
             $nombreEvento = $evento->NombreEvento;
             $qrContent = json_encode([
-                'grupo' => $entradas,
+                'nombre' => $request->input('nombre'),
                 'evento' => $nombreEvento,
-                'institucion' => 'UDB'
+                'institucion' => 'UDB',
             ]);
     
-            $qrCode = QrCode::size(150)->generate($qrContent);
-            $currentDateTime = date('Ymd_His');
-            $qrPath = 'qr/grupo_'.$nombreEvento.'_'.$currentDateTime.'.svg';
-            file_put_contents(public_path($qrPath), $qrCode);
+             // Generar código QR
+             $qrCode = QrCode::size(150)->generate($qrContent);
     
-            foreach ($entradas as $entradaData) {
-                // Store each entry in the database
-                $entrada = new Entrada();
-                $entrada->idEvento = $idEvento;
-                $entrada->idEstudianteUDB = $idEstudianteUDB;
-                $entrada->idDocenteUDB = $idDocenteUDB;
-                $entrada->idPersonalUDB = $idPersonalUDB;
-                $entrada->idEstudianteInstitucion = $idEstudianteInstitucion;
-                $entrada->nombre = $entradaData['nombre'];
-                $entrada->sexo = $entradaData['sexo'];
-                $entrada->institucion = 'UDB';
-                $entrada->nivel_educativo = $entradaData['nivel_educativo'];
-                $entrada->qr_code = $qrPath;
-                $entrada->save();
-            }
+             // Guardar el código QR como imagen
+             $currentDateTime = date('Ymd_His');
+             $qrPath = 'qr/'.$request->input('nombre').'_'.$nombreEvento.'_'.$currentDateTime.'.svg'; // Guardar como SVG
+             file_put_contents(public_path($qrPath), $qrCode);
     
-            DB::commit();
+             // Obtener el ID del estudiante de la sesión
+             $id = session()->get('estudianteUDB');
+             $idEstudianteUDB = $id[0]->idUDB;
     
-            return Redirect::back()->with('exitoAgregar', 'Entradas adquiridas exitosamente');
-        } catch(Exception $e){
-            DB::rollback();
-            return Redirect::back()->with('errorAgregar', 'Ha ocurrido un error al adquirir las entradas, vuelva a intentarlo más tarde')->getMessage($e);
-        }
-    }
+             // Guardar la entrada en la tabla entradas
+             $entrada = new Entrada();
+             $entrada->idEvento = $request->input('idEvento');
+             $entrada->idEstudianteUDB = $idEstudianteUDB;
+             $entrada->idDocenteUDB = 0; // Se debe inicializar en 0 según tu lógica
+             $entrada->idPersonalUDB = 0; // Se debe inicializar en 0 según tu lógica
+             $entrada->idEstudianteInstitucion = 0; // Se debe inicializar en 0 según tu lógica
+             $entrada->nombre = $id[0]->nombreUDB. ' '. $id[0]->apellidosUDB;
+             $entrada->sexo = $id[0]->sexoUDB;
+             $entrada->institucion = 'UDB';
+             $entrada->nivel_educativo = '';
+             $entrada->qr_code = $qrPath;
+             $entrada->save();
     
-        
+             // Guardar la entrada en la tabla entradasG para todos menos el usuario que ha iniciado sesión
+             $entradas = DB::table('estudianteUDB')
+                             ->where('idUDB', '!=', $idEstudianteUDB)
+                             ->get();
+    
+             foreach ($entradas as $entrada) {
+                 $entradaG = new EntradaG();
+                 $entradaG->idEvento = $request->input('idEvento');
+                 $entradaG->idEntrada = $entrada->idEntrada; // Asegúrate de que esto sea correcto según tu estructura de tabla
+                 $entradaG->nombre =$request->input('nombre');
+                 $entradaG->sexo = $request->input('sexo');
+                 $entradaG->institucion = $request->input('institucion');
+                 $entradaG->nivel_educativo = $request->input('nivel_educativo');
+                 $entradaG->save();
+             }
+    
+             DB::commit();
+    
+         return Redirect::back()->with('exitoAgregar', 'Entrada Adquirida Exitosamente');
+     } catch(Exception $e){
+         DB::rollback();
+         return Redirect::back()->with('errorAgregar', 'Ha ocurrido un error al adquirir la entrada, vuelva a intentarlo más tarde'.$e->getMessage());
+     }
+ }
 }
     

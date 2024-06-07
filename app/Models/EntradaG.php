@@ -10,4 +10,5 @@ class EntradaG extends Model
     use HasFactory;
     protected $table = 'entradasG';
     protected $primaryKey = 'idEntradaG';
+    public $timestamps = false;
 }

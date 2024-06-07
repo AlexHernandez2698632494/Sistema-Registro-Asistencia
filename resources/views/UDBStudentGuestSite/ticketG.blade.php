@@ -76,7 +76,7 @@
                         <div class="row mx-1">
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Nombre Completo</p>
-                                <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre y apellido" class="form-control input" value="{{ $informacionUDB->nombreUDB }}" required>
+                                <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre y apellido" class="form-control input" value="{{ $informacionUDB->nombreUDB. ' '.  $informacionUDB->apellidosUDB}}" required>
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Sexo</p>
