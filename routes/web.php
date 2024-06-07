@@ -65,11 +65,12 @@ Route::prefix('invitado')->group(function(){
     route::get('show/{id}', [GuestSiteController::class, 'show'])->name('guestSite.showInfo');
     Route::get('/miPerfil', [guestSiteController::class, 'miPerfil'])->name('guestSite.miPerfil');
     route::put('/updateInfor',[guestSiteController::class,'updateInfor'])->name('guestSite.updateInfor');
-    route::get('/adquirir', [guestSiteController::class, 'buyIndividualGroupTicket'])->name('guestSite.ticketIG');
-    route::get('/adquirir/entrada', [guestSiteController::class, 'purchaseTicketI'])->name('guestSite.ticketI');    
+    route::get('/adquirir/entrada/{id}', [guestSiteController::class, 'purchaseTicketI'])->name('guestSite.ticketI');    
     route::get('/adquirir/entradas', [guestSiteController::class, 'purchaseTicketG'])->name('guestSite.ticketG');
     route::get('/entradas/adquiridas', [guestSiteController::class, 'purchasedTicket'])->name('guestSite.purchasedTicket');     
     route::post('/QR', [guestSiteController::class, 'addEntry'])->name('guestSite.addEntry');
+    Route::post('/guestSite/deleteEntry/{idEntrada}', [guestSiteController::class, 'deleteEntry'])->name('guestSite.deleteEntry');
+
 });
 //Rutas relacionadas con el controlador de usuarios (usuarioController)
 Route::prefix('user')->group(function(){

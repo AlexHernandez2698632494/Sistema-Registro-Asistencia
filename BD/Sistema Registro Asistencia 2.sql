@@ -138,5 +138,6 @@ CREATE TABLE entradasG(
     institucion VARCHAR(256) NOT NULL,
     nivel_educativo VARCHAR(50) NOT NULL,
     qr_code TEXT NOT NULL,
-    asistencia BOOLEAN DEFAULT FALSE
+    asistencia BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY(`idEntrada`) REFERENCES `entradas`(`idEntrada`)
 );

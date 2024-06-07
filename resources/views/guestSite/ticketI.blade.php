@@ -75,32 +75,27 @@
                         <div class="row mx-1">
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Nombre Completo</p>
-                                {{ $informacionInvitado[0]->nombreInvitado.' '.$informacionInvitado[0]->apellidosInvitado}}
-                                <input type="hidden" name="nombre" value="{{ $informacionInvitado[0]->nombreInvitado.' '.$informacionInvitado[0]->apellidosInvitado }}">
+                                {{ $informacionInvitado->nombreInvitado.' '.$informacionInvitado->apellidosInvitado}}
+                                <input type="hidden" name="nombre" value="{{ $informacionInvitado->nombreInvitado.' '.$informacionInvitado->apellidosInvitado }}">
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Sexo</p>
-                                {{ $informacionInvitado[0]->sexoInvitado}}
-                                <input type="hidden" name="sexo" value="{{ $informacionInvitado[0]->sexoInvitado }}">
+                                {{ $informacionInvitado->sexoInvitado}}
+                                <input type="hidden" name="sexo" value="{{ $informacionInvitado->sexoInvitado }}">
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Institución</p>
                                 <input type="text" id="institucion" name="institucion" placeholder="Ingrese institución" class="form-control input" required>
                             </div>
                             <div class="col-lg-6 col-xs-12">
-                                <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Nivel Educativo</p>
+                                <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Nivel Educativo/Profesión</p>
                                 <input type="text" id="nivel_educativo" name="nivel_educativo" placeholder="Ingrese su nivel educativo" class="form-control input" required>
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Evento</p>
-                                <select class="form-select" id="idEvento" name="idEvento" required>
-                                    <option value="" disabled selected>Seleccione un evento</option>
-                                    @foreach ($eventos as $evento)
-                                        <option value="{{ $evento->idEvento }}">{{ $evento->NombreEvento }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+                                <input type="hidden" name="idEvento" value="{{ $evento->idEvento }}">
+                                {{ $evento->NombreEvento }}
+                            </div>                        </div>
                         <div class="row mx-1 mt-3 d-flex justify-content-center">
                             <div class="col-lg-4">
                                 <div class="btn-group d-flex justify-content-center">
