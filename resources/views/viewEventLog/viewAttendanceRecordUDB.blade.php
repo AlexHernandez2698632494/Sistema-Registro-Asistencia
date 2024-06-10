@@ -79,7 +79,7 @@
                                                 <td>{{ $personalUDB->total_asistencia }}</td>
 										</tr> 
 									@endforeach
-                                    @foreach ($recordSUDB as $estudianteUDB)
+                                    @foreach ($recordsSUDB as $estudianteUDB)
 									<tr>
 										        <td>{{ $estudianteUDB->nombreEvento }}</td>
                                                 <td>{{ $estudianteUDB->fecha }}</td>
@@ -89,18 +89,6 @@
                                                 <td>{{ $estudianteUDB->capacidad}}</td>
                                                 <td>{{ $estudianteUDB->total_registrados }}</td>
                                                 <td>{{ $estudianteUDB->total_asistencia }}</td>
-										</tr> 
-									@endforeach	
-                                    @foreach ($recordsDUDB as $docenteUDB)
-									<tr>
-										        <td>{{ $docenteUDB->nombreEvento }}</td>
-                                                <td>{{ $docenteUDB->fecha }}</td>
-                                                <td>{{ $docenteUDB->hora }}</td>
-                                                <td>{{ $docenteUDB->nombre }}</td>
-                                                <td>{{ $docenteUDB->profesionUDB}}</td>
-                                                <td>{{ $docenteUDB->capacidad}}</td>
-                                                <td>{{ $docenteUDB->total_registrados }}</td>
-                                                <td>{{ $docenteUDB->total_asistencia }}</td>
 										</tr> 
 									@endforeach																																							
 								</tbody>
