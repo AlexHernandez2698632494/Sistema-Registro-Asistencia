@@ -71,7 +71,7 @@
                         </div>
                     @endif
 
-                    <form id="entradaForm" method="POST" action="{{ route('UDBStudentGuestSite.addEntryG') }}">
+                    <form id="entradaForm" method="POST" action="{{ route('UDBStudentGuestSite.storeEntries') }}">
                         @csrf
                         <div class="row mx-1">
                             <div class="col-lg-6 col-xs-12">
@@ -214,4 +214,4 @@
             form.submit();
         }
     </script>
-        </body>
+</body>
