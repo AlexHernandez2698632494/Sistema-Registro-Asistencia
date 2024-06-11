@@ -70,7 +70,7 @@
                             {{ session('error') }}
                         </div>
                     @endif
-                    <form id="entradaForm" method="POST" action="{{ route('guestSite.addEntry') }}">
+                    <form id="entradaForm" method="POST" action="{{ route('UDBStudentGuestSite.addEntry') }}">
                         @csrf
                         <div class="row mx-1">
                             <div class="col-lg-6 col-xs-12">

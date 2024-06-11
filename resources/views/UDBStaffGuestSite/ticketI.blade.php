@@ -75,33 +75,28 @@
                         <div class="row mx-1">
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Nombre Completo</p>
-                                {{ $informacionUDB[0]->nombreUDB.' '.$informacionUDB[0]->apellidosUDB}}
-                                <input type="hidden" name="nombre" value="{{ $informacionUDB[0]->nombreUDB.' '.$informacionUDB[0]->apellidosUDB }}">
+                                {{ $informacionUDB->nombreUDB.' '.$informacionUDB->apellidosUDB}}
+                                <input type="hidden" name="nombre" value="{{ $informacionUDB->nombreUDB.' '.$informacionUDB->apellidosUDB }}">
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Sexo</p>
-                                {{ $informacionUDB[0]->sexoUDB}}
-                                <input type="hidden" name="sexo" value="{{ $informacionUDB[0]->sexoUDB }}">
+                                {{ $informacionUDB->sexoUDB}}
+                                <input type="hidden" name="sexo" value="{{ $informacionUDB->sexoUDB }}">
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Institución</p>
-                                <p class="mt-2" value="UDB" name="institucionUDB">Universidad Don Bosco</p>
+                                <input type="text" id="institucion" name="institucion" placeholder="Ingrese institución" class="form-control input" required value="Universidad Don Bosco " readonly>
                             </div>
                             <div class="col-lg-6 col-xs-12">
-                                <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Nivel Educativo</p>
-                                {{ $informacionUDB[0]->profesionUDB}}
-                                <input type="hidden" name="nivel_educativo" value="{{ $informacionUDB[0]->profesionUDB }}">
+                                <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Nivel Educativo/Profesión</p>
+                                {{ $informacionUDB->profesionUDB}}
+                                <input type="hidden" id="nivel_educativo" name="nivel_educativo" placeholder="Ingrese su nivel educativo" class="form-control input" value="{{ $informacionUDB->profesionUDB }}" required >
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Evento</p>
-                                <select class="form-select" id="idEvento" name="idEvento" required>
-                                    <option value="" disabled selected>Seleccione un evento</option>
-                                    @foreach ($eventos as $evento)
-                                        <option value="{{ $evento->idEvento }}">{{ $evento->NombreEvento }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+                                <input type="hidden" name="idEvento" value="{{ $evento->idEvento }}">
+                                {{ $evento->NombreEvento }}
+                            </div>                        </div>
                         <div class="row mx-1 mt-3 d-flex justify-content-center">
                             <div class="col-lg-4">
                                 <div class="btn-group d-flex justify-content-center">
@@ -109,8 +104,7 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </form>                </div>
             </div>
         </div>
     </div>
