@@ -1,9 +1,9 @@
 @extends('layout.header')
- 
+
 @section('title', 'Adquirir entrada')
- 
+
 <script src="{{ asset('js/sweetalert.js') }}"></script>
- 
+
 <body style="overflow-x: hidden">
     <script src="{{ asset('js/inactividad.js') }}"></script>
     @if (session('exitoAgregar'))
@@ -21,7 +21,7 @@
             })
         </script>
     @endif
- 
+
     @if (session('errorAgregar'))
         <script>
             swal({
@@ -37,7 +37,7 @@
             })
         </script>
     @endif
- 
+
     @include('layout.horizontalMenu')
     <div class="wrapper">
         @include('layout.verticalMenuInvitado')
@@ -57,32 +57,33 @@
                     <p class="d-flex justify-content-center">Información general</p>
                     <div class="separator mb-3"></div>
                     @if ($errors->any())
-                                <div class="alert alert-danger my-2 pb-0">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-                            @if(session('error'))
-                                <div class="alert alert-danger">
-                                    {{ session('error') }}
-                                </div>
-                            @endif
-                    <form id="entradaForm" method="POST" action="{{ route('guestSite.addEntry') }}">
+                        <div class="alert alert-danger my-2 pb-0">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    <form id="entradaForm" method="POST" action="{{ route('guestSite.storeEntries') }}">
                         @csrf
                         <div class="row mx-1">
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Nombre Completo</p>
-                                <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre y apellido" class="form-control input" required>
+                                <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre y apellido" class="form-control input" value="{{ $informacionInvitado->nombreInvitado. ' '.  $informacionInvitado->apellidosInvitado}}" required>
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Sexo</p>
                                 <select class="form-select" id="sexo" name="sexo" required>
-                                    <option value="" disabled selected>Ingrese su género</option>
-                                    <option value="Masculino">Masculino</option>
-                                    <option value="Femenino">Femenino</option>
+                                    <option value="" disabled>Ingrese su género</option>
+                                    <option value="Masculino" {{ $informacionInvitado->sexoInvitado == 'Masculino' ? 'selected' : '' }}>Masculino</option>
+                                    <option value="Femenino" {{ $informacionInvitado->sexoInvitado == 'Femenino' ? 'selected' : '' }}>Femenino</option>
                                 </select>
                             </div>
                             <div class="col-lg-6 col-xs-12">
@@ -100,6 +101,11 @@
                                     <option value="Universidad">Universidad</option>
                                 </select>
                             </div>
+                            <div class="col-lg-6 col-xs-12">
+                                <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Evento</p>
+                                <input type="hidden" name="idEvento" value="{{ $evento->idEvento }}">
+                                {{ $evento->NombreEvento }}
+                            </div>  
                         </div>
                         <div class="row mx-1 mt-3 d-flex justify-content-center">
                             <div class="col-lg-4">
@@ -111,7 +117,7 @@
                     </form>
                 </div>
             </div>
- 
+
             <div class="card mx-5">
                 <div class="card-body">
                     <p class="d-flex justify-content-center">Tabla de Información</p>
@@ -141,35 +147,71 @@
             </div>
         </div>
     </div>
- 
+
     <script>
+        let entradas = [];
+    
         function ingresarDatos() {
             const nombre = document.getElementById('nombre').value;
             const sexo = document.getElementById('sexo').value;
             const institucion = document.getElementById('institucion').value;
             const nivel_educativo = document.getElementById('nivel_educativo').value;
- 
+    
             if (nombre && sexo && institucion && nivel_educativo) {
-                const tbody = document.querySelector('#tablaInformacion tbody');
-                const row = document.createElement('tr');
- 
-                row.innerHTML = `
-                    <td>${nombre}</td>
-                    <td>${sexo}</td>
-                    <td>${institucion}</td>
-                    <td>${nivel_educativo}</td>
-                    <td>
-                        <button type="button" class="btn btn-warning icon-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Actualizar"><i class="fa-solid fa-arrows-rotate" style="color: white"></i></button>
-                        <button type="button" class="btn btn-danger icon-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                `;
- 
-                tbody.appendChild(row);
+                const entrada = {
+                    nombre: nombre,
+                    sexo: sexo,
+                    institucion: institucion,
+                    nivel_educativo: nivel_educativo
+                };
+    
+                entradas.push(entrada);
+                renderTable();
+                clearForm();
             }
         }
- 
+    
+        function renderTable() {
+            const tbody = document.querySelector('#tablaInformacion tbody');
+            tbody.innerHTML = '';
+            
+            entradas.forEach((entrada, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${entrada.nombre}</td>
+                    <td>${entrada.sexo}</td>
+                    <td>${entrada.institucion}</td>
+                    <td>${entrada.nivel_educativo}</td>
+                    <td>
+                        <button type="button" class="btn btn-danger icon-button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Eliminar" onclick="eliminarFila(${index})">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+    
+        function clearForm() {
+            document.getElementById('nombre').value = '';
+            document.getElementById('sexo').value = '';
+            document.getElementById('institucion').value = '';
+            document.getElementById('nivel_educativo').value = '';
+        }
+    
+        function eliminarFila(index) {
+            entradas.splice(index, 1);
+            renderTable();
+        }
+    
         function adquirirEntradas() {
-            document.getElementById('entradaForm').submit();
+            const form = document.getElementById('entradaForm');
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'entradas';
+            hiddenInput.value = JSON.stringify(entradas);
+            form.appendChild(hiddenInput);
+            form.submit();
         }
     </script>
 </body>

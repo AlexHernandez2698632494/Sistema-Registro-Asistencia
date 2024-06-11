@@ -86,7 +86,7 @@
                                     Inscripción Individual
                                 </a>
                                 {{-- Botón de inscripción grupal --}}
-                                <a href="{{ route('guestSite.ticketG') }}" class="btn btn-secondary mx-2">
+                                <a href="{{ route('guestSite.ticketG', $eventInfo->idEvento) }}" class="btn btn-secondary mx-2">
                                     Inscripción Grupal
                                 </a>
                             </div>

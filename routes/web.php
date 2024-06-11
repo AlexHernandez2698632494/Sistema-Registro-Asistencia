@@ -66,10 +66,11 @@ Route::prefix('invitado')->group(function(){
     Route::get('/miPerfil', [guestSiteController::class, 'miPerfil'])->name('guestSite.miPerfil');
     route::put('/updateInfor',[guestSiteController::class,'updateInfor'])->name('guestSite.updateInfor');
     route::get('/adquirir/entrada/{id}', [guestSiteController::class, 'purchaseTicketI'])->name('guestSite.ticketI');    
-    route::get('/adquirir/entradas', [guestSiteController::class, 'purchaseTicketG'])->name('guestSite.ticketG');
+    route::get('/adquirir/entradas/{id}', [guestSiteController::class, 'purchaseTicketG'])->name('guestSite.ticketG');
     route::get('/entradas/adquiridas', [guestSiteController::class, 'purchasedTicket'])->name('guestSite.purchasedTicket');     
     route::post('/QR', [guestSiteController::class, 'addEntry'])->name('guestSite.addEntry');
     Route::post('/guestSite/deleteEntry/{idEntrada}', [guestSiteController::class, 'deleteEntry'])->name('guestSite.deleteEntry');
+    Route::post('/storeEntries', [guestSiteController::class, 'storeEntries'])->name('guestSite.storeEntries');
 
 });
 //Rutas relacionadas con el controlador de usuarios (usuarioController)

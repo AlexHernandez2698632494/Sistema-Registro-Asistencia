@@ -117,6 +117,7 @@ CREATE TABLE areaFormativaEntretenimientoEvento(
 CREATE TABLE entradas(
     idEntrada INT AUTO_INCREMENT PRIMARY KEY,
     idEvento INT NOT NULL,
+    idInvitado INT NOT NULL,
     idEstudianteUDB INT NOT NULL,
 	idDocenteUDB INT NOT NULL,
     idPersonalUDB INT NOT NULL,
