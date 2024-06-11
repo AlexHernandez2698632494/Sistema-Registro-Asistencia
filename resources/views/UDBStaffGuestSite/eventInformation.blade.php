@@ -81,7 +81,7 @@
                                 </div>
                             </div>
                             <div class="card-body cardBody-Teachers text-center">
-                                {{-- Botón de inscripción individual --}}
+                            {{-- Botón de inscripción individual --}}
                                 <a href="{{ route('UDBStaffGuestSite.ticketI', $eventInfo->idEvento) }}" class="btn btn-primary mx-2">
                                     Inscripción Individual
                                 </a>
