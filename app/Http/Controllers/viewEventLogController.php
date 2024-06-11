@@ -13,19 +13,35 @@ use Illuminate\Validation\Rule;
 class viewEventLogController extends Controller
 {
     //
-    public function show($id){
-        if(session()->has('administrador')){
-            $purchaseLog = DB::table('entradas as en')
-                            ->join('eventos as e','e.idEvento','=','en.idEvento')
-                            ->where('e.idEvento', '=', $id)
-                            ->where('en.asistencia', '=', 0)
-                            ->get();
-            //return $purchaseLog;
-            return view('viewEventLog.entry',compact('purchaseLog'));
-        }else{
-            return view('layout.406');
-        }
+    public function show($id)
+{
+    if (session()->has('administrador')) {
+        $purchaseLog = DB::table('entradas as en')
+                        ->join('eventos as e', 'e.idEvento', '=', 'en.idEvento')
+                        ->leftJoin('eventEntries as ee', function($join) {
+                            $join->on('ee.idEntrada', '=', 'en.idEntrada');
+                            $join->on('ee.idEvento', '=', 'e.idEvento');
+                        })
+                        ->where('e.idEvento', '=', $id)
+                        ->where('en.asistencia', '=', 0)
+                        ->select(
+                            'en.idEntrada',
+                            'e.NombreEvento',
+                            'en.nombre',
+                            'en.sexo',
+                            'en.institucion',
+                            'en.nivel_educativo',
+                            'ee.idEventEntries' // Seleccionamos idEventEntries
+                        )
+                        ->get();
+
+        return view('viewEventLog.entry', compact('purchaseLog'));
+    } else {
+        return view('layout.406');
     }
+}
+
+    
     
     public function confirmAsistencia($entradaId)
     {
@@ -62,7 +78,19 @@ class viewEventLogController extends Controller
                 'e.capacidad',
                 'a.nombre',
                 'udb.profesionUDB', // Selecciona la profesión de la tabla estudianteUDB
-                DB::raw('COUNT(en.asistencia) + COUNT(ee.asistencia) AS total_registrados'),
+                DB::raw('
+                (
+                    (
+                        SELECT COUNT(*) 
+                        FROM entradas 
+                        WHERE asistencia = 0
+                    ) + 
+                    (
+                        SELECT COUNT(*) 
+                        FROM eventEntries 
+                        WHERE asistencia = 0
+                    )
+                ) AS total_registrados'),
                 DB::raw('
                     (
                         (
@@ -107,7 +135,19 @@ class viewEventLogController extends Controller
                 'e.capacidad',
                 'a.nombre',
                 'udb.carreraUDB', // Selecciona la profesión de la tabla estudianteUDB
-                DB::raw('COUNT(en.asistencia) + COUNT(ee.asistencia) AS total_registrados'),
+                DB::raw('
+                (
+                    (
+                        SELECT COUNT(*) 
+                        FROM entradas 
+                        WHERE asistencia = 0
+                    ) + 
+                    (
+                        SELECT COUNT(*) 
+                        FROM eventEntries 
+                        WHERE asistencia = 0
+                    )
+                ) AS total_registrados'),
                 DB::raw('
                     (
                         (
@@ -161,7 +201,19 @@ class viewEventLogController extends Controller
                 'e.hora',
                 'e.capacidad',
                 'a.nombre',
-                DB::raw('COUNT(en.asistencia) + COUNT(ee.asistencia) AS total_registrados'),
+                DB::raw('
+                (
+                    (
+                        SELECT COUNT(*) 
+                        FROM entradas 
+                        WHERE asistencia = 0
+                    ) + 
+                    (
+                        SELECT COUNT(*) 
+                        FROM eventEntries 
+                        WHERE asistencia = 0
+                    )
+                ) AS total_registrados'),
                 DB::raw('
                     (
                         (
