@@ -190,24 +190,30 @@ class GuestSiteOtherInstitutionController extends Controller
             return view('layout.403');
         }
     }
-    public function purchaseTicketI(){
+    public function purchaseTicketI(string $id){
         if(session()->has('estudianteInstitucion')){
-            $id= session()->get('estudianteInstitucion');
-            $informacionInstitucion = DB::table('estudianteInstitucion')->where('idInstitucion','=',$id[0]->idInstitucion)->get();
-            $eventos = DB::table('Eventos')->get();
-            return view('StudentGuestSite.ticketI', compact('eventos','informacionInstitucion'));
-        
+            $idInstitucion = session()->get('estudianteInstitucion');
+            $informacionInstitucion = DB::table('estudianteInstitucion')->where('idInstitucion', '=', $idInstitucion[0]->idInstitucion)->first();
+            $evento = DB::table('Eventos')->where('idEvento', '=', $id)->first();
+           
+            if (!$informacionInstitucion || !$evento) {
+                return redirect()->route('StudentGuestSite.site')->with('error', 'Información no disponible');
+            }
+   
+            return view('StudentGuestSite.ticketI', compact('evento', 'informacionInstitucion'));
+        } else {
+            return redirect()->route('StudentGuestSite.site')->with('error', 'Sesión no iniciada');
         }
     }
     
     public function purchaseTicketG(string $id){
         if (session()->has('estudianteInstitucion')) {
             $idUDB = session()->get('estudianteInstitucion');
-            $informacionUDB = DB::table('estudianteUDB')->where('idInstitucion', '=', $id[0]->idInstitucion)->first();
+            $informacionUDB = DB::table('estudianteInstitucion')->where('idInstitucion', '=', $idUDB[0]->idInstitucion)->first();
             $evento = DB::table('Eventos')->where('idEvento', '=', $id)->first();
            
             if (!$informacionUDB || !$evento) {
-                return redirect()->route('UDBStudentGuestSite.site')->with('error', 'Información no disponible');
+                return redirect()->route('StudentGuestSite.site')->with('error', 'Información no disponible');
             }
    
             return view('StudentGuestSite.ticketG', compact('evento', 'informacionInstitucion'));

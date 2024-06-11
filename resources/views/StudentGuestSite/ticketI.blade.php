@@ -75,34 +75,30 @@
                         <div class="row mx-1">
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Nombre Completo</p>
-                                {{ $informacionInstitucion[0]->nombreInstitucion.' '.$informacionInstitucion[0]->apellidosInstitucion}}
-                                <input type="hidden" name="nombre" value="{{ $informacionInstitucion[0]->nombreInstitucion.' '.$informacionInstitucion[0]->apellidosInstitucion }}">
+                                {{ $informacionInstitucion->nombreInstitucion.' '.$informacionInstitucion->apellidosInstitucion}}
+                                <input type="hidden" name="nombre" value="{{ $informacionInstitucion->nombreInstitucion.' '.$informacionInstitucion->apellidosInstitucion }}">
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Sexo</p>
-                                {{ $informacionInstitucion[0]->sexoInstitucion}}
-                                <input type="hidden" name="sexo" value="{{ $informacionInstitucion[0]->sexoInstitucion }}">
+                                {{ $informacionInstitucion->sexoInstitucion}}
+                                <input type="hidden" name="sexo" value="{{ $informacionInstitucion->sexoInstitucion }}">
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Institución</p>
-                                {{ $informacionInstitucion[0]->institucion}}
-                                <input type="hidden" name="institucion" value="{{ $informacionInstitucion[0]->institucion }}">
+                                {{ $informacionInstitucion->institucion}}
+                                <input type="hidden" name="institucion" value="{{ $informacionInstitucion->institucion}}">
+                                
                             </div>
                             <div class="col-lg-6 col-xs-12">
-                                <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Nivel Educativo</p>
-                                {{ $informacionInstitucion[0]->nivelEducativo}}
-                                <input type="hidden" name="nivelEducativo" value="{{ $informacionInstitucion[0]->nivelEducativo }}">
+                                <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Nivel Educativo/Profesión</p>
+                                {{ $informacionInstitucion->nivelEducativo}}
+                                <input type="hidden" name="nivelEducativo" value="{{ $informacionInstitucion->nivelEducativo}}">
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Evento</p>
-                                <select class="form-select" id="idEvento" name="idEvento" required>
-                                    <option value="" disabled selected>Seleccione un evento</option>
-                                    @foreach ($eventos as $evento)
-                                        <option value="{{ $evento->idEvento }}">{{ $evento->NombreEvento }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+                                <input type="hidden" name="idEvento" value="{{ $evento->idEvento }}">
+                                {{ $evento->NombreEvento }}
+                            </div>                        </div>
                         <div class="row mx-1 mt-3 d-flex justify-content-center">
                             <div class="col-lg-4">
                                 <div class="btn-group d-flex justify-content-center">
