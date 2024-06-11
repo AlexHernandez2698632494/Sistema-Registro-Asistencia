@@ -15,11 +15,11 @@
             })            
         </script>
     @endif
-	@if (session('exitoRegistoAdmin'))
+	@if (session('exitoRegistroAdmin'))
         <script>
             swal({
                 title: "Administrador registrado",
-                text: "{{ session('exitoRegistoAdmin') }}",
+                text: "{{ session('exitoRegistroAdmin') }}",
                 icon: "success",
                 button: "OK",
             })            
@@ -54,24 +54,23 @@
 						<div class="card-body p-5 text-center">
 							<h3 class="mb-1">¡Bienvenido!</h3>
 							<h3 class="mb-3">Sistema de Registro de Asistencia DAC</h3>
-							<img class="img" width="125" src="http://127.0.0.1:8000/img/LOGO-DAC-20214.png" alt="LOGO DE DEPARTAMENTO DE ARTE Y CULTURA (DAC)">
+							<img class="img" width="125" src="http://127.0.0.1:8000/img/LOGO-DAC-20214.png" alt="LOGO DEL DEPARTAMENTO DE ARTE Y CULTURA (DAC)">
                             <!-- Pills navs -->
 							<ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
-							<li class="nav-item" role="presentation">
-								<a href="{{route('guestSite.index') }}" class="nav-link" id="tab-register" data-mdb-toggle="pill" role="tab" aria-controls="pills-register" aria-selected="false" style="color: #0060B4;">Registrar Invitado</a>
-							</li>
 								<li class="nav-item" role="presentation">
-									<a href="{{route('StudentGuestSite.index') }}" class="nav-link" id="tab-register" data-mdb-toggle="pill"  role="tab" aria-controls="pills-register" aria-selected="false" style="color: #0060B4;">Registrar Estudiante</a>
+									<a href="{{ route('guestSite.index') }}" class="nav-link" id="tab-register" data-mdb-toggle="pill" role="tab" aria-controls="pills-register" aria-selected="false" style="color: #0060B4;">Registrar Invitado</a>
+								</li>
+								<li class="nav-item" role="presentation">
+									<a href="{{ route('StudentGuestSite.index') }}" class="nav-link" id="tab-register" data-mdb-toggle="pill" role="tab" aria-controls="pills-register" aria-selected="false" style="color: #0060B4;">Registrar Estudiante</a>
 								</li>
 							</ul>
                             <div class="row">
-                                <a href="{{route('welcome')}}" class="btn btn-primary btn-lg btn-block mt-2" style="background-color: #0060B4;" type="submit">Regresar</a>
+                                <a href="{{ route('welcome') }}" class="btn btn-primary btn-lg btn-block mt-2" style="background-color: #0060B4;" type="submit">Regresar</a>
                             </div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 		</div>
 	</section>
 </body>

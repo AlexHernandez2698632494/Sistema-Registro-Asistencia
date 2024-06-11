@@ -15,11 +15,11 @@
             })            
         </script>
     @endif
-	@if (session('exitoRegistoAdmin'))
+	@if (session('exitoRegistroAdmin'))
         <script>
             swal({
                 title: "Administrador registrado",
-                text: "{{ session('exitoRegistoAdmin') }}",
+                text: "{{ session('exitoRegistroAdmin') }}",
                 icon: "success",
                 button: "OK",
             })            
@@ -92,7 +92,7 @@
 									<button class="btn btn-primary btn-lg btn-block mt-2" style="background-color: #0060B4;" type="submit">Ingresar</button>
 								</div>
 								<div class="row">
-									<p class="mt-3"><a href="{{ route('recuperarView') }}" class="link-underline-primary">Olvide mi contraseña</a></p>
+									<p class="mt-3"><a href="{{ route('recuperarView') }}" class="link-underline-primary">Olvidé mi contraseña</a></p>
 								</div>
 							</form>
 						</div>

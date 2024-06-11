@@ -107,8 +107,7 @@ Route::prefix('estudiante/UDB')->group(function(){
     route::get('/adquirir/entradas/{id}', [UDBStudentGuestSiteController::class, 'purchaseTicketG'])->name('UDBStudentGuestSite.ticketG');
     route::get('/entradas/adquiridas', [UDBStudentGuestSiteController::class, 'purchasedTicket'])->name('UDBStudentGuestSite.purchasedTicket');     
     route::post('/QR', [UDBStudentGuestSiteController::class, 'addEntry'])->name('UDBStudentGuestSite.addEntry');
-    route::post('/QR/grupo', [UDBStudentGuestSiteController::class, 'addEntryG'])->name('UDBStudentGuestSite.addEntryG');
-    
+    Route::post('/storeEntries', [UDBStudentGuestSiteController::class, 'storeEntries'])->name('UDBStudentGuestSite.storeEntries');
 });
 
 //Rutas relacionadas con el controlador de areas (AreaController)
@@ -130,10 +129,11 @@ Route::prefix('personal/UDB')->group(function(){
     Route::get('/miPerfil', [UDBStaffGuestSiteController::class, 'miPerfil'])->name('UDBStaffGuestSite.miPerfil');
     route::put('/updateInfor',[UDBStaffGuestSiteController::class,'updateInfor'])->name('UDBStaffGuestSite.updateInfor');
     route::get('/adquirir', [UDBStaffGuestSiteController::class, 'buyIndividualGroupTicket'])->name('UDBStaffGuestSite.ticketIG');
-    route::get('/adquirir/entrada', [UDBStaffGuestSiteController::class, 'purchaseTicketI'])->name('UDBStaffGuestSite.ticketI');    
-    route::get('/adquirir/entradas', [UDBStaffGuestSiteController::class, 'purchaseTicketG'])->name('UDBStaffGuestSite.ticketG');
+    route::get('/adquirir/entrada/{id}', [UDBStaffGuestSiteController::class, 'purchaseTicketI'])->name('UDBStaffGuestSite.ticketI');    
+    route::get('/adquirir/entradas{id}', [UDBStaffGuestSiteController::class, 'purchaseTicketG'])->name('UDBStaffGuestSite.ticketG');
     route::get('/entradas/adquiridas', [UDBStaffGuestSiteController::class, 'purchasedTicket'])->name('UDBStaffGuestSite.purchasedTicket');     
     route::post('/QR', [UDBStaffGuestSiteController::class, 'addEntry'])->name('UDBStaffGuestSite.addEntry');
+    Route::post('/storeEntries', [UDBStaffGuestSiteController::class, 'storeEntries'])->name('UDBStaffGuestSite.storeEntries');
 });
 
 
@@ -146,15 +146,17 @@ Route::prefix('invitado/estudiante')->group(function(){
     Route::get('/miPerfil', [GuestSiteOtherInstitutionController::class, 'miPerfil'])->name('StudentGuestSite.miPerfil');
     route::put('/updateInfor',[GuestSiteOtherInstitutionController::class,'updateInfor'])->name('StudentGuestSite.updateInfor');
     route::get('/adquirir', [GuestSiteOtherInstitutionController::class, 'buyIndividualGroupTicket'])->name('StudentGuestSite.ticketIG');
-    route::get('/adquirir/entrada', [GuestSiteOtherInstitutionController::class, 'purchaseTicketI'])->name('StudentGuestSite.ticketI');    
-    route::get('/adquirir/entradas', [GuestSiteOtherInstitutionController::class, 'purchaseTicketG'])->name('StudentGuestSite.ticketG');
+    route::get('/adquirir/entrada{id}', [GuestSiteOtherInstitutionController::class, 'purchaseTicketI'])->name('StudentGuestSite.ticketI');    
+    route::get('/adquirir/entradas{id}', [GuestSiteOtherInstitutionController::class, 'purchaseTicketG'])->name('StudentGuestSite.ticketG');
     route::get('/entradas/adquiridas', [GuestSiteOtherInstitutionController::class, 'purchasedTicket'])->name('StudentGuestSite.purchasedTicket');     
     route::post('/QR', [GuestSiteOtherInstitutionController::class, 'addEntry'])->name('StudentGuestSite.addEntry');
+    Route::post('/storeEntries', [GuestSiteOtherInstitutionController::class, 'storeEntries'])->name('StudentGuestSite.storeEntries');
 });
 
 // Rutas relacionadas al controlador para ver el registro de entradas adquiridas (viewEventLogController)
 Route::get('/entry/{id}', [viewEventLogController::class, 'show'])->name('viewEventLog.entry');
-Route::put('/entry/confirm/{entradaId}', [viewEventLogController::class, 'confirmAsistencia'])->name('confirmAsistencia');
+Route::put('/entry/confirm/{idEntrada}', [viewEventLogController::class, 'confirmAsistencia'])->name('confirmAsistencia');
 Route::get('/registro', [viewEventLogController::class, 'viewAttendanceRecordEntertainmentArea'])->name('viewEventLog.viewAttendanceRecordEntertainmentArea');
 Route::get('/registros/UDB', [viewEventLogController::class, 'viewAttendanceRecordUDB'])->name('viewEventLog.viewAttendanceRecordUDB');
 Route::get('/attendance/records', [viewEventLogController::class, 'viewAttendanceRecordEntertainmentArea'])->name('attendance.records');
+Route::get('/entry/edit/{idEntrada}', [viewEventLogController::class, 'editEntrada'])->name('editarEntrada');

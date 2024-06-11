@@ -1,7 +1,7 @@
 @extends('layout.header')
 
-@section('title','Login')
-    
+@section('title', 'Login')
+
 <script src="{{ asset('js/sweetalert.js') }}"></script>
 {{-- #7facff --}}
 <body>
@@ -21,7 +21,7 @@
                 <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                     <div class="card shadow-2-strong" style="border-radius: 1rem;">
                         <div class="card-body p-5 text-center">            
-                            <h3 class="mb-1">Registro de primer administrador</h3>                            
+                            <h3 class="mb-1">Registro del primer administrador</h3>                            
                                 
                             <div class="my-4" style="background-color:#0060B4; height: 3px; border-radius: 2rem"></div>
                             @if ($errors->any())
@@ -66,7 +66,7 @@
                                     <div class="col-lg-12 col-md-6 col-xs-12">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-address-card"></i></span>
-                                            <input type="text" class="form-control" placeholder="Ingrese carnet" aria-label="carnet" id="txtCarnetAdmin" name="carnet" value="{{ old('carnet') }}">
+                                            <input type="text" class="form-control" placeholder="Ingrese carné" aria-label="carnet" id="txtCarnetAdmin" name="carnet" value="{{ old('carnet') }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-6 col-xs-12">

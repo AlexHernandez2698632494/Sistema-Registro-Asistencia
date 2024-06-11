@@ -188,9 +188,7 @@ public function updateInfor(Request $request)
         return view('layout.403');
     }
 }
-public function buyIndividualGroupTicket (){
-    return view('UDBStaffGuestSite.ticketIG');
-}
+
 public function purchaseTicketI(){
     if(session()->has('personalUDB')){
         $id= session()->get('personalUDB');
@@ -201,8 +199,20 @@ public function purchaseTicketI(){
     }
 }
 
-public function purchaseTicketG(){
-    return view('UDBStaffGuestSite.ticketG');
+public function purchaseTicketG(string $id){
+    if (session()->has('personalUDB')) {
+        $idUDB = session()->get('personalUDB');
+        $informacionUDB = DB::table('personalUDB')->where('idUDB', '=', $idUDB[0]->idUDB)->first();
+        $evento = DB::table('Eventos')->where('idEvento', '=', $id)->first();
+       
+        if (!$informacionUDB || !$evento) {
+            return redirect()->route('UDBStaffGuestSite.site')->with('error', 'Información no disponible');
+        }
+
+        return view('UDBStaffGuestSite.ticketG', compact('evento', 'informacionUDB'));
+    } else {
+        return redirect()->route('UDBStaffGuestSite.site')->with('error', 'Sesión no iniciada');
+    }
 }
 
 public function addEntry(Request $request)
@@ -286,6 +296,78 @@ public function purchasedTicket() {
         return view('UDBStaffGuestSite.purchasedTicket', compact('purchaseTicket'));
     } else {
         return view('layout.403');
+    }
+}
+
+public function storeEntries(Request $request)
+{
+    if (session()->has('personalUDB')) {
+        $idUDB = session()->get('personalUDB');
+        $idPersonalUDB = $idUDB[0]->idUDB;
+
+        $entradas = json_decode($request->entradas);
+
+        if (count($entradas) > 0) {
+            // Guarda la primera entrada en la tabla 'entradas'
+            $idEntrada = DB::table('entradas')->insertGetId([
+                'idEvento' => $request->idEvento,
+                'idEstudianteUDB' => 0,
+                'idDocenteUDB' => 0,
+                'idPersonalUDB' => $idPersonalUDB,
+                'idEstudianteInstitucion' => 0,
+                'nombre' => $entradas[0]->nombre,
+                'sexo' => $entradas[0]->sexo,
+                'institucion' => $entradas[0]->institucion,
+                'nivel_educativo' => $entradas[0]->nivel_educativo,
+                'qr_code' => '',
+                'asistencia' => false,
+            ]);
+
+            // Guarda las siguientes entradas en la tabla 'eventEntries'
+            for ($i = 1; $i < count($entradas); $i++) {
+                DB::table('eventEntries')->insert([
+                    'idEvento' => $request->idEvento,
+                    'idEntrada' => $idEntrada,
+                    'nombre' => $entradas[$i]->nombre,
+                    'sexo' => $entradas[$i]->sexo,
+                    'institucion' => $entradas[$i]->institucion,
+                    'nivel_educativo' => $entradas[$i]->nivel_educativo,
+                    'asistencia' => false,
+                ]);
+            }
+            $idEvento = $request->input('idEvento');
+            $evento = DB::table('eventos')->where('idEvento', '=', $idEvento)->first();
+            // Generar contenido y guardar QR
+            $nombreEvento = $evento->NombreEvento;  // Obtén el nombre del evento
+            $nombrePrimeraPersona = $entradas[0]->nombre;
+            $institucion = $entradas[0]->institucion;
+            $cantidadPersonas = count($entradas);
+
+            // Generar el contenido del QR
+            $qrContent = json_encode([
+                'nombre' => $nombrePrimeraPersona,
+                'evento' => $nombreEvento,
+                'institucion' => $institucion,
+                'cantidad_personas' => $cantidadPersonas,
+            ]);
+
+            // Generar la instancia del código QR
+            $qrCode = QrCode::size(150)->generate($qrContent);
+
+            // Guardar el código QR como imagen
+            $currentDateTime = date('Ymd_His');
+            $qrPath = 'qr/' . $nombrePrimeraPersona . '_' . $nombreEvento . '_' . $currentDateTime . '.svg'; // Guardar como SVG
+            file_put_contents(public_path($qrPath), $qrCode);
+
+            // Actualizar la entrada con la ruta del QR
+            DB::table('entradas')->where('idEntrada', $idEntrada)->update(['qr_code' => $qrPath]);
+
+            return redirect()->route('UDBStaffGuestSite.ticketG', ['id' => $request->idEvento])->with('exitoAgregar', 'Entrada guardada exitosamente');
+        } else {
+            return redirect()->route('UDBStaffGuestSite.ticketG', ['id' => $request->idEvento])->with('errorAgregar', 'No hay entradas para guardar');
+        }
+    } else {
+        return redirect()->route('UDBStaffGuestSite.site')->with('errorAgregar', 'Sesión no iniciada');
     }
 }
 

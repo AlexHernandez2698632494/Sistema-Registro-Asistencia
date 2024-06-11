@@ -46,21 +46,17 @@
                             <form method="POST" action="{{ route('recuperarContra') }}">
                                 @csrf
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text" id="basic-addon1"><i
-                                            class="fa-solid fa-user"></i></span>
-                                    <input type="text" class="form-control" placeholder="Usuario" aria-label="user"
-                                        name="user">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user"></i></span>
+                                    <input type="text" class="form-control" placeholder="Usuario" aria-label="user" name="user">
                                 </div>
                                 <div class="row">
-                                    <button class="btn btn-primary btn-lg btn-block mt-2"
-                                        type="submit">Ingresar</button>
+                                    <button class="btn btn-primary btn-lg btn-block mt-2" type="submit">Ingresar</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     </section>
 </body>
