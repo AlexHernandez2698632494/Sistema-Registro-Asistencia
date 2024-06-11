@@ -80,6 +80,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="card-body cardBody-Teachers text-center">
+                                {{-- Botón de inscripción individual --}}
+                                <a href="{{ route('StudentGuestSite.ticketI', $eventInfo->idEvento) }}" class="btn btn-primary mx-2">
+                                    Inscripción Individual
+                                </a>
+                                {{-- Botón de inscripción grupal --}}
+                                <a href="{{ route('StudentGuestSite.ticketG',  $eventInfo->idEvento) }}" class="btn btn-secondary mx-2">
+                                    Inscripción Grupal
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

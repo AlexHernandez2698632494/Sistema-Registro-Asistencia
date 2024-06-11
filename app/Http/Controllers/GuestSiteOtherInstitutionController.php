@@ -132,7 +132,7 @@ class GuestSiteOtherInstitutionController extends Controller
          $userObj->idUsuario = $request->input('carnet');
          $userObj->usuario = $userName;
          $userObj->password = hash('SHA256',$pass);
-         $userObj->nivel = 5;
+         $userObj->nivel = 4;
          $userObj->save();
 
          if($UDB->save() && $userObj->save()){
@@ -190,10 +190,6 @@ class GuestSiteOtherInstitutionController extends Controller
             return view('layout.403');
         }
     }
-
-    public function buyIndividualGroupTicket (){
-        return view('StudentGuestSite.ticketIG');
-    }
     public function purchaseTicketI(){
         if(session()->has('estudianteInstitucion')){
             $id= session()->get('estudianteInstitucion');
@@ -204,8 +200,20 @@ class GuestSiteOtherInstitutionController extends Controller
         }
     }
     
-    public function purchaseTicketG(){
-        return view('StudentGuestSite.ticketG');
+    public function purchaseTicketG(string $id){
+        if (session()->has('estudianteInstitucion')) {
+            $idUDB = session()->get('estudianteInstitucion');
+            $informacionUDB = DB::table('estudianteUDB')->where('idInstitucion', '=', $id[0]->idInstitucion)->first();
+            $evento = DB::table('Eventos')->where('idEvento', '=', $id)->first();
+           
+            if (!$informacionUDB || !$evento) {
+                return redirect()->route('UDBStudentGuestSite.site')->with('error', 'Información no disponible');
+            }
+   
+            return view('StudentGuestSite.ticketG', compact('evento', 'informacionInstitucion'));
+        } else {
+            return redirect()->route('StudentGuestSite.site')->with('error', 'Sesión no iniciada');
+        }
     }
     
     public function addEntry(Request $request)
