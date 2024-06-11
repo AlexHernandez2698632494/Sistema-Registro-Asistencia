@@ -395,7 +395,6 @@ class GuestSiteController extends Controller
             // Guarda la primera entrada en la tabla 'entradas'
             $idEntrada = DB::table('entradas')->insertGetId([
                 'idEvento' => $request->idEvento,
-                'idInvitado' => $idInvitado,
                 'idEstudianteUDB' => 0,
                 'idDocenteUDB' => 0,
                 'idPersonalUDB' => 0,
