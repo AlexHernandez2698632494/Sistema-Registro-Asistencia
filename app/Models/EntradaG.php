@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class EntradaG extends Model
 {
     use HasFactory;
-    protected $table = 'entradasG';
-    protected $primaryKey = 'idEntradaG';
+    protected $table = 'eventEntries';
+    protected $primaryKey = 'idEventEntries';
     public $timestamps = false;
 }

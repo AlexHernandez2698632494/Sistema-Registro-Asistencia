@@ -1,10 +1,11 @@
 @extends('layout.header')
 
+
+
 @section('title', 'Información de evento')
 
 <body>
     <script src="{{ asset('js/inactividad.js') }}"></script>
-
     @if (session('exito'))
     <script>
         swal({
@@ -19,9 +20,9 @@
             }
         })
     </script>
-    @endif
+@endif
 
-    @if (session('error'))
+@if (session('error'))
     <script>
         swal({
             title: "Error al adquirir",
@@ -35,8 +36,7 @@
             }
         })
     </script>
-    @endif
-
+@endif
     @include('layout.horizontalMenu')
     <div class="wrapper">
         @include('layout.verticalMenu')
@@ -53,7 +53,7 @@
                 </div>
             </nav>
             <div class="row justify-content-center">
-                @foreach($purchaseLog as $purchaseRecord)
+                 @foreach($purchaseLog as $purchaseRecord) 
                 <div class="col-lg-6 col-xs-12">
                     <div class="card">
                         <div class="card-body">
@@ -79,20 +79,6 @@
                                 <div class="col-12"><b>Nivel Academico: </b></div>
                                 <div class="col-12">{{ $purchaseRecord->nivel_educativo }}</div>
                             </div>
-                            @if ($purchaseRecord->idEventEntries)
-                            <div class="card-footer text-body-secondary d-flex justify-content-center">
-                                <form action="{{ route('confirmAsistencia', $purchaseRecord->idEntrada) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="btn btn-primary my-1 mx-1" style="background-color: #2F98FE;">
-                                        Confirmar Asistencia
-                                    </button>
-                                </form>
-                                <a href="{{ route('editarEntrada', $purchaseRecord->idEntrada) }}" class="btn btn-warning my-1 mx-1">
-                                    Editar
-                                </a>
-                            </div>
-                            @else
                             <div class="card-footer text-body-secondary d-flex justify-content-center">
                                 <form action="{{ route('confirmAsistencia', $purchaseRecord->idEntrada) }}" method="POST">
                                     @csrf
@@ -102,7 +88,7 @@
                                     </button>
                                 </form>
                             </div>
-                            @endif
+
                         </div>
                     </div>
                 </div>
@@ -110,6 +96,7 @@
             </div>
         </div>
     </div>
+
 </body>
 
 </html>
