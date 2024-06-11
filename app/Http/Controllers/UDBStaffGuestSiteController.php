@@ -189,13 +189,19 @@ public function updateInfor(Request $request)
     }
 }
 
-public function purchaseTicketI(){
+public function purchaseTicketI(string $id){
     if(session()->has('personalUDB')){
-        $id= session()->get('personalUDB');
-        $informacionUDB = DB::table('personalUDB')->where('idUDB','=',$id[0]->idUDB)->get();
-        $eventos = DB::table('Eventos')->get();
-        return view('UDBStaffGuestSite.ticketI', compact('eventos','informacionUDB'));
-    
+        $idUDB = session()->get('personalUDB');
+        $informacionUDB = DB::table('personalUDB')->where('idUDB', '=', $idUDB[0]->idUDB)->first();
+        $evento = DB::table('Eventos')->where('idEvento', '=', $id)->first();
+       
+        if (!$informacionUDB || !$evento) {
+            return redirect()->route('UDBStaffGuestSite.site')->with('error', 'Información no disponible');
+        }
+
+        return view('UDBStaffGuestSite.ticketI', compact('evento', 'informacionUDB'));
+    } else {
+        return redirect()->route('UDBStaffGuestSite.site')->with('error', 'Sesión no iniciada');
     }
 }
 
@@ -242,7 +248,7 @@ public function addEntry(Request $request)
         $qrContent = json_encode([
             'nombre' => $request->input('nombre'),
             'evento' => $nombreEvento,
-            'institucion' => 'UDB',
+            'institucion' => 'Universidad Don Bosco',
             //'url' => $url
         ]);
 
@@ -269,7 +275,7 @@ public function addEntry(Request $request)
         $entrada->idEstudianteInstitucion = $idEstudianteInstitucion ;
         $entrada->nombre = $request->input('nombre');
         $entrada->sexo = $request->input('sexo');
-        $entrada->institucion = 'UDB';
+        $entrada->institucion = 'Universidad Don Bosco';
         $entrada->nivel_educativo = $request->input('nivel_educativo');
         $entrada->qr_code = $qrPath;
         $entrada->save();
