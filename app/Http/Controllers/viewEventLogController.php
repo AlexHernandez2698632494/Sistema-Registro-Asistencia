@@ -17,10 +17,10 @@ class viewEventLogController extends Controller
     public function show($id)
 {
     if (session()->has('administrador')) {
-        $purchaseLog = DB::table('entradas as en')
-        ->join('eventos as e','e.idEvento','=','en.idEvento')
+        $purchaseLog = DB::table('eventEntry as ev')
+        ->join('eventos as e','e.idEvento','=','ev.idEvento')
         ->where('e.idEvento', '=', $id)
-        ->where('en.asistencia', '=', 0)
+        ->where('ev.asistencia', '=', 0)
         ->get();
     //return $purchaseLog;
     return view('viewEventLog.entry',compact('purchaseLog'));

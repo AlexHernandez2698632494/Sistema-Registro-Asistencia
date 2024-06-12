@@ -115,8 +115,8 @@ CREATE TABLE areaFormativaEntretenimientoEvento(
   FOREIGN KEY(`idAreas`) REFERENCES `Areas`(`idAreas`)
 );
 
-CREATE TABLE entradas(
-    idEntrada INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE eventEntry(
+    idEventEntry INT AUTO_INCREMENT PRIMARY KEY,
     idEvento INT NOT NULL,
     idEstudianteUDB INT NOT NULL,
 	idDocenteUDB INT NOT NULL,
@@ -133,11 +133,19 @@ CREATE TABLE entradas(
 CREATE TABLE eventEntries(
     idEventEntries INT AUTO_INCREMENT PRIMARY KEY,
     idEvento INT NOT NULL,
-    idEntrada INT NOT NULL,
+    idEventEntry INT NOT NULL,
 	nombre VARCHAR(256) NOT NULL,
     sexo VARCHAR(10) NOT NULL,
     institucion VARCHAR(256) NOT NULL,
     nivel_educativo VARCHAR(50) NOT NULL,
     asistencia BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY(`idEntrada`) REFERENCES `entradas`(`idEntrada`)
+    FOREIGN KEY(`idEventEntry`) REFERENCES `evententry`(`idEventEntry`)
+);
+
+CREATE TABLE entradas(
+	idEntrada INT AUTO_INCREMENT PRIMARY KEY,
+	idEventEntry INT ,
+	idEventEntries INT ,
+	cantidad INT,
+    FOREIGN KEY(`idEventEntry`) REFERENCES `evententry`(`idEventEntry`)
 );
