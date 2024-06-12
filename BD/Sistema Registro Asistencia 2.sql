@@ -25,6 +25,7 @@ CREATE TABLE estudianteUDB(
     telefonoUDB VARCHAR(10) NOT NULL,
     departamentoUDB TEXT NOT NULL,
     municipioUDB TEXT NOT NULL,
+    estadoUDB TEXT NOT NULL,
     estadoEliminacion INT NOT NULL DEFAULT 1
 ); 
 
