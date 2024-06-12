@@ -295,7 +295,7 @@ public function purchasedTicket() {
         $informacionUDB = DB::table('personalUDB')->where('idUDB','=',$id[0]->idUDB)->first();
         $purchaseTicket = DB::table('entradas')
             ->join('Eventos', 'entradas.idEvento', '=', 'Eventos.idEvento')
-            ->select('Eventos.NombreEvento', 'Eventos.fecha', 'Eventos.hora', 'entradas.qr_code')
+            ->select('Eventos.NombreEvento', 'Eventos.fecha', 'Eventos.hora', 'entradas.qr_code', 'entradas.idEntrada')
             ->where('entradas.nombre', '=', $informacionUDB->nombreUDB . ' ' . $informacionUDB->apellidosUDB)
             ->get();
 
@@ -374,6 +374,35 @@ public function storeEntries(Request $request)
         }
     } else {
         return redirect()->route('UDBStaffGuestSite.site')->with('errorAgregar', 'Sesión no iniciada');
+    }
+}
+
+public function deleteEntry(Request $request, $idEntrada)
+{
+    try {
+        DB::beginTransaction();
+
+        // Obtener la entrada
+        $entrada = DB::table('entradas')->where('idEntrada', '=', $idEntrada)->first();
+
+        if (!$entrada) {
+            throw new Exception('Entrada no encontrada.');
+        }
+
+        // Eliminar la entrada
+        DB::table('entradas')->where('idEntrada', '=', $idEntrada)->delete();
+
+        // Eliminar el archivo QR
+        if (file_exists(public_path($entrada->qr_code))) {
+            unlink(public_path($entrada->qr_code));
+        }
+
+        DB::commit();
+
+        return Redirect::back()->with('exitoEliminar', 'Entrada eliminada exitosamente');
+    } catch (Exception $e) {
+        DB::rollback();
+        return Redirect::back()->with('errorEliminar', 'Ha ocurrido un error al eliminar la entrada, vuelva a intentarlo más tarde');
     }
 }
 

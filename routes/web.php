@@ -134,6 +134,7 @@ Route::prefix('personal/UDB')->group(function(){
     route::get('/adquirir/entradas/{id}', [UDBStaffGuestSiteController::class, 'purchaseTicketG'])->name('UDBStaffGuestSite.ticketG');
     route::get('/entradas/adquiridas', [UDBStaffGuestSiteController::class, 'purchasedTicket'])->name('UDBStaffGuestSite.purchasedTicket');     
     route::post('/QR', [UDBStaffGuestSiteController::class, 'addEntry'])->name('UDBStaffGuestSite.addEntry');
+    Route::post('/guestSite/deleteEntry/{idEntrada}', [guestSiteController::class, 'deleteEntry'])->name('guestSite.deleteEntry');
     Route::post('/storeEntries', [UDBStaffGuestSiteController::class, 'storeEntries'])->name('UDBStaffGuestSite.storeEntries');
 });
 
