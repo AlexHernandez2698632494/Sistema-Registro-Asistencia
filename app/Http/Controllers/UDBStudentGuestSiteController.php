@@ -99,6 +99,7 @@ class UDBStudentGuestSiteController extends Controller
             'sexo' => ['required', 'max:10', 'string'],
             'carnetUDB' => ['required', 'max:10', 'string'],
             'carrera' => ['required', 'max:255', 'string'],
+            'estadoUDB' => ['required', 'max:10', 'string'],
             'correoUDB' => ['required', 'max:255', 'string'],
             'telefonoUDB' => ['required', 'max:10', 'string'],
             'departamento' => ['required', 'max:255', 'string'],
@@ -112,6 +113,7 @@ class UDBStudentGuestSiteController extends Controller
             $sexoUDB = $request->input('sexo');
             $carnetUDB = $request->input('carnetUDB');
             $carreraUDB = $request->input('carrera');
+            $estadoUDB = $request->input('estadoUDB');
             $correoUDB = $request->input('correoUDB');
             $telefonoUDB = $request->input('telefonoUDB');
             $departamentoUDB = $request->input('departamento');
@@ -123,6 +125,7 @@ class UDBStudentGuestSiteController extends Controller
             $UDB->sexoUDB = $sexoUDB;
             $UDB->carnetUDB = $carnetUDB;
             $UDB->carreraUDB = $carreraUDB;
+            $UDB->estadoUDB = $estadoUDB;
             $UDB->correoUDB = $correoUDB;
             $UDB->telefonoUDB = $telefonoUDB;
             $UDB->departamentoUDB = $departamentoUDB;
@@ -174,6 +177,7 @@ class UDBStudentGuestSiteController extends Controller
         if (session()->has('estudianteUDB')) {
             $validator = Validator::make($request->all(), [
                 'correoUDB' => 'required|email',
+                'estadoUDB' => 'required',
                 'telefonoUDB' => [
                     'required',
                     'regex:/^[267]\d{3}-\d{4}$/'
@@ -188,6 +192,7 @@ class UDBStudentGuestSiteController extends Controller
                 $UDB = estudianteUDB::findOrFail($request->input('idInvitadoActualizar'));
                 $UDB->correoUDB = $request->input('correoUDB');
                 $UDB->telefonOUDB = $request->input('telefonoUDB');
+                $UDB->estadoUDB = $request->input('estadoUDB');
                 $UDB->save();
 
                 return redirect()->back()->with('exitoModificar', 'Información actualizada correctamente');

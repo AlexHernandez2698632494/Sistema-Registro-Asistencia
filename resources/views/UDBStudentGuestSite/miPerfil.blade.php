@@ -83,7 +83,11 @@
                         <div class="col-lg-6 col-xs-12">
                             <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Correo electrónico</p>
                             {{$informacionUDB[0]->correoUDB}}
-                        </div>                                                                
+                        </div>     
+                        <div class="col-lg-6 col-xs-12">
+                            <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Estado</p>
+                            {{$informacionUDB[0]->estadoUDB}}
+                        </div>                                                            
                     </div>  
                     <div class="separator mb-3 mt-3"></div>                 	       
                     <div class="row mx-1 mt-3 d-flex justify-content-center">                        
@@ -118,7 +122,17 @@
                             <div class="col-lg-6 col-xs-12">
                                 <label for="txtTelefonoInvitado" class="form-label" style="font-weight: bold">Teléfono del invitado</label>                                
                                 <input type="text" id="txtTelefonoInvitado" name="telefonoUDB" placeholder="Ingrese teléfono del invitado" class="form-control inputTxt" value="{{$informacionUDB[0]->telefonoUDB}}">
-                            </div>    
+                            </div>   
+                            <div class="col-lg-6 col-xs-12">
+                                <label for="txtTelefonoInvitado" class="form-label" style="font-weight: bold">Estado</label>                                
+                                <select class="form-select" id="sexo" name="estadoUDB" value="{{$informacionUDB[0]->estadoUDB}}" required>
+                                <option value="Activo" {{ $informacionUDB[0]->estadoUDB == 'Activo' ? 'selected' : '' }}>Activo</option>
+                                <option value="noActivo" {{ $informacionUDB[0]->estadoUDB == 'no Activo' ? 'selected' : '' }}>No Activo</option>
+                                <option value="Graduado" {{ $informacionUDB[0]->estadoUDB == 'Graduado' ? 'selected' : '' }}>Graduado</option>
+
+                                    
+                                </select>
+                            </div>  
                             <input type="text" id="txtIdInvitado" name="idInvitadoActualizar" value="{{$informacionUDB[0]->idUDB}}" hidden>                    
                         </div>
                     </div>
