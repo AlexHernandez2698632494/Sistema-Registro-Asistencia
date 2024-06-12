@@ -208,17 +208,17 @@ class GuestSiteOtherInstitutionController extends Controller
     
     public function purchaseTicketG(string $id){
         if (session()->has('estudianteInstitucion')) {
-            $idUDB = session()->get('estudianteInstitucion');
-            $informacionUDB = DB::table('estudianteInstitucion')->where('idInstitucion', '=', $idUDB[0]->idInstitucion)->first();
+            $idInstitucion = session()->get('estudianteInstitucion');
+            $informacionInstitucion = DB::table('estudianteInstitucion')->where('idInstitucion', '=', $idInstitucion[0]->idInstitucion)->first();
             $evento = DB::table('Eventos')->where('idEvento', '=', $id)->first();
            
-            if (!$informacionUDB || !$evento) {
-                return redirect()->route('StudentGuestSite.site')->with('error', 'Información no disponible');
+            if (!$informacionInstitucion || !$evento) {
+                return redirect()->route('UDBStudentGuestSite.site')->with('error', 'Información no disponible');
             }
    
             return view('StudentGuestSite.ticketG', compact('evento', 'informacionInstitucion'));
         } else {
-            return redirect()->route('StudentGuestSite.site')->with('error', 'Sesión no iniciada');
+            return redirect()->route('UDBStudentGuestSite.site')->with('error', 'Sesión no iniciada');
         }
     }
     
@@ -306,5 +306,77 @@ class GuestSiteOtherInstitutionController extends Controller
             return view('layout.403');
         }
     }
+
+    public function storeEntries(Request $request)
+{
+    if (session()->has('estudianteInstitucion')) {
+        $idInstitucion = session()->get('estudianteInstitucion');
+        $idEstudianteInstitucion = $idInstitucion[0]->idInstitucion;
+
+        $entradas = json_decode($request->entradas);
+
+        if (count($entradas) > 0) {
+            // Guarda la primera entrada en la tabla 'entradas'
+            $idEntrada = DB::table('entradas')->insertGetId([
+                'idEvento' => $request->idEvento,
+                'idEstudianteUDB' => 0,
+                'idDocenteUDB' => 0,
+                'idPersonalUDB' => 0,
+                'idEstudianteInstitucion' => $idEstudianteInstitucion,
+                'nombre' => $entradas[0]->nombre,
+                'sexo' => $entradas[0]->sexo,
+                'institucion' => $entradas[0]->institucion,
+                'nivel_educativo' => $entradas[0]->nivel_educativo,
+                'qr_code' => '',
+                'asistencia' => false,
+            ]);
+
+            // Guarda las siguientes entradas en la tabla 'eventEntries'
+            for ($i = 1; $i < count($entradas); $i++) {
+                DB::table('eventEntries')->insert([
+                    'idEvento' => $request->idEvento,
+                    'idEntrada' => $idEntrada,
+                    'nombre' => $entradas[$i]->nombre,
+                    'sexo' => $entradas[$i]->sexo,
+                    'institucion' => $entradas[$i]->institucion,
+                    'nivel_educativo' => $entradas[$i]->nivel_educativo,
+                    'asistencia' => false,
+                ]);
+            }
+            $idEvento = $request->input('idEvento');
+            $evento = DB::table('eventos')->where('idEvento', '=', $idEvento)->first();
+            // Generar contenido y guardar QR
+            $nombreEvento = $evento->NombreEvento;  // Obtén el nombre del evento
+            $nombrePrimeraPersona = $entradas[0]->nombre;
+            $institucion = $entradas[0]->institucion;
+            $cantidadPersonas = count($entradas);
+
+            // Generar el contenido del QR
+            $qrContent = json_encode([
+                'nombre' => $nombrePrimeraPersona,
+                'evento' => $nombreEvento,
+                'institucion' => $institucion,
+                'cantidad_personas' => $cantidadPersonas,
+            ]);
+
+            // Generar la instancia del código QR
+            $qrCode = QrCode::size(150)->generate($qrContent);
+
+            // Guardar el código QR como imagen
+            $currentDateTime = date('Ymd_His');
+            $qrPath = 'qr/' . $nombrePrimeraPersona . '_' . $nombreEvento . '_' . $currentDateTime . '.svg'; // Guardar como SVG
+            file_put_contents(public_path($qrPath), $qrCode);
+
+            // Actualizar la entrada con la ruta del QR
+            DB::table('entradas')->where('idEntrada', $idEntrada)->update(['qr_code' => $qrPath]);
+
+            return redirect()->route('StudentGuestSite.ticketG', ['id' => $request->idEvento])->with('exitoAgregar', 'Entrada guardada exitosamente');
+        } else {
+            return redirect()->route('StudentGuestSite.ticketG', ['id' => $request->idEvento])->with('errorAgregar', 'No hay entradas para guardar');
+        }
+    } else {
+        return redirect()->route('StudentGuestSite.site')->with('errorAgregar', 'Sesión no iniciada');
+    }
+}
     
 }
