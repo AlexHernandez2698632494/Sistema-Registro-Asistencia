@@ -119,13 +119,14 @@ class UDBStaffGuestSiteController extends Controller
                 ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
                 ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea')
                 ->where('afe.nombreArea', '=', 'Area Formativa')
+                ->where('e.estadoEliminacion', '=', 0)
                 ->get();
             $entrenimiento = DB::table('areaFormativaEntretenimientoEvento as afee')
             ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
             ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
             ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
             ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea')
-            ->where('afe.nombreArea', '=', 'Area Entretenimiento')
+            ->where('e.estadoEliminacion', '=', 0)
             ->get();
             return view('UDBStaffGuestSite.site', compact('formativa','entrenimiento','guestInfo'));
         } else {
