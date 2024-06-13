@@ -457,8 +457,6 @@ public function deleteEntryI()
         return view('layout.403');
     }
 }
-
-
 public function deleteEntryG()
 {
     if (session()->has('personalUDB')) {

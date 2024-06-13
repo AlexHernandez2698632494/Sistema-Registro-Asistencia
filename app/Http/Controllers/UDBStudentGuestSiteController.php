@@ -317,23 +317,6 @@ class UDBStudentGuestSiteController extends Controller
             return Redirect::back()->with('errorAgregar', 'Ha ocurrido un error al adquirir la entrada, vuelva a intentarlo más tarde'.$e->getMessage());
         }
     }
-    
-    public function purchasedTicket() {
-        if (session()->has('estudianteUDB')) {
-            $id= session()->get('estudianteUDB');
-            $informacionUDB = DB::table('estudianteUDB')->where('idUDB','=',$id[0]->idUDB)->first();
-            $purchaseTicket = DB::table('eventEntry')
-            ->join('Eventos', 'eventEntry.idEvento', '=', 'Eventos.idEvento')
-            ->select('Eventos.NombreEvento', 'Eventos.fecha', 'Eventos.hora', 'eventEntry.qr_code', 'eventEntry.idEventEntry')
-            ->where('eventEntry.nombre', '=', $informacionUDB->nombreUDB . ' ' . $informacionUDB->apellidosUDB)
-            ->get();
-            return view('UDBStudentGuestSite.purchasedTicket', compact('purchaseTicket'));
-        } else {
-            return view('layout.403');
-        }
-    }
-
-    
     public function storeEntries(Request $request)
 {
     if (session()->has('estudianteUDB')) {
@@ -429,41 +412,98 @@ class UDBStudentGuestSiteController extends Controller
         return redirect()->route('UDBStudentGuestSite.site')->with('errorAgregar', 'Sesión no iniciada');
     }
 }
-public function deleteEntry(Request $request, $idEntrada)
-{
-    try {
-        DB::beginTransaction();
-
-        // Obtener la entrada
-        $entrada = DB::table('entradas')->where('idEntrada', '=', $idEntrada)->first();
-
-        if (!$entrada) {
-            throw new Exception('Entrada no encontrada.');
-        }
-        $idEventEntry = $entrada->idEventEntry;
-        $idEventEntries = $entrada->idEventEntries;
-
-        // Eliminar la entrada
-        DB::table('entradas')->where('idEntrada', '=', $idEntrada)->delete();
-
-        // Eliminar los registros relacionados en eventEntries
-        DB::table('eventEntries')->where('idEventEntries', '=', $idEventEntries)->delete();
-
-        // Eliminar el registro relacionado en eventEntry
-        DB::table('eventEntry')->where('idEventEntry', '=', $idEventEntry)->delete();
-        // Eliminar el archivo QR
-        if (file_exists(public_path($entrada->qr_code))) {
-            unlink(public_path($entrada->qr_code));
-        }
-
-        DB::commit();
-
-        return Redirect::back()->with('exitoEliminar', 'Entrada eliminada exitosamente');
-    } catch (Exception $e) {
-        DB::rollback();
-        return Redirect::back()->with('errorEliminar', 'Ha ocurrido un error al eliminar la entrada, vuelva a intentarlo más tarde');
+public function purchasedTicket(){
+    if(session()->has('estudianteUDB')){
+        $id = session()->get('estudianteUDB');
+        $informacionUDB = DB::table('estudianteUDB')->where('idUDB','=',$id[0]->idUDB)->first();
+        $entradas = DB::table('eventEntry')
+        ->join('entradas', 'entradas.idEventEntry', '=', 'eventEntry.idEventEntry')
+        ->select('eventEntry.idEventEntry')
+        ->where('eventEntry.nombre', '=', $informacionUDB->nombreUDB . ' ' . $informacionUDB->apellidosUDB)
+        ->get();
+        $purchaseTicket = DB::table('eventEntry')
+        ->join('entradas', 'entradas.idEventEntry', '=', 'eventEntry.idEventEntry')
+        ->join('Eventos', 'eventEntry.idEvento', '=', 'Eventos.idEvento')
+        ->select('Eventos.NombreEvento', 'Eventos.fecha', 'Eventos.hora', 'eventEntry.qr_code', 'eventEntry.idEventEntry')
+        ->where('eventEntry.nombre', '=', $informacionUDB->nombreUDB . ' ' . $informacionUDB->apellidosUDB)
+        ->where('entradas.idEventEntries', '=', 0)  // Ajusta esto según el valor dinámico que necesites
+        ->get();
+        $purchaseTickets = DB::table('eventEntry')
+        ->join('entradas', 'entradas.idEventEntry', '=', 'eventEntry.idEventEntry')
+        ->join('eventEntries', 'eventEntries.idEventEntry', '=', 'eventEntry.idEventEntry')
+        ->join('Eventos', 'eventEntry.idEvento', '=', 'Eventos.idEvento')
+        ->select('Eventos.NombreEvento', 'Eventos.fecha', 'Eventos.hora', 'eventEntry.qr_code', 'eventEntry.idEventEntry')
+        ->where('eventEntry.nombre', '=', $informacionUDB->nombreUDB . ' ' . $informacionUDB->apellidosUDB)
+        ->where('entradas.idEventEntries', '=', 1)  // Ajusta esto según el valor dinámico que necesites
+        ->get();
+        //return $entradas;
+        return view('UDBStudentGuestSite.purchasedTicket',compact('purchaseTicket','purchaseTickets','entradas'));
+    } else {
+        return view('layout.403');
     }
-}
+    }
+    
+    public function deleteEntryI()
+    {
+        if (session()->has('estudianteUDB')) {
+            $id = session()->get('estudianteUDB');
+            $informacionUDB = DB::table('estudianteUDB')->where('idUDB', '=', $id[0]->idUDB)->first();
+    
+            // Obtener todos los idEventEntry relacionados con idEventEntries = 0
+            $eventEntryIds = DB::table('entradas')
+                ->where('idEventEntries', '=', 0)
+                ->pluck('idEventEntry');
+    
+            // Eliminar entradas primero
+            DB::table('entradas')
+                ->whereIn('idEventEntry', $eventEntryIds)
+                ->delete();
+    
+            // Luego eliminar los registros correspondientes en eventEntry
+            DB::table('eventEntry')
+                ->whereIn('idEventEntry', $eventEntryIds)
+                ->delete();
+    
+            return to_route('UDBStudentGuestSite.purchasedTicket')->with('exitoEliminar', 'Entrada eliminada Exitosamente');
+        } else {
+            return view('layout.403');
+        }
+    }
+    public function deleteEntryG()
+    {
+        if (session()->has('estudianteUDB')) {
+            $id = session()->get('estudianteUDB');
+            $informacionUDB = DB::table('estudianteUDB')->where('idUDB', '=', $id[0]->idUDB)->first();
+    
+            DB::beginTransaction();
+    
+            try {
+                // Primero, obtenemos los IDs que queremos eliminar
+                $entriesToDelete = DB::table('entradas')
+                    ->join('eventEntry', 'entradas.idEventEntry', '=', 'eventEntry.idEventEntry')
+                    ->join('eventEntries', 'eventEntries.idEventEntry', '=', 'eventEntry.idEventEntry')
+                    ->where('entradas.idEventEntries', '=', 1)
+                    ->select('entradas.idEventEntry', 'entradas.idEventEntries')
+                    ->get();
+    
+                foreach ($entriesToDelete as $entry) {
+                    // Eliminamos primero de las tablas dependientes
+                    DB::table('entradas')->where('idEventEntry', $entry->idEventEntry)->delete();
+                    DB::table('eventEntries')->where('idEventEntry', $entry->idEventEntry)->delete();
+                    DB::table('eventEntry')->where('idEventEntry', $entry->idEventEntry)->delete();
+                }
+    
+                DB::commit();
+    
+                return to_route('UDBStudentGuestSite.purchasedTicket')->with('exitoEliminar', 'Entrada eliminada Exitosamente');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return to_route('UDBStudentGuestSite.purchasedTicket')->with('errorEliminar', 'Error al eliminar la entrada');
+            }
+        } else {
+            return view('layout.403');
+        }
+    }
 
 }
     

@@ -109,7 +109,8 @@ Route::prefix('estudiante/UDB')->group(function(){
     route::get('/entradas/adquiridas', [UDBStudentGuestSiteController::class, 'purchasedTicket'])->name('UDBStudentGuestSite.purchasedTicket');     
     route::post('/QR', [UDBStudentGuestSiteController::class, 'addEntry'])->name('UDBStudentGuestSite.addEntry');
     Route::post('/storeEntries', [UDBStudentGuestSiteController::class, 'storeEntries'])->name('UDBStudentGuestSite.storeEntries');
-    Route::post('/guestSite/deleteEntry/{idEntrada}', [UDBStudentGuestSiteController::class, 'deleteEntry'])->name('UDBStudentGuestSite.deleteEntry');
+    Route::post('/deleteEntryI', [UDBStudentGuestSiteController::class, 'deleteEntryI'])->name('UDBStudentGuestSite.deleteEntryI');
+    Route::post('/deleteEntryG', [UDBStudentGuestSiteController::class, 'deleteEntryG'])->name('UDBStudentGuestSite.deleteEntryG');
 });
 
 //Rutas relacionadas con el controlador de areas (AreaController)
