@@ -355,7 +355,7 @@ class GuestSiteOtherInstitutionController extends Controller
                 'idEstudianteUDB' => 0,
                 'idDocenteUDB' => 0,
                 'idPersonalUDB' => 0,
-                'idEstudianteInstitucion' => 0,
+                'idEstudianteInstitucion' =>$idEstudianteInstitucion,
                 'nombre' => $entradas[0]->nombre,
                 'sexo' => $entradas[0]->sexo,
                 'institucion' => $entradas[0]->institucion,

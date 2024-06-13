@@ -15,6 +15,7 @@ use App\Models\eventos;
 use Exception;
 use App\Models\AdquirirEntrada;
 use App\Models\Entrada;
+use App\Models\EventEntry;
 use Illuminate\Support\Facades\Redirect;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class UDBStaffGuestSiteController extends Controller
@@ -233,14 +234,17 @@ public function addEntry(Request $request)
         $idEvento = $request->input('idEvento');
         $evento = DB::table('eventos')->where('idEvento', '=', $idEvento)->first();
         $capacidadEvento = $evento->capacidad;
-
+    
         // Contar las entradas vendidas para este evento
-        $entradasVendidas = DB::table('entradas')->where('idEvento', '=', $idEvento)->count();
+        $entradasVendidas = DB::table('entradas')
+        ->join('eventEntry', 'entradas.idEventEntry', '=', 'eventEntry.idEventEntry')
+        ->where('eventEntry.idEvento', '=', $idEvento)
+        ->sum('entradas.cantidad');
 
-        // Verificar si hay capacidad disponible
-        if ($entradasVendidas >= $capacidadEvento) {
-            throw new Exception('No hay capacidad disponible para este evento.');
-        }
+    // Verificar si la cantidad de entradas solicitadas excede la capacidad del evento
+    if ($entradasVendidas >= $capacidadEvento) {
+        return Redirect::back()->with('info', 'Ya no hay entradas para este evento');
+    }
 
         // Generar contenido y guardar QR
         $nombreEvento = $evento->NombreEvento;       // $url = route('viewEventLog.entry', ['id' => $idEvento]); 
@@ -267,23 +271,33 @@ public function addEntry(Request $request)
         $idEstudianteInstitucion = 0 ;
 
         // Store the entry in the database
-        $entrada = new Entrada();
-        $entrada->idEvento = $request->input('idEvento');
-        $entrada->idEstudianteUDB = $idEstudianteUDB;
-        $entrada->idDocenteUDB = $idDocenteUDB ;
-        $entrada->idPersonalUDB = $idPersonalUDB;
-        $entrada->idEstudianteInstitucion = $idEstudianteInstitucion ;
-        $entrada->nombre = $request->input('nombre');
-        $entrada->sexo = $request->input('sexo');
-        $entrada->institucion = 'Universidad Don Bosco';
-        $entrada->nivel_educativo = $request->input('nivel_educativo');
-        $entrada->qr_code = $qrPath;
-        $entrada->save();
+        $eventEntry = new EventEntry();
+        $eventEntry->idEvento = $request->input('idEvento');
+        $eventEntry->idEstudianteUDB = $idEstudianteUDB;
+        $eventEntry->idDocenteUDB = $idDocenteUDB;
+        $eventEntry->idPersonalUDB = $idPersonalUDB;
+        $eventEntry->idEstudianteInstitucion = $idEstudianteInstitucion;
+        $eventEntry->nombre = $request->input('nombre');
+        $eventEntry->sexo = $request->input('sexo');
+        $eventEntry->institucion = $request->input('institucion');
+        $eventEntry->nivel_educativo = $request->input('nivel_educativo');
+        $eventEntry->qr_code = $qrPath;
+        $eventEntry->save();
+
+        // Get the ID of the newly created event entry
+        $idEventEntry = $eventEntry->idEventEntry;
+
+        // Store the entry in the 'entradas' table
+        DB::table('entradas')->insert([
+            'idEventEntry' => $idEventEntry,
+            'idEventEntries' => 0,
+            'cantidad' => 1
+        ]);
 
         DB::commit();
 
-        return Redirect::back()->with('exitoAgregar', 'Entrada Adquirida Exitosamente');
-    } catch(Exception $e){
+        return to_route('UDBStaffGuestSite.purchasedTicket')->with('exitoAgregar', 'Entrada Adquirida Exitosamente'); 
+} catch(Exception $e){
         DB::rollback();
         return Redirect::back()->with('errorAgregar', 'Ha ocurrido un error al adquirir la entrada, vuelva a intentarlo más tarde');
     }
@@ -293,11 +307,11 @@ public function purchasedTicket() {
     if (session()->has('personalUDB')) {
         $id= session()->get('personalUDB');
         $informacionUDB = DB::table('personalUDB')->where('idUDB','=',$id[0]->idUDB)->first();
-        $purchaseTicket = DB::table('entradas')
-            ->join('Eventos', 'entradas.idEvento', '=', 'Eventos.idEvento')
-            ->select('Eventos.NombreEvento', 'Eventos.fecha', 'Eventos.hora', 'entradas.qr_code', 'entradas.idEntrada')
-            ->where('entradas.nombre', '=', $informacionUDB->nombreUDB . ' ' . $informacionUDB->apellidosUDB)
-            ->get();
+        $purchaseTicket = DB::table('eventEntry')
+        ->join('Eventos', 'eventEntry.idEvento', '=', 'Eventos.idEvento')
+        ->select('Eventos.NombreEvento', 'Eventos.fecha', 'Eventos.hora', 'eventEntry.qr_code', 'eventEntry.idEventEntry')
+        ->where('eventEntry.nombre', '=', $informacionUDB->nombreUDB . ' ' . $informacionUDB->apellidosUDB)
+        ->get();
 
         return view('UDBStaffGuestSite.purchasedTicket', compact('purchaseTicket'));
     } else {
@@ -314,8 +328,25 @@ public function storeEntries(Request $request)
         $entradas = json_decode($request->entradas);
 
         if (count($entradas) > 0) {
-            // Guarda la primera entrada en la tabla 'entradas'
-            $idEntrada = DB::table('entradas')->insertGetId([
+            $idEvento = $request->input('idEvento');
+            $evento = DB::table('eventos')->where('idEvento', '=', $idEvento)->first();
+
+            // Verificar la capacidad del evento
+            $capacidadEvento = $evento->capacidad;
+
+            // Contar la cantidad de entradas ya vendidas para el evento
+            $entradasVendidas = DB::table('entradas')
+                ->join('eventEntry', 'entradas.idEventEntry', '=', 'eventEntry.idEventEntry')
+                ->where('eventEntry.idEvento', '=', $idEvento)
+                ->sum('entradas.cantidad');
+
+            // Verificar si la cantidad de entradas solicitadas excede la capacidad del evento
+            if ($entradasVendidas + count($entradas) > $capacidadEvento) {
+                return Redirect::back()->with('info', 'Ya no hay entradas para este evento');
+            }
+
+            // Guarda la primera entrada en la tabla 'eventEntry'
+            $idEventEntry = DB::table('eventEntry')->insertGetId([
                 'idEvento' => $request->idEvento,
                 'idEstudianteUDB' => 0,
                 'idDocenteUDB' => 0,
@@ -333,7 +364,7 @@ public function storeEntries(Request $request)
             for ($i = 1; $i < count($entradas); $i++) {
                 DB::table('eventEntries')->insert([
                     'idEvento' => $request->idEvento,
-                    'idEntrada' => $idEntrada,
+                    'idEventEntry' => $idEventEntry,
                     'nombre' => $entradas[$i]->nombre,
                     'sexo' => $entradas[$i]->sexo,
                     'institucion' => $entradas[$i]->institucion,
@@ -349,6 +380,12 @@ public function storeEntries(Request $request)
             $institucion = $entradas[0]->institucion;
             $cantidadPersonas = count($entradas);
 
+            // Guarda la entrada en la tabla 'entradas'
+            DB::table('entradas')->insert([
+                'idEventEntry' => $idEventEntry,
+                'idEventEntries' => 1,
+                'cantidad' => $cantidadPersonas
+            ]);
             // Generar el contenido del QR
             $qrContent = json_encode([
                 'nombre' => $nombrePrimeraPersona,
@@ -366,9 +403,9 @@ public function storeEntries(Request $request)
             file_put_contents(public_path($qrPath), $qrCode);
 
             // Actualizar la entrada con la ruta del QR
-            DB::table('entradas')->where('idEntrada', $idEntrada)->update(['qr_code' => $qrPath]);
+            DB::table('eventEntry')->where('idEventEntry', $idEventEntry)->update(['qr_code' => $qrPath]);
 
-            return redirect()->route('UDBStaffGuestSite.ticketG', ['id' => $request->idEvento])->with('exitoAgregar', 'Entrada guardada exitosamente');
+            return to_route('UDBStaffGuestSite.purchasedTicket')->with('exitoAgregar', 'Entrada Adquirida Exitosamente');
         } else {
             return redirect()->route('UDBStaffGuestSite.ticketG', ['id' => $request->idEvento])->with('errorAgregar', 'No hay entradas para guardar');
         }

@@ -37,7 +37,21 @@
             })
         </script>
     @endif
- 
+    @if (session('info'))
+    <script>
+        swal({
+            title: "Error al adquirir",
+            text: "{{ session('info') }}",
+            icon: "warning",
+            button: "OK",
+            closeOnClickOutside: false,
+        }).then((value) => {
+            if (value) {
+                location.reload();
+            }
+        })
+    </script>
+@endif
     @include('layout.horizontalMenu')
     <div class="wrapper">
         @include('layout.verticalMenuInvitadoPersonalUDB')
@@ -87,7 +101,7 @@
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Institución</p>
-                                <input type="text" id="institucion" name="institucion" placeholder="Ingrese institución" class="form-control input" required>
+                                <input type="text" id="institucion" name="institucion" placeholder="Ingrese institución" class="form-control input" required value="Universidad Don Bosco " >
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Nivel Educativo/Profesión</p>

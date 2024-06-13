@@ -4,21 +4,15 @@
         </div>
         <ul class="list-unstyled components">  
             <li id="opcionesEventos">
-                <a class="dropdown-toggle" data-bs-toggle="collapse" href="#menuEventos" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <a href="{{route('UDBStudentGuestSite.site')}}">
                     Eventos
                 </a>
-                <ul class="collapse list-unstyled" id="menuEventos">
-                    <li>
-                        <a href="" id="areaFormativa">Area Formativa</a>
-                    </li>
-                    <li>
-                        <a href="" id="areaEntretenimiento">Area Entretenimiento</a>
-                    </li>
-                    <li>
-                        <a href="{{route('UDBStudentGuestSite.purchasedTicket')}}" id="entradasAdquiridas">Entradas Adquiridas</a>
-                    </li>
-                </ul>
             </li>  
+            <li id="opcionesEntradas">
+                <a href="{{route('UDBStudentGuestSite.purchasedTicket')}}">
+                    Entradas Adquiridas
+                </a>
+            </li> 
             <li id="opcionesMiPerfil">
                 <a href="{{route('UDBStudentGuestSite.miPerfil')}}">
                     Mi perfil

@@ -201,7 +201,7 @@
 									</div>
                                     <div class="col-lg-12  col-md-6 col-xs-12">
 										<div class="input-group mb-3">
-											<span class="input-group-text" id="basic-addon1"><i class="bi-solid bi-gender-ambiguous"></i></span>
+											<span class="input-group-text" id="basic-addon1"><i class="bi-solid bi-person-workspace"></i></span>
 											<select class="form-select" aria-label="Default select example" id="txtEstado" name="estadoUDB">
 												<option value="" disabled selected>Ingrese su estado</option>
 												<option value="Activo">Activo</option>

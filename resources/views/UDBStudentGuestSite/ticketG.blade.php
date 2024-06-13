@@ -37,7 +37,21 @@
             })
         </script>
     @endif
-
+    @if (session('info'))
+    <script>
+        swal({
+            title: "Error al adquirir",
+            text: "{{ session('info') }}",
+            icon: "warning",
+            button: "OK",
+            closeOnClickOutside: false,
+        }).then((value) => {
+            if (value) {
+                location.reload();
+            }
+        })
+    </script>
+@endif
     @include('layout.horizontalMenu')
     <div class="wrapper">
         @include('layout.verticalMenuInvitadoEstudianteUDB')
@@ -88,18 +102,12 @@
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Institución</p>
-                                <input type="text" id="institucion" name="institucion" placeholder="Ingrese institución" class="form-control input" required>
+                                <input type="text" id="institucion" name="institucion" placeholder="Ingrese institución" class="form-control input" required value="Universidad Don Bosco " >
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Nivel Educativo</p>
-                                <select class="form-select" id="nivel_educativo" name="nivel_educativo" required>
-                                    <option value="" disabled selected>Ingrese su nivel académico</option>
-                                    <option value="Parvularia">Parvularia</option>
-                                    <option value="Básica">Básica</option>
-                                    <option value="Tercer Ciclo">Tercer Ciclo</option>
-                                    <option value="Bachillerato">Bachillerato</option>
-                                    <option value="Universidad">Universidad</option>
-                                </select>
+                                <input type="text" id="nivel_educativo" name="nivel_educativo" placeholder="Ingrese su profesión o nivel educativo" class="form-control input"value="{{ $informacionUDB->carreraUDB}}"  required>       
+
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Evento</p>

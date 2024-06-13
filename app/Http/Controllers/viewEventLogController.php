@@ -22,6 +22,13 @@ class viewEventLogController extends Controller
         ->where('e.idEvento', '=', $id)
         ->where('ev.asistencia', '=', 0)
         ->get();
+        $purchaseLogs = DB::table('eventEntry as ev')
+    ->join('eventos as e', 'e.idEvento', '=', 'ev.idEvento')
+    ->join('entradas as en', 'en.idEventEntry', '=', 'ev.idEventEntry')
+    ->where('e.idEvento', '=', $id)
+    ->where('ev.asistencia', '=', 0)
+    ->where('en.idEventEntry', '=', 0)
+    ->get();
     //return $purchaseLog;
     return view('viewEventLog.entry',compact('purchaseLog'));
     } else {

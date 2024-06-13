@@ -37,7 +37,21 @@
             })
         </script>
     @endif
- 
+    @if (session('info'))
+    <script>
+        swal({
+            title: "Error al adquirir",
+            text: "{{ session('info') }}",
+            icon: "warning",
+            button: "OK",
+            closeOnClickOutside: false,
+        }).then((value) => {
+            if (value) {
+                location.reload();
+            }
+        })
+    </script>
+@endif
     @include('layout.horizontalMenu')
     <div class="wrapper">
         @include('layout.verticalMenuInvitadoPersonalUDB')
