@@ -35,7 +35,9 @@ class UsuarioController extends Controller
             return view('users.cambiarContraAdmin');
         } else if (session()->has('estudianteUDB')){
             return view('users.cambiarContraUDBStudentGuest');
-        } else{
+        }else if (session()->has('personalUDB')){
+            return view('users.cambiarContraUDBStaffGuest');
+         } else{
             return view('layout.403');
         }
     }
@@ -98,6 +100,31 @@ class UsuarioController extends Controller
         }
         else if(session()->has('estudianteUDB')){
             $UDBStudentGuestInfo = session()->get('estudianteUDB');
+            $usuarioId = $UDBStudentGuestInfo[0]->carnetUDB;
+
+            $user = DB::table('usuario')->where('idUsuario', '=',$usuarioId)->get();
+
+            $passwordActual = $request->input('passwordActual');
+            $passwordNueva = $request->input('passwordNueva');
+            $passwordConfirmar = $request->input('passwordConfirmar');
+            if($user[0]->password == Hash('SHA256',$passwordActual)){
+                if($passwordNueva == $passwordConfirmar){
+                    $contra=Hash('SHA256',$passwordNueva);
+                    try{
+                        DB::table('usuario')->where('idUsuario','=',$usuarioId)->update(['password'=>$contra]);
+            
+                        return to_route('users.formContra')->with('exitoCambiar','La contraseña del usuario ha sido cambiada');
+                    }
+                    catch(Exception $e){
+                        return to_route('users.formContra')->with('errorCambiar','La contraseña del usuario no ha sido cambiada');
+                    }
+                }
+                else{
+                    return to_route('users.formContra')->with('errorCambiar','La contraseña nueva no ha sido confirmada');
+                }
+            }
+        }else if(session()->has('personalUDB')){
+            $UDBStudentGuestInfo = session()->get('personalUDB');
             $usuarioId = $UDBStudentGuestInfo[0]->carnetUDB;
 
             $user = DB::table('usuario')->where('idUsuario', '=',$usuarioId)->get();

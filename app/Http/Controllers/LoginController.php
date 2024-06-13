@@ -300,6 +300,17 @@ class LoginController extends Controller
             $email = new Credentials($userName, $newPassword, $studentUDBName);
             Mail::to($studentUDBEmail)->send($email);
             return to_route('showLogin')->with('exitoRestablecer','La contraseña del usuario ha sido restablecida');
+        } else if($user->nivel ==3){
+            $personalUDB = DB::table('personalUDB')->where('carnetUDB','=', $user->idUsuario)->first();   
+            $personalUDBEmail = $personalUDB->correoUDB;  
+            $newPassword = $this->generatePass();
+            DB::table('usuario')->where('usuario', $userName)->update([
+                'password' => hash('SHA256', $newPassword),
+            ]);
+            $studentUDBName = $personalUDB->nombreUDB . ' ' . $personalUDB->apellidosUDB;
+            $email = new Credentials($userName, $newPassword, $studentUDBName);
+            Mail::to($personalUDBEmail)->send($email);
+            return to_route('showLogin')->with('exitoRestablecer','La contraseña del usuario ha sido restablecida');
         }
     }
 }
