@@ -135,9 +135,10 @@ Route::prefix('personal/UDB')->group(function(){
     route::get('/adquirir/entradas/{id}', [UDBStaffGuestSiteController::class, 'purchaseTicketG'])->name('UDBStaffGuestSite.ticketG');
     route::get('/entradas/adquiridas', [UDBStaffGuestSiteController::class, 'purchasedTicket'])->name('UDBStaffGuestSite.purchasedTicket');     
     route::post('/QR', [UDBStaffGuestSiteController::class, 'addEntry'])->name('UDBStaffGuestSite.addEntry');
-    Route::post('/guestSite/deleteEntry/{idEntrada}', [guestSiteController::class, 'deleteEntry'])->name('guestSite.deleteEntry');
     Route::post('/storeEntries', [UDBStaffGuestSiteController::class, 'storeEntries'])->name('UDBStaffGuestSite.storeEntries');
-});
+    Route::post('/deleteEntryI', [UDBStaffGuestSiteController::class, 'deleteEntryI'])->name('deleteEntryI');
+    Route::post('/deleteEntryG', [UDBStaffGuestSiteController::class, 'deleteEntryG'])->name('deleteEntryG');
+    });
 
 
 //Rutas relacionadas con el controlador de estudiante otra institucion  (GuestSiteOtherInstitutionController)
@@ -163,4 +164,4 @@ Route::put('/entry/confirm/{idEntrada}', [viewEventLogController::class, 'confir
 Route::get('/registro', [viewEventLogController::class, 'viewAttendanceRecordEntertainmentArea'])->name('viewEventLog.viewAttendanceRecordEntertainmentArea');
 Route::get('/registros/UDB', [viewEventLogController::class, 'viewAttendanceRecordUDB'])->name('viewEventLog.viewAttendanceRecordUDB');
 Route::get('/attendance/records', [viewEventLogController::class, 'viewAttendanceRecordEntertainmentArea'])->name('attendance.records');
-Route::get('/entry/edit/{idEntrada}', [viewEventLogController::class, 'editEntrada'])->name('editarEntrada');
+Route::get('/entry/edit/{idEntrada}', [viewEventLogController::class, 'editCantidad'])->name('editCantidad');

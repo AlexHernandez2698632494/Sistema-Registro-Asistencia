@@ -17,20 +17,22 @@ class viewEventLogController extends Controller
     public function show($id)
 {
     if (session()->has('administrador')) {
-        $purchaseLog = DB::table('eventEntry as ev')
-        ->join('eventos as e','e.idEvento','=','ev.idEvento')
+        $purchaseLog = DB::table('entradas as en')
+        ->leftJoin('eventEntry as ev', 'ev.idEventEntry', '=', 'en.idEventEntry')
+        ->join('eventos as e', 'e.idEvento', '=', 'ev.idEvento')
         ->where('e.idEvento', '=', $id)
         ->where('ev.asistencia', '=', 0)
+        ->where('en.idEventEntries', '=', 0)
         ->get();
-        $purchaseLogs = DB::table('eventEntry as ev')
-    ->join('eventos as e', 'e.idEvento', '=', 'ev.idEvento')
-    ->join('entradas as en', 'en.idEventEntry', '=', 'ev.idEventEntry')
-    ->where('e.idEvento', '=', $id)
-    ->where('ev.asistencia', '=', 0)
-    ->where('en.idEventEntry', '=', 0)
-    ->get();
+        $purchaseLogs = DB::table('entradas as en')
+        ->leftJoin('eventEntry as ev', 'ev.idEventEntry', '=', 'en.idEventEntry')
+        ->join('eventos as e', 'e.idEvento', '=', 'ev.idEvento')
+        ->where('e.idEvento', '=', $id)
+        ->where('ev.asistencia', '=', 0)
+        ->where('en.idEventEntries', '=', 1)
+        ->get();
     //return $purchaseLog;
-    return view('viewEventLog.entry',compact('purchaseLog'));
+    return view('viewEventLog.entry',compact('purchaseLog','purchaseLogs'));
     } else {
         return view('layout.406');
     }

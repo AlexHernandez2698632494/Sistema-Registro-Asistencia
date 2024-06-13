@@ -93,7 +93,56 @@
                     </div>
                 </div>
                 @endforeach
-                
+                @foreach($purchaseLogs as $purchaseRecord) 
+                <div class="col-lg-6 col-xs-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="d-flex justify-content-center">Información general del evento</p>
+                            <div class="separator"></div>
+                            <div class="row mt-2">
+                                <div class="col-12"><b>Nombre del evento: </b></div>
+                                <div class="col-12">{{ $purchaseRecord->NombreEvento }}</div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-12"><b>Nombre del Usuario: </b></div>
+                                <div class="col-12">{{ $purchaseRecord->nombre }}</div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-12"><b>Sexo: </b></div>
+                                <div class="col-12">{{ $purchaseRecord->sexo }}</div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-12"><b>Institucion Educativa: </b></div>
+                                <div class="col-12">{{ $purchaseRecord->institucion }}</div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-12"><b>Nivel Academico: </b></div>
+                                <div class="col-12">{{ $purchaseRecord->nivel_educativo }}</div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-12"><b>Cantidad: </b></div>
+                                <div class="col-12">{{ $purchaseRecord->cantidad }}</div>
+                            </div>
+                            <div class="card-footer text-body-secondary d-flex justify-content-center">
+                                <form action="{{ route('confirmAsistencia', $purchaseRecord->idEventEntry) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-primary my-1 mx-1" style="background-color: #2F98FE;">
+                                        Confirmar Asistencia
+                                    </button>
+                                </form>
+                                <form action="{{ route('editCantidad', $purchaseRecord->idEventEntry) }}" method="GET">
+                                    @csrf
+                                    <button type="submit" class="btn btn-secondary my-1 mx-1">
+                                        Editar Cantidad
+                                    </button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                @endforeach
             </div>
         </div>
     </div>
