@@ -12,6 +12,7 @@ use App\Models\estudianteUDB;
 use App\Mail\Credentials;
 use App\Models\Entrada;
 use App\Models\estudianteOtraInstitucion;
+use App\Models\EventEntry;
 use App\Models\Usuarios;
 use App\Models\eventos;
 use Illuminate\Support\Facades\Redirect;
@@ -236,12 +237,16 @@ class GuestSiteOtherInstitutionController extends Controller
             $capacidadEvento = $evento->capacidad;
     
             // Contar las entradas vendidas para este evento
-            $entradasVendidas = DB::table('entradas')->where('idEvento', '=', $idEvento)->count();
-    
-            // Verificar si hay capacidad disponible
-            if ($entradasVendidas >= $capacidadEvento) {
-                throw new Exception('No hay capacidad disponible para este evento.');
-            }
+            $entradasVendidas = DB::table('entradas')
+            ->join('eventEntry', 'entradas.idEventEntry', '=', 'eventEntry.idEventEntry')
+            ->where('eventEntry.idEvento', '=', $idEvento)
+            ->sum('entradas.cantidad');
+
+        // Verificar si la cantidad de entradas solicitadas excede la capacidad del evento
+        if ($entradasVendidas >= $capacidadEvento) {
+            return Redirect::back()->with('info', 'Ya no hay entradas para este evento');
+        }
+
     
             // Generar contenido y guardar QR
             $nombreEvento = $evento->NombreEvento;              
@@ -269,25 +274,36 @@ class GuestSiteOtherInstitutionController extends Controller
             $idEstudianteInstitucion = $id[0]->idInstitucion ;
     
             // Store the entry in the database
-            $entrada = new Entrada();
-            $entrada->idEvento = $request->input('idEvento');
-            $entrada->idEstudianteUDB = $idEstudianteUDB;
-            $entrada->idDocenteUDB = $idDocenteUDB ;
-            $entrada->idPersonalUDB = $idPersonalUDB;
-            $entrada->idEstudianteInstitucion = $idEstudianteInstitucion ;
-            $entrada->nombre = $request->input('nombre');
-            $entrada->sexo = $request->input('sexo');
-            $entrada->institucion = $request->input('institucion');
-            $entrada->nivel_educativo = $request->input('nivelEducativo');
-            $entrada->qr_code = $qrPath;
-            $entrada->save();
-    
+            // Store the entry in the database
+            $eventEntry = new EventEntry();
+            $eventEntry->idEvento = $request->input('idEvento');
+            $eventEntry->idEstudianteUDB = $idEstudianteUDB;
+            $eventEntry->idDocenteUDB = $idDocenteUDB;
+            $eventEntry->idPersonalUDB = $idPersonalUDB;
+            $eventEntry->idEstudianteInstitucion = $idEstudianteInstitucion;
+            $eventEntry->nombre = $request->input('nombre');
+            $eventEntry->sexo = $request->input('sexo');
+            $eventEntry->institucion = $request->input('institucion');
+            $eventEntry->nivel_educativo = $request->input('nivelEducativo');
+            $eventEntry->qr_code = $qrPath;
+            $eventEntry->save();
+
+            // Get the ID of the newly created event entry
+            $idEventEntry = $eventEntry->idEventEntry;
+
+            // Store the entry in the 'entradas' table
+            DB::table('entradas')->insert([
+                'idEventEntry' => $idEventEntry,
+                'idEventEntries' => 0,
+                'cantidad' => 1
+            ]);
+
             DB::commit();
-    
-            return Redirect::back()->with('exitoAgregar', 'Entrada Adquirida Exitosamente');
+
+            return to_route('StudentGuestSite.purchasedTicket')->with('exitoAgregar', 'Entrada Adquirida Exitosamente'); 
         } catch(Exception $e){
             DB::rollback();
-            return Redirect::back()->with('errorAgregar', 'Ha ocurrido un error al adquirir la entrada, vuelva a intentarlo más tarde');
+            return Redirect::back()->with('errorAgregar', 'Ha ocurrido un error al adquirir la entrada, vuelva a intentarlo más tarde'.$e->getMessage());
         }
     }
     
@@ -295,10 +311,10 @@ class GuestSiteOtherInstitutionController extends Controller
         if (session()->has('estudianteInstitucion')) {
             $id= session()->get('estudianteInstitucion');
             $informacionUDB = DB::table('estudianteInstitucion')->where('idInstitucion','=',$id[0]->idInstitucion)->first();
-            $purchaseTicket = DB::table('entradas')
-            ->join('Eventos', 'entradas.idEvento', '=', 'Eventos.idEvento')
-            ->select('Eventos.NombreEvento', 'Eventos.fecha', 'Eventos.hora', 'entradas.qr_code')
-            ->where('entradas.nombre', '=', $informacionUDB->nombreInstitucion . ' ' . $informacionUDB->apellidosInstitucion)
+            $purchaseTicket = DB::table('eventEntry')
+            ->join('Eventos', 'eventEntry.idEvento', '=', 'Eventos.idEvento')
+            ->select('Eventos.NombreEvento', 'Eventos.fecha', 'Eventos.hora', 'eventEntry.qr_code', 'eventEntry.idEventEntry')
+            ->where('eventEntry.nombre', '=', $informacionUDB->nombreInstitucion . ' ' . $informacionUDB->apellidosInstitucion)
             ->get();
             //return $purchaseTicket;
             return view('StudentGuestSite.purchasedTicket', compact('purchaseTicket'));
@@ -316,13 +332,30 @@ class GuestSiteOtherInstitutionController extends Controller
         $entradas = json_decode($request->entradas);
 
         if (count($entradas) > 0) {
-            // Guarda la primera entrada en la tabla 'entradas'
-            $idEntrada = DB::table('entradas')->insertGetId([
+            $idEvento = $request->input('idEvento');
+            $evento = DB::table('eventos')->where('idEvento', '=', $idEvento)->first();
+
+            // Verificar la capacidad del evento
+            $capacidadEvento = $evento->capacidad;
+
+            // Contar la cantidad de entradas ya vendidas para el evento
+            $entradasVendidas = DB::table('entradas')
+                ->join('eventEntry', 'entradas.idEventEntry', '=', 'eventEntry.idEventEntry')
+                ->where('eventEntry.idEvento', '=', $idEvento)
+                ->sum('entradas.cantidad');
+
+            // Verificar si la cantidad de entradas solicitadas excede la capacidad del evento
+            if ($entradasVendidas + count($entradas) > $capacidadEvento) {
+                return Redirect::back()->with('info', 'Ya no hay entradas para este evento');
+            }
+
+            // Guarda la primera entrada en la tabla 'eventEntry'
+            $idEventEntry = DB::table('eventEntry')->insertGetId([
                 'idEvento' => $request->idEvento,
                 'idEstudianteUDB' => 0,
                 'idDocenteUDB' => 0,
                 'idPersonalUDB' => 0,
-                'idEstudianteInstitucion' => $idEstudianteInstitucion,
+                'idEstudianteInstitucion' => 0,
                 'nombre' => $entradas[0]->nombre,
                 'sexo' => $entradas[0]->sexo,
                 'institucion' => $entradas[0]->institucion,
@@ -331,11 +364,12 @@ class GuestSiteOtherInstitutionController extends Controller
                 'asistencia' => false,
             ]);
 
+
             // Guarda las siguientes entradas en la tabla 'eventEntries'
             for ($i = 1; $i < count($entradas); $i++) {
                 DB::table('eventEntries')->insert([
                     'idEvento' => $request->idEvento,
-                    'idEntrada' => $idEntrada,
+                    'idEventEntry' => $idEventEntry,
                     'nombre' => $entradas[$i]->nombre,
                     'sexo' => $entradas[$i]->sexo,
                     'institucion' => $entradas[$i]->institucion,
@@ -350,6 +384,13 @@ class GuestSiteOtherInstitutionController extends Controller
             $nombrePrimeraPersona = $entradas[0]->nombre;
             $institucion = $entradas[0]->institucion;
             $cantidadPersonas = count($entradas);
+
+            // Guarda la entrada en la tabla 'entradas'
+            DB::table('entradas')->insert([
+                'idEventEntry' => $idEventEntry,
+                'idEventEntries' => 1,
+                'cantidad' => $cantidadPersonas
+            ]);
 
             // Generar el contenido del QR
             $qrContent = json_encode([
@@ -368,7 +409,7 @@ class GuestSiteOtherInstitutionController extends Controller
             file_put_contents(public_path($qrPath), $qrCode);
 
             // Actualizar la entrada con la ruta del QR
-            DB::table('entradas')->where('idEntrada', $idEntrada)->update(['qr_code' => $qrPath]);
+            DB::table('eventEntry')->where('idEventEntry', $idEventEntry)->update(['qr_code' => $qrPath]);
 
             return redirect()->route('StudentGuestSite.ticketG', ['id' => $request->idEvento])->with('exitoAgregar', 'Entrada guardada exitosamente');
         } else {
