@@ -31,7 +31,7 @@
 
     @include('layout.horizontalMenu')    
     <div class="wrapper">
-        @include('layout.verticalMenuInvitadoEstudianteUDB')
+        @include('layout.verticalMenuInvitadoPersonalUDB')
         <div id="content" class="mt-0 pt-0">            
             <nav class="navbar navbar-expand-lg navbar-light bg-light mt-3 mx-5">
                 <div class="container-fluid">                    
