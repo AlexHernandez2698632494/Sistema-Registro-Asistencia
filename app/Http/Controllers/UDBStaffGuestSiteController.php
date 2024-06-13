@@ -425,10 +425,17 @@ public function deleteEntry(Request $request, $idEntrada)
         if (!$entrada) {
             throw new Exception('Entrada no encontrada.');
         }
+        $idEventEntry = $entrada->idEventEntry;
+        $idEventEntries = $entrada->idEventEntries;
 
         // Eliminar la entrada
         DB::table('entradas')->where('idEntrada', '=', $idEntrada)->delete();
 
+        // Eliminar los registros relacionados en eventEntries
+        DB::table('eventEntries')->where('idEventEntries', '=', $idEventEntries)->delete();
+
+        // Eliminar el registro relacionado en eventEntry
+        DB::table('eventEntry')->where('idEventEntry', '=', $idEventEntry)->delete();
         // Eliminar el archivo QR
         if (file_exists(public_path($entrada->qr_code))) {
             unlink(public_path($entrada->qr_code));

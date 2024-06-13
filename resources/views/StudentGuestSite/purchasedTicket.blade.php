@@ -72,6 +72,10 @@
                                     <p><b>Fecha del Evento: </b>{{ $ticket->fecha }}</p>
                                     <p><b>Hora del Evento: </b>{{ $ticket->hora }}</p>
                                     <img src="{{ asset($ticket->qr_code) }}" alt="Código QR">
+                                    <form action="{{ route('StudentGuestSite.deleteEntry', $ticket->idEventEntry) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger mt-2">Eliminar</button>
+                                </form>
                                 </div>
                             </div>
                         </div>

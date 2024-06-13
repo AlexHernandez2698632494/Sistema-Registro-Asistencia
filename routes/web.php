@@ -109,6 +109,7 @@ Route::prefix('estudiante/UDB')->group(function(){
     route::get('/entradas/adquiridas', [UDBStudentGuestSiteController::class, 'purchasedTicket'])->name('UDBStudentGuestSite.purchasedTicket');     
     route::post('/QR', [UDBStudentGuestSiteController::class, 'addEntry'])->name('UDBStudentGuestSite.addEntry');
     Route::post('/storeEntries', [UDBStudentGuestSiteController::class, 'storeEntries'])->name('UDBStudentGuestSite.storeEntries');
+    Route::post('/guestSite/deleteEntry/{idEntrada}', [UDBStudentGuestSiteController::class, 'deleteEntry'])->name('UDBStudentGuestSite.deleteEntry');
 });
 
 //Rutas relacionadas con el controlador de areas (AreaController)
@@ -153,6 +154,7 @@ Route::prefix('invitado/estudiante')->group(function(){
     route::get('/entradas/adquiridas', [GuestSiteOtherInstitutionController::class, 'purchasedTicket'])->name('StudentGuestSite.purchasedTicket');     
     route::post('/QR', [GuestSiteOtherInstitutionController::class, 'addEntry'])->name('StudentGuestSite.addEntry');
     Route::post('/storeEntries', [GuestSiteOtherInstitutionController::class, 'storeEntries'])->name('StudentGuestSite.storeEntries');
+    Route::post('/guestSite/deleteEntry/{idEntrada}', [GuestSiteOtherInstitutionController::class, 'deleteEntry'])->name('StudentGuestSite.deleteEntry');
 });
 
 // Rutas relacionadas al controlador para ver el registro de entradas adquiridas (viewEventLogController)

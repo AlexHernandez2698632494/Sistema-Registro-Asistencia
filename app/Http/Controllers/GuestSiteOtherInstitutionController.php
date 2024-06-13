@@ -419,5 +419,40 @@ class GuestSiteOtherInstitutionController extends Controller
         return redirect()->route('StudentGuestSite.site')->with('errorAgregar', 'Sesión no iniciada');
     }
 }
+public function deleteEntry(Request $request, $idEntrada)
+{
+    try {
+        DB::beginTransaction();
+
+        // Obtener la entrada
+        $entrada = DB::table('entradas')->where('idEntrada', '=', $idEntrada)->first();
+
+        if (!$entrada) {
+            throw new Exception('Entrada no encontrada.');
+        }
+        $idEventEntry = $entrada->idEventEntry;
+        $idEventEntries = $entrada->idEventEntries;
+
+        // Eliminar la entrada
+        DB::table('entradas')->where('idEntrada', '=', $idEntrada)->delete();
+
+        // Eliminar los registros relacionados en eventEntries
+        DB::table('eventEntries')->where('idEventEntries', '=', $idEventEntries)->delete();
+
+        // Eliminar el registro relacionado en eventEntry
+        DB::table('eventEntry')->where('idEventEntry', '=', $idEventEntry)->delete();
+        // Eliminar el archivo QR
+        if (file_exists(public_path($entrada->qr_code))) {
+            unlink(public_path($entrada->qr_code));
+        }
+
+        DB::commit();
+
+        return Redirect::back()->with('exitoEliminar', 'Entrada eliminada exitosamente');
+    } catch (Exception $e) {
+        DB::rollback();
+        return Redirect::back()->with('errorEliminar', 'Ha ocurrido un error al eliminar la entrada, vuelva a intentarlo más tarde');
+    }
+}
     
 }
