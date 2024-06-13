@@ -258,7 +258,17 @@ class GuestSiteController extends Controller
             $idEvento = $request->input('idEvento');
             $evento = DB::table('eventos')->where('idEvento', '=', $idEvento)->first();
             $capacidadEvento = $evento->capacidad;
-    
+
+            // Contar la cantidad de entradas ya vendidas para el evento
+            $entradasVendidas = DB::table('entradas')
+                ->join('eventEntry', 'entradas.idEventEntry', '=', 'eventEntry.idEventEntry')
+                ->where('eventEntry.idEvento', '=', $idEvento)
+                ->sum('entradas.cantidad');
+
+            // Verificar si la cantidad de entradas solicitadas excede la capacidad del evento
+            if ($entradasVendidas >= $capacidadEvento) {
+                return Redirect::back()->with('info', 'Ya no hay entradas para este evento');
+            }
             // Generar contenido y guardar QR
             $nombreEvento = $evento->NombreEvento;
             $qrContent = json_encode([
@@ -365,6 +375,23 @@ public function storeEntries(Request $request)
         $entradas = json_decode($request->entradas);
 
         if (count($entradas) > 0) {
+            $idEvento = $request->input('idEvento');
+            $evento = DB::table('eventos')->where('idEvento', '=', $idEvento)->first();
+
+            // Verificar la capacidad del evento
+            $capacidadEvento = $evento->capacidad;
+
+            // Contar la cantidad de entradas ya vendidas para el evento
+            $entradasVendidas = DB::table('entradas')
+                ->join('eventEntry', 'entradas.idEventEntry', '=', 'eventEntry.idEventEntry')
+                ->where('eventEntry.idEvento', '=', $idEvento)
+                ->sum('entradas.cantidad');
+
+            // Verificar si la cantidad de entradas solicitadas excede la capacidad del evento
+            if ($entradasVendidas + count($entradas) > $capacidadEvento) {
+                return Redirect::back()->with('info', 'Ya no hay entradas para este evento');
+            }
+
             // Guarda la primera entrada en la tabla 'eventEntry'
             $idEventEntry = DB::table('eventEntry')->insertGetId([
                 'idEvento' => $request->idEvento,
@@ -393,14 +420,12 @@ public function storeEntries(Request $request)
                 ]);
             }
 
-            $idEvento = $request->input('idEvento');
-            $evento = DB::table('eventos')->where('idEvento', '=', $idEvento)->first();
-
             // Generar contenido y guardar QR
             $nombreEvento = $evento->NombreEvento;  // Obtén el nombre del evento
             $nombrePrimeraPersona = $entradas[0]->nombre;
             $institucion = $entradas[0]->institucion;
             $cantidadPersonas = count($entradas);
+
             // Guarda la entrada en la tabla 'entradas'
             DB::table('entradas')->insert([
                 'idEventEntry' => $idEventEntry,
@@ -408,7 +433,6 @@ public function storeEntries(Request $request)
                 'cantidad' => $cantidadPersonas
             ]);
 
-            
             // Generar el contenido del QR
             $qrContent = json_encode([
                 'nombre' => $nombrePrimeraPersona,
@@ -436,6 +460,7 @@ public function storeEntries(Request $request)
         return redirect()->route('guestSite.site')->with('errorAgregar', 'Sesión no iniciada');
     }
 }
+
 
     }
     

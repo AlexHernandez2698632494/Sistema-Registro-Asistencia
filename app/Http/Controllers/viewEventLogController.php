@@ -33,9 +33,9 @@ class viewEventLogController extends Controller
         if (session()->has('administrador')) {
             try {
                 // Actualizar el campo 'asistencia' a 1
-                Entrada::where('idEntrada', $entradaId)->update(['asistencia' => 1]);
-                $idEvento = DB::table('entradas')->where('idEntrada','=',$entradaId)->value('idEvento');
-                EntradaG::where('idEntrada', $entradaId)->update(['asistencia' => 1]);
+                Entrada::where('idEventEntry', $entradaId)->update(['asistencia' => 1]);
+                $idEvento = DB::table('eventEntry')->where('idEventEntry','=',$entradaId)->value('idEvento');
+                EntradaG::where('idEventEntry', $entradaId)->update(['asistencia' => 1]);
                 return to_route('viewEventLog.entry', ['id' => $idEvento])->with('exito', 'Asistencia confirmada correctamente.');
         } catch (Exception $e) {
             return to_route('viewEventLog.entry', ['id' => $idEvento])->with('error', 'Error al confirmar la asistencia.');
@@ -49,8 +49,8 @@ class viewEventLogController extends Controller
         if (session()->has('administrador')) {
             $idEvento = $request->get('idEvento'); // Obtener el idEvento desde la solicitud
     
-            $records = DB::table('entradas as en')
-            ->join('evententries as ee', 'ee.idEntrada', '=', 'en.idEntrada')
+            $records = DB::table('eventEntry as en')
+            ->join('evententries as ee', 'ee.idEventEntry', '=', 'en.idEventEntry')
             ->join('eventos as e', 'e.idEvento', '=', 'en.idEvento')
             ->join('areaformativaentretenimientoevento as afee', 'e.idEvento', '=', 'afee.idEvento')
             ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
@@ -67,7 +67,7 @@ class viewEventLogController extends Controller
                 (
                     (
                         SELECT COUNT(*) 
-                        FROM entradas 
+                        FROM eventEntry 
                         WHERE asistencia = 0
                     ) + 
                     (
@@ -80,7 +80,7 @@ class viewEventLogController extends Controller
                     (
                         (
                             SELECT COUNT(*) 
-                            FROM entradas 
+                            FROM eventEntry 
                             WHERE asistencia = TRUE
                         ) + 
                         (
@@ -106,8 +106,8 @@ class viewEventLogController extends Controller
                 'udb.profesionUDB' // Agrupar también por la profesión
             )->get();
 
-            $recordsSUDB = DB::table('entradas as en')
-            ->join('evententries as ee', 'ee.idEntrada', '=', 'en.idEntrada')
+            $recordsSUDB = DB::table('eventEntry as en')
+            ->join('evententries as ee', 'ee.idEventEntry', '=', 'en.idEventEntry')
             ->join('eventos as e', 'e.idEvento', '=', 'en.idEvento')
             ->join('areaformativaentretenimientoevento as afee', 'e.idEvento', '=', 'afee.idEvento')
             ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
@@ -124,7 +124,7 @@ class viewEventLogController extends Controller
                 (
                     (
                         SELECT COUNT(*) 
-                        FROM entradas 
+                        FROM eventEntry 
                         WHERE asistencia = 0
                     ) + 
                     (
@@ -137,7 +137,7 @@ class viewEventLogController extends Controller
                     (
                         (
                             SELECT COUNT(*) 
-                            FROM entradas 
+                            FROM eventEntry 
                             WHERE asistencia = TRUE
                         ) + 
                         (
@@ -174,8 +174,8 @@ class viewEventLogController extends Controller
         if (session()->has('administrador')) {
             $idEvento = $request->get('idEvento'); // Obtener el idEvento desde la solicitud
     
-            $records = DB::table('entradas as en')
-            ->join('evententries as ee', 'ee.idEntrada', '=', 'en.idEntrada')
+            $records = DB::table('eventEntry as en')
+            ->join('evententries as ee', 'ee.idEventEntry', '=', 'en.idEventEntry')
             ->join('eventos as e', 'e.idEvento', '=', 'en.idEvento')
             ->join('areaformativaentretenimientoevento as afee', 'e.idEvento', '=', 'afee.idEvento')
             ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
@@ -190,7 +190,7 @@ class viewEventLogController extends Controller
                 (
                     (
                         SELECT COUNT(*) 
-                        FROM entradas 
+                        FROM eventEntry 
                         WHERE asistencia = 0
                     ) + 
                     (
@@ -203,7 +203,7 @@ class viewEventLogController extends Controller
                     (
                         (
                             SELECT COUNT(*) 
-                            FROM entradas 
+                            FROM eventEntry 
                             WHERE asistencia = TRUE
                         ) + 
                         (

@@ -155,7 +155,7 @@ class EventController extends Controller
                             ->select('Eventos.*','areaFormativaEntretenimiento.nombreArea','Areas.nombre')
                             ->where('Eventos.idEvento','=',$id)
                             ->get();
-            $purchaseLog = DB::table('entradas')->where('idEvento','=',$id)->get();
+            $purchaseLog = DB::table('eventEntry')->where('idEvento','=',$id)->get();
             //return $eventInfo;
             return view('event.eventInformation', compact('eventInfo','purchaseLog'));
         } else {

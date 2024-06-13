@@ -80,7 +80,7 @@
                                 <div class="col-12">{{ $purchaseRecord->nivel_educativo }}</div>
                             </div>
                             <div class="card-footer text-body-secondary d-flex justify-content-center">
-                                <form action="{{ route('confirmAsistencia', $purchaseRecord->idEntrada) }}" method="POST">
+                                <form action="{{ route('confirmAsistencia', $purchaseRecord->idEventEntry) }}" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <button type="submit" class="btn btn-primary my-1 mx-1" style="background-color: #2F98FE;">
