@@ -205,7 +205,7 @@
 											<select class="form-select" aria-label="Default select example" id="txtEstado" name="estadoUDB">
 												<option value="" disabled selected>Ingrese su estado</option>
 												<option value="Activo">Activo</option>
-												<option value="no Activo">No Activo</option>
+												<option value="No Activo">No Activo</option>
                                                 <option value="Graduado">Graduado</option>
 											</select>
 										</div>

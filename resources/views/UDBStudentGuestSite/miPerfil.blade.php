@@ -127,7 +127,7 @@
                                 <label for="txtTelefonoInvitado" class="form-label" style="font-weight: bold">Estado</label>                                
                                 <select class="form-select" id="sexo" name="estadoUDB" value="{{$informacionUDB[0]->estadoUDB}}" required>
                                 <option value="Activo" {{ $informacionUDB[0]->estadoUDB == 'Activo' ? 'selected' : '' }}>Activo</option>
-                                <option value="noActivo" {{ $informacionUDB[0]->estadoUDB == 'no Activo' ? 'selected' : '' }}>No Activo</option>
+                                <option value="No Activo" {{ $informacionUDB[0]->estadoUDB == 'no Activo' ? 'selected' : '' }}>No Activo</option>
                                 <option value="Graduado" {{ $informacionUDB[0]->estadoUDB == 'Graduado' ? 'selected' : '' }}>Graduado</option>
 
                                     
