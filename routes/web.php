@@ -156,8 +156,8 @@ Route::prefix('invitado/estudiante')->group(function(){
     route::get('/entradas/adquiridas', [GuestSiteOtherInstitutionController::class, 'purchasedTicket'])->name('StudentGuestSite.purchasedTicket');     
     route::post('/QR', [GuestSiteOtherInstitutionController::class, 'addEntry'])->name('StudentGuestSite.addEntry');
     Route::post('/storeEntries', [GuestSiteOtherInstitutionController::class, 'storeEntries'])->name('StudentGuestSite.storeEntries');
-    Route::post('/guestSite/deleteEntry/{idEntrada}', [GuestSiteOtherInstitutionController::class, 'deleteEntry'])->name('StudentGuestSite.deleteEntry');
-});
+    Route::post('/deleteEntryI', [GuestSiteOtherInstitutionController::class, 'deleteEntryI'])->name('StudentGuestSite.deleteEntryI');
+    Route::post('/deleteEntryG', [GuestSiteOtherInstitutionController::class, 'deleteEntryG'])->name('StudentGuestSite.deleteEntryG');});
 
 // Rutas relacionadas al controlador para ver el registro de entradas adquiridas (viewEventLogController)
 Route::get('/entry/{id}', [viewEventLogController::class, 'show'])->name('viewEventLog.entry');
