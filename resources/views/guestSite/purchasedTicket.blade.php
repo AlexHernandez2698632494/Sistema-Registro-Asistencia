@@ -1,11 +1,12 @@
 @extends('layout.header')
 
+
 @section('title','Entradas Adquiridas')
 
 <script src="{{ asset('js/sweetalert.js') }}"></script>
 
 <body style="overflow-x: hidden">    
-    <script src="{{ asset('js/inactividad.js') }}"></script>
+	<script src="{{ asset('js/inactividad.js') }}"></script>
     @if (session('exitoAgregar'))
         <script>
             swal({
@@ -21,7 +22,7 @@
             })
         </script>
     @endif
-
+ 
     @if (session('errorAgregar'))
         <script>
             swal({
@@ -53,23 +54,6 @@
             })
         </script>
     @endif
-
-    @if (session('errorEliminar'))
-        <script>
-            swal({
-                title: "Error al eliminar",
-                text: "{{ session('errorEliminar') }}",
-                icon: "error",
-                button: "OK",
-                closeOnClickOutside: false,
-            }).then((value) => {
-                if (value) {
-                    location.reload();
-                }
-            })
-        </script>
-    @endif
-
     @include('layout.horizontalMenu')    
     <div class="wrapper">
         @include('layout.verticalMenuInvitado')
@@ -85,7 +69,7 @@
                 </div>
             </nav>
             <div class="row mx-5">
-                @if ($purchaseTicket->isEmpty())
+                @if ($entradas->isEmpty())
                 <div class="alert alert-warning" role="alert">
                     No se han encontrado registro de entradas Adquiridas
                 </div>
@@ -94,23 +78,45 @@
                     Entradas Adquiridas
                 </div>
                 @foreach ($purchaseTicket as $ticket)
-                    <div class="col-lg-4 col-xl-6 col-md-6 col-xs-12 my-2">
-                        <div class="card" style="height: 400px; max-height: 400px; width:450px; overflow-y: auto">
-                            <div class="card-header" style="background-color: #2F98FE">
+                            <div class="col-lg-4 col-xl-6 col-md-6 col-xs-12 my-2">
+                                <div class="card" style="height: 400px; max-height: 400px; width:450px; overflow-y: auto">
+                                    <div class="card-header" style="background-color: #2F98FE">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ $ticket->NombreEvento }}</h5>
+                                        <p><b>Fecha del Evento: </b>{{ $ticket->fecha }}</p>
+                                        <p><b>Hora del Evento: </b>{{ $ticket->hora }}</p>
+                                        <img src="{{ asset($ticket->qr_code) }}" alt="Código QR">
+                                        <div class="text-center mt-3">
+                                            <form action="{{ route('guestSite.deleteEntryI') }}" method="post">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger">Eliminar Entrada</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $ticket->NombreEvento }}</h5>
-                                <p><b>Fecha del Evento: </b>{{ $ticket->fecha }}</p>
-                                <p><b>Hora del Evento: </b>{{ $ticket->hora }}</p>
-                                <img src="{{ asset($ticket->qr_code) }}" alt="Código QR">
-                                <form action="{{ route('guestSite.deleteEntry', $ticket->idEventEntry) }}" method="POST">
+                        @endforeach
+                @foreach ($purchaseTickets as $ticket)
+                <div class="col-lg-4 col-xl-6 col-md-6 col-xs-12 my-2">
+                    <div class="card" style="height: 400px; max-height: 400px; width:450px; overflow-y: auto">
+                        <div class="card-header" style="background-color: #2F98FE">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $ticket->NombreEvento }}</h5>
+                            <p><b>Fecha del Evento: </b>{{ $ticket->fecha }}</p>
+                            <p><b>Hora del Evento: </b>{{ $ticket->hora }}</p>
+                            <img src="{{ asset($ticket->qr_code) }}" alt="Código QR">
+                            <div class="text-center mt-3">
+                                <form action="{{ route('guestSite.deleteEntryG') }}" method="post">
                                     @csrf
-                                    <button type="submit" class="btn btn-danger mt-2">Eliminar</button>
+                                    <button type="submit" class="btn btn-danger">Eliminar Entrada</button>
                                 </form>
                             </div>
                         </div>
                     </div>
-                @endforeach
+                </div>
+            @endforeach
             @endif
 
             </div>                                              

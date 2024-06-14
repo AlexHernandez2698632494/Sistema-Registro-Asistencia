@@ -90,7 +90,7 @@
                                         <div class="text-center mt-3">
                                             <form action="{{ route('UDBStudentGuestSite.deleteEntryI') }}" method="post">
                                                 @csrf
-                                                <button type="submit" class="btn btn-danger">Eliminar Entrada I</button>
+                                                <button type="submit" class="btn btn-danger">Eliminar Entrada</button>
                                             </form>
                                         </div>
                                     </div>
@@ -110,7 +110,7 @@
                             <div class="text-center mt-3">
                                 <form action="{{ route('UDBStudentGuestSite.deleteEntryG') }}" method="post">
                                     @csrf
-                                    <button type="submit" class="btn btn-danger">Eliminar Entrada G</button>
+                                    <button type="submit" class="btn btn-danger">Eliminar Entrada</button>
                                 </form>
                             </div>
                         </div>

@@ -69,9 +69,9 @@ Route::prefix('invitado')->group(function(){
     route::get('/adquirir/entradas/{id}', [guestSiteController::class, 'purchaseTicketG'])->name('guestSite.ticketG');
     route::get('/entradas/adquiridas', [guestSiteController::class, 'purchasedTicket'])->name('guestSite.purchasedTicket');     
     route::post('/QR', [guestSiteController::class, 'addEntry'])->name('guestSite.addEntry');
-    Route::post('/guestSite/deleteEntry/{idEntrada}', [guestSiteController::class, 'deleteEntry'])->name('guestSite.deleteEntry');
     Route::post('/storeEntries', [guestSiteController::class, 'storeEntries'])->name('guestSite.storeEntries');
-
+    Route::post('/deleteEntryI', [guestSiteController::class, 'deleteEntryI'])->name('guestSite.deleteEntryI');
+    Route::post('/deleteEntryG', [guestSiteController::class, 'deleteEntryG'])->name('guestSite.deleteEntryG');
 });
 //Rutas relacionadas con el controlador de usuarios (usuarioController)
 Route::prefix('user')->group(function(){
