@@ -40,15 +40,21 @@
 
 <body>
 	<section class="vh-200" style="background-color: #0060B4;">
-		<div class="container py-5 h-200">
-			<div class="row d-flex justify-content-center align-items-center h-200">
-				<div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="container py-5 h-200">
+            <div class="row d-flex justify-content-center align-items-center h-200">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
 					<div class="card shadow-2-strong" style="border-radius: 1rem;">
+                                            <!-- Agregamos el botón en la esquina izquierda -->
+                    <div class="d-flex justify-content-start">
+                        <a href="{{ route('welcome') }}" class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Regresar">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                    </div>
 						<div class="card-body p-5 text-center">
 							<form method="POST" action="{{ route('guestSite.add') }}">
 								@csrf                          
 								<div class="row">
-									<div class="col-12">        
+								<div class="col-12">    
 										<p class="d-flex justify-content-center mt-0 subtitle">Ingrese la información que se solicita</p>
 									</div>
 								</div>

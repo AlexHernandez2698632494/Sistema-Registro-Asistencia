@@ -75,8 +75,11 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-2 col-xs-12 mt-2">
                                 
-                            <button class="btn btn-primary mt-2" style="background-color: #7386d5" type="submit">Cambiar contraseña</button>
-                            </div>
+                                <button class="btn btn-primary mt-2" style="background-image: linear-gradient(to right,#025098 0%,
+                                #0152A1 25%,
+                                #015BA7 50%,
+                                #0B71B9 75%,
+                                #0D87C8 100%)" type="submit">Cambiar contraseña</button>                            </div>
                         </div>		
                     </form>																	
 					</div>
