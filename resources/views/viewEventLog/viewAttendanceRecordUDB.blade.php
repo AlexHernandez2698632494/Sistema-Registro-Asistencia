@@ -90,7 +90,31 @@
                                                 <td>{{ $estudianteUDB->total_registrados }}</td>
                                                 <td>{{ $estudianteUDB->total_asistencia }}</td>
 										</tr> 
-									@endforeach																																							
+									@endforeach	
+                                    @foreach ($recordsG as $personalUDB)
+									<tr>
+										<td>{{ $personalUDB->nombreEvento }}</td>
+                                                <td>{{ $personalUDB->fecha }}</td>
+                                                <td>{{ $personalUDB->hora }}</td>
+                                                <td>{{ $personalUDB->nombre }}</td>
+                                                <td>{{ $personalUDB->profesionUDB}}</td>
+                                                <td>{{ $personalUDB->capacidad}}</td>
+                                                <td>{{ $personalUDB->total_registrados }}</td>
+                                                <td>{{ $personalUDB->total_asistencia }}</td>
+										</tr> 
+									@endforeach
+                                    @foreach ($recordsSUDBG as $estudianteUDB)
+									<tr>
+										        <td>{{ $estudianteUDB->nombreEvento }}</td>
+                                                <td>{{ $estudianteUDB->fecha }}</td>
+                                                <td>{{ $estudianteUDB->hora }}</td>
+                                                <td>{{ $estudianteUDB->nombre }}</td>
+                                                <td>{{ $estudianteUDB->carreraUDB}}</td>
+                                                <td>{{ $estudianteUDB->capacidad}}</td>
+                                                <td>{{ $estudianteUDB->total_registrados }}</td>
+                                                <td>{{ $estudianteUDB->total_asistencia }}</td>
+										</tr> 
+									@endforeach																																						
 								</tbody>
 							</div>
 						</table>																

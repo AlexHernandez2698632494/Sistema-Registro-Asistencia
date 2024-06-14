@@ -59,121 +59,163 @@ class viewEventLogController extends Controller
             $idEvento = $request->get('idEvento'); // Obtener el idEvento desde la solicitud
     
             $records = DB::table('eventEntry as en')
-            ->join('evententries as ee', 'ee.idEventEntry', '=', 'en.idEventEntry')
-            ->join('eventos as e', 'e.idEvento', '=', 'en.idEvento')
-            ->join('areaformativaentretenimientoevento as afee', 'e.idEvento', '=', 'afee.idEvento')
-            ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
-            ->join('areaformativaentretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
-            ->join('personalUDB as udb', 'en.idpersonalUDB', '=', 'udb.idUDB') // Asumiendo que esta es la relación correcta
-            ->select(
-                'e.nombreEvento',
-                'e.fecha',
-                'e.hora',
-                'e.capacidad',
-                'a.nombre',
-                'udb.profesionUDB', // Selecciona la profesión de la tabla estudianteUDB
-                DB::raw('
-                (
-                    (
-                        SELECT COUNT(*) 
-                        FROM eventEntry 
-                        WHERE asistencia = 0
-                    ) + 
-                    (
-                        SELECT COUNT(*) 
-                        FROM eventEntries 
-                        WHERE asistencia = 0
-                    )
-                ) AS total_registrados'),
-                DB::raw('
-                    (
-                        (
-                            SELECT COUNT(*) 
-                            FROM eventEntry 
-                            WHERE asistencia = TRUE
-                        ) + 
-                        (
-                            SELECT COUNT(*) 
-                            FROM eventEntries 
-                            WHERE asistencia = TRUE
-                        )
-                    ) AS total_asistencia'
-                )
-            )
-            ->where('en.asistencia', '<=', 1);
+    ->join('entradas as ent', 'en.idEventEntry', '=', 'ent.idEventEntry')
+    ->join('Eventos as ev', 'en.idEvento', '=', 'ev.idEvento')
+    ->join('areaFormativaEntretenimientoEvento as afee', 'ev.idEvento', '=', 'afee.idEvento')
+    ->join('Areas as a', 'afee.idAreas', '=', 'a.idAreas')
+    ->join('personalUDB as pu', 'en.idPersonalUDB', '=', 'pu.idUDB')  // Aquí se añade el join con la nueva tabla
+    ->select(
+        'ev.nombreEvento',
+        'ev.fecha',
+        'ev.hora',
+        'ev.capacidad',
+        'a.nombre',
+        'pu.profesionUDB',  // Se añade el campo profesión
+        DB::raw('(SELECT SUM(cantidad) FROM entradas) as total_registrados'),
+        DB::raw('
+             (
+                 (
+                     SELECT COUNT(*) 
+                     FROM eventEntry 
+                     WHERE asistencia = TRUE
+                 ) + 
+                 (
+                     SELECT COUNT(*) 
+                     FROM eventEntries 
+                     WHERE asistencia = TRUE
+                 )
+             ) AS total_asistencia'
+         )
+    )
+    ->groupBy(
+        'ev.nombreEvento', 
+        'ev.fecha', 
+        'ev.hora', 
+        'ev.capacidad', 
+        'a.nombre',
+        'pu.profesionUDB'  // Se añade también en el group by
+    )
+    ->get();
 
-            if ($idEvento) {
-                $records->where('e.idEvento', $idEvento);
-            }
+    $recordsSUDB = DB::table('eventEntry as en')
+    ->join('entradas as ent', 'en.idEventEntry', '=', 'ent.idEventEntry')
+    ->join('Eventos as ev', 'en.idEvento', '=', 'ev.idEvento')
+    ->join('areaFormativaEntretenimientoEvento as afee', 'ev.idEvento', '=', 'afee.idEvento')
+    ->join('Areas as a', 'afee.idAreas', '=', 'a.idAreas')
+    ->join('estudianteUDB as udb', 'en.idEstudianteUDB', '=', 'udb.idUDB')  // Aquí se añade el join con la nueva tabla
+    ->select(
+        'ev.nombreEvento',
+        'ev.fecha',
+        'ev.hora',
+        'ev.capacidad',
+        'a.nombre',
+        'udb.carreraUDB',  // Se añade el campo profesión
+        DB::raw('(SELECT SUM(cantidad) FROM entradas) as total_registrados'),
+        DB::raw('
+             (
+                 (
+                     SELECT COUNT(*) 
+                     FROM eventEntry 
+                     WHERE asistencia = TRUE
+                 ) + 
+                 (
+                     SELECT COUNT(*) 
+                     FROM eventEntries 
+                     WHERE asistencia = TRUE
+                 )
+             ) AS total_asistencia'
+         )
+    )
+    ->groupBy(
+        'ev.nombreEvento', 
+        'ev.fecha', 
+        'ev.hora', 
+        'ev.capacidad', 
+        'a.nombre',
+        'udb.carreraUDB'  // Se añade también en el group by
+    )
+    ->get();
+    $recordsG = DB::table('eventEntry as en')
+    ->join('eventEntries as ee', 'en.idEventEntry', '=', 'ee.idEventEntry')
+    ->join('entradas as ent', 'en.idEventEntry', '=', 'ent.idEventEntry')
+    ->join('Eventos as ev', 'en.idEvento', '=', 'ev.idEvento')
+    ->join('areaFormativaEntretenimientoEvento as afee', 'ev.idEvento', '=', 'afee.idEvento')
+    ->join('Areas as a', 'afee.idAreas', '=', 'a.idAreas')
+    ->join('personalUDB as pu', 'en.idPersonalUDB', '=', 'pu.idUDB')  // Aquí se añade el join con la nueva tabla
+    ->select(
+        'ev.nombreEvento',
+        'ev.fecha',
+        'ev.hora',
+        'ev.capacidad',
+        'a.nombre',
+        'pu.profesionUDB',  // Se añade el campo profesión
+        DB::raw('(SELECT SUM(cantidad) FROM entradas) as total_registrados'),
+        DB::raw('
+             (
+                 (
+                     SELECT COUNT(*) 
+                     FROM eventEntry 
+                     WHERE asistencia = TRUE
+                 ) + 
+                 (
+                     SELECT COUNT(*) 
+                     FROM eventEntries 
+                     WHERE asistencia = TRUE
+                 )
+             ) AS total_asistencia'
+         )
+    )
+    ->groupBy(
+        'ev.nombreEvento', 
+        'ev.fecha', 
+        'ev.hora', 
+        'ev.capacidad', 
+        'a.nombre',
+        'pu.profesionUDB'  // Se añade también en el group by
+    )
+    ->get();
 
-            $records = $records->groupBy(
-                'e.nombreEvento', 
-                'e.fecha', 
-                'e.hora', 
-                'e.capacidad', 
-                'a.nombre',
-                'udb.profesionUDB' // Agrupar también por la profesión
-            )->get();
-
-            $recordsSUDB = DB::table('eventEntry as en')
-            ->join('evententries as ee', 'ee.idEventEntry', '=', 'en.idEventEntry')
-            ->join('eventos as e', 'e.idEvento', '=', 'en.idEvento')
-            ->join('areaformativaentretenimientoevento as afee', 'e.idEvento', '=', 'afee.idEvento')
-            ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
-            ->join('areaformativaentretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
-            ->join('estudianteUDB as udb', 'en.idEstudianteUDB', '=', 'udb.idUDB') // Asumiendo que esta es la relación correcta
-            ->select(
-                'e.nombreEvento',
-                'e.fecha',
-                'e.hora',
-                'e.capacidad',
-                'a.nombre',
-                'udb.carreraUDB', // Selecciona la profesión de la tabla estudianteUDB
-                DB::raw('
-                (
-                    (
-                        SELECT COUNT(*) 
-                        FROM eventEntry 
-                        WHERE asistencia = 0
-                    ) + 
-                    (
-                        SELECT COUNT(*) 
-                        FROM eventEntries 
-                        WHERE asistencia = 0
-                    )
-                ) AS total_registrados'),
-                DB::raw('
-                    (
-                        (
-                            SELECT COUNT(*) 
-                            FROM eventEntry 
-                            WHERE asistencia = TRUE
-                        ) + 
-                        (
-                            SELECT COUNT(*) 
-                            FROM eventEntries 
-                            WHERE asistencia = TRUE
-                        )
-                    ) AS total_asistencia'
-                )
-            )
-            ->where('en.asistencia', '<=', 1);
-
-        if ($idEvento) {
-            $recordsSUDB->where('e.idEvento', $idEvento);
-        }
-
-        $recordsSUDB = $recordsSUDB->groupBy(
-            'e.nombreEvento', 
-            'e.fecha', 
-            'e.hora', 
-            'e.capacidad', 
-            'a.nombre',
-            'udb.carreraUDB' // Agrupar también por la profesión
-        )->get();
-    
+    $recordsSUDBG = DB::table('eventEntry as en')
+    ->join('eventEntries as ee', 'en.idEventEntry', '=', 'ee.idEventEntry')
+    ->join('entradas as ent', 'en.idEventEntry', '=', 'ent.idEventEntry')
+    ->join('Eventos as ev', 'en.idEvento', '=', 'ev.idEvento')
+    ->join('areaFormativaEntretenimientoEvento as afee', 'ev.idEvento', '=', 'afee.idEvento')
+    ->join('Areas as a', 'afee.idAreas', '=', 'a.idAreas')
+    ->join('estudianteUDB as udb', 'en.idEstudianteUDB', '=', 'udb.idUDB')  // Aquí se añade el join con la nueva tabla
+    ->select(
+        'ev.nombreEvento',
+        'ev.fecha',
+        'ev.hora',
+        'ev.capacidad',
+        'a.nombre',
+        'udb.carreraUDB',  // Se añade el campo profesión
+        DB::raw('(SELECT SUM(cantidad) FROM entradas) as total_registrados'),
+        DB::raw('
+             (
+                 (
+                     SELECT COUNT(*) 
+                     FROM eventEntry 
+                     WHERE asistencia = TRUE
+                 ) + 
+                 (
+                     SELECT COUNT(*) 
+                     FROM eventEntries 
+                     WHERE asistencia = TRUE
+                 )
+             ) AS total_asistencia'
+         )
+    )->where('en.asistencia', '<=', 1)
+    ->groupBy(
+        'ev.nombreEvento', 
+        'ev.fecha', 
+        'ev.hora', 
+        'ev.capacidad', 
+        'a.nombre',
+        'udb.carreraUDB'  // Se añade también en el group by
+    )
+    ->get();
             //return $recordSUDB;
-            return view('viewEventLog.viewAttendanceRecordUDB', compact('records','recordsSUDB'));
+            return view('viewEventLog.viewAttendanceRecordUDB', compact('records','recordsSUDB','recordsG','recordsSUDBG'));
         } else {
             return view('layout.403');
         }
@@ -182,56 +224,42 @@ class viewEventLogController extends Controller
     public function viewAttendanceRecordEntertainmentArea(Request $request) {
         if (session()->has('administrador')) {
             $idEvento = $request->get('idEvento'); // Obtener el idEvento desde la solicitud
-    
             $records = DB::table('eventEntry as en')
-            ->join('evententries as ee', 'ee.idEventEntry', '=', 'en.idEventEntry')
-            ->join('eventos as e', 'e.idEvento', '=', 'en.idEvento')
-            ->join('areaformativaentretenimientoevento as afee', 'e.idEvento', '=', 'afee.idEvento')
-            ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
-            ->join('areaformativaentretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
+            ->join('eventEntries as ee', 'en.idEventEntry', '=', 'ee.idEventEntry')
+            ->join('entradas as ent', 'en.idEventEntry', '=', 'ent.idEventEntry')
+            ->join('Eventos as ev', 'en.idEvento', '=', 'ev.idEvento')
+            ->join('areaFormativaEntretenimientoEvento as afee', 'ev.idEvento', '=', 'afee.idEvento')
+            ->join('Areas as a', 'afee.idAreas', '=', 'a.idAreas')
             ->select(
-                'e.nombreEvento',
-                'e.fecha',
-                'e.hora',
-                'e.capacidad',
+                'ev.nombreEvento',
+                'ev.fecha',
+                'ev.hora',
+                'ev.capacidad',
                 'a.nombre',
+                DB::raw('(SELECT SUM(cantidad) FROM entradas) as total_registrados'),
                 DB::raw('
-                (
-                    (
-                        SELECT COUNT(*) 
-                        FROM eventEntry 
-                        WHERE asistencia = 0
-                    ) + 
-                    (
-                        SELECT COUNT(*) 
-                        FROM eventEntries 
-                        WHERE asistencia = 0
-                    )
-                ) AS total_registrados'),
-                DB::raw('
-                    (
-                        (
-                            SELECT COUNT(*) 
-                            FROM eventEntry 
-                            WHERE asistencia = TRUE
-                        ) + 
-                        (
-                            SELECT COUNT(*) 
-                            FROM eventEntries 
-                            WHERE asistencia = TRUE
-                        )
-                    ) AS total_asistencia'
-                )
+                     (
+                         (
+                             SELECT COUNT(*) 
+                             FROM eventEntry 
+                             WHERE asistencia = TRUE
+                         ) + 
+                         (
+                             SELECT COUNT(*) 
+                             FROM eventEntries 
+                             WHERE asistencia = TRUE
+                         )
+                     ) AS total_asistencia'
+                 )
             )
-            ->where('en.asistencia', '<=', 1);
-
-            if ($idEvento) {
-                $records->where('e.idEvento', $idEvento);
-            }
-    
-            $records = $records->groupBy('e.nombreEvento', 'e.fecha', 'e.hora', 'e.capacidad', 'a.nombre')
-                        ->get();
-            
+            ->groupBy(
+                'ev.nombreEvento', 
+                'ev.fecha', 
+                'ev.hora', 
+                'ev.capacidad', 
+                'a.nombre'
+            )
+            ->get();
             return view('viewEventLog.viewAttendanceRecordEntertainmentArea', compact('records'));
         } else {
             return view('layout.403');
