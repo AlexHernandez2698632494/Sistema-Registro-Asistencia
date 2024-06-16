@@ -1,6 +1,7 @@
 @extends('layout.header')
 
 @section('title', 'Información de evento')
+<script src="{{ asset('js/viewRegister/addInit.js') }}"></script>
 
 <body>
     <script src="{{ asset('js/inactividad.js') }}"></script>
