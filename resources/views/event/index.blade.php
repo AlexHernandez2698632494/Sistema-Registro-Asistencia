@@ -5,6 +5,7 @@
 
 <script src="{{ asset('js/sweetalert.js') }}"></script>
 <script src="{{ asset('js/events/deleteEvents.js') }}"></script>
+<script src="{{ asset('js/events/initEventControl.js') }}"></script>
 
 <body style="overflow-x: hidden">  
 	{{-- <script src="{{ asset('js/inactividad.js') }}"></script> --}}

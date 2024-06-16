@@ -3,6 +3,7 @@
 @section('title', 'Registro de eventos')
 
 <script src="{{ asset('js/sweetalert.js') }}"></script>
+<script src="{{ asset('js/events/initial.js') }}"></script>
 
 <body>
 
