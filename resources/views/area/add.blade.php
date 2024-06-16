@@ -3,9 +3,9 @@
 @section('title', 'Registro de Área')
 
 <script src="{{ asset('js/sweetalert.js') }}"></script>
-{{-- <script src="{{ asset('js/admin/addInit.js') }}"></script> --}}
+<script src="{{ asset('js/Area/addInit.js') }}"></script>
 <body >
-    {{-- <script src="{{ asset('js/inactividad.js') }}"></script> --}}
+    <script src="{{ asset('js/inactividad.js') }}"></script>
     @if (session('exitoAgregar'))
         <script>
             swal({

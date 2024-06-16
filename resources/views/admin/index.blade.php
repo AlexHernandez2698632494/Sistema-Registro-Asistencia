@@ -4,10 +4,11 @@
 @section('title', 'Control de Admins')
 
 <script src="{{ asset('js/sweetalert.js') }}"></script>
+<script src="{{ asset('js/admin/indexInit.js') }}"></script>
 <script src="{{ asset('js/admin/deleteAdmin.js') }}"></script>
 
 <body style="overflow-x: hidden">
-    {{-- <script src="{{ asset('js/inactividad.js') }}"></script> --}}
+    <script src="{{ asset('js/inactividad.js') }}"></script>
     @if (session('exitoEliminacion'))
         <script>
             swal({

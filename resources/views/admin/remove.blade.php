@@ -4,6 +4,7 @@
 @section('title','Control de Administradores')
 
 <script src="{{ asset('js/sweetalert.js') }}"></script>
+<script src="{{ asset('js/admin/indexEInit.js') }}"></script>
 <script src="{{ asset('js/admin/removedInit.js') }}"></script>
 <script src="{{ asset('js/admin/restoreModal.js') }}"></script>
 <script src="{{ asset('js/admin/deleteAdmin.js') }}"></script>

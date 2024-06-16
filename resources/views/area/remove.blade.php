@@ -4,6 +4,7 @@
 @section('title','Control de Áreas')
 
 <script src="{{ asset('js/sweetalert.js') }}"></script>
+<script src="{{ asset('js/Area/indexEInit.js') }}"></script>
 <script src="{{ asset('js/Area/removedInit.js') }}"></script>
 <script src="{{ asset('js/area/restoreModal.js') }}"></script>
 <body style="overflow-x: hidden">    
