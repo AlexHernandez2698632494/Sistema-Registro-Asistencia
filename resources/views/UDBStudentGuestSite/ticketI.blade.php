@@ -3,6 +3,7 @@
 @section('title', 'Adquirir entrada')
  
 <script src="{{ asset('js/sweetalert.js') }}"></script>
+<script src="{{ asset('js/studentUDB/eventos.js') }}"></script>
  
 <body style="overflow-x: hidden">
     <script src="{{ asset('js/inactividad.js') }}"></script>

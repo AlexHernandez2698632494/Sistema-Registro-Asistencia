@@ -3,6 +3,7 @@
 
 
 @section('title', 'Información de evento')
+<script src="{{ asset('js/studentUDB/eventos.js') }}"></script>
 
 <body>
     <script src="{{ asset('js/inactividad.js') }}"></script>
