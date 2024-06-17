@@ -179,9 +179,39 @@ class UsuarioController extends Controller
         }
     }
     
-    public function send(string $id){
-        $evento = DB::table('eventos')->where('idEvento', '=', $id)->select('nombreEvento','lugar','fecha','hora','descripcion','precio','imagen')->get();
-        return $evento;
-        return view('users.send',compact('evento'));
+    public function send(Request $request, string $id) {
+        // Obtener la información del evento
+        $evento = DB::table('eventos')
+                    ->where('idEvento', '=', $id)
+                    ->select('nombreEvento', 'lugar', 'fecha', 'hora', 'descripcion', 'precio', 'imagen')
+                    ->first();
+    
+        // Obtener correos electrónicos de todas las tablas
+        $correosInvitados = DB::table('invitado')->where('estadoEliminacion', 1)->pluck('correoInvitado')->toArray();
+        $correosEstudiantesUDB = DB::table('estudianteUDB')->where('estadoEliminacion', 1)->pluck('correoUDB')->toArray();
+        $correosPersonalUDB = DB::table('personalUDB')->where('estadoEliminacion', 1)->pluck('correoUDB')->toArray();
+        $correosEstudiantesInstitucion = DB::table('estudianteInstitucion')->where('estadoEliminacion', 1)->pluck('correoInstitucion')->toArray();
+    
+        // Combinar todos los correos electrónicos en un solo array
+        $destinatarios = array_merge($correosInvitados, $correosEstudiantesUDB, $correosPersonalUDB, $correosEstudiantesInstitucion);
+    
+        $data = [
+            'NombreEvento' => $evento->nombreEvento,
+            'Lugar' => $evento->lugar,
+            'Fecha' => $evento->fecha,
+            'Hora' => $evento->hora,
+            'Descripcion' => $evento->descripcion,
+            'Precio' => $evento->precio,
+            'Imagen' => $evento->imagen
+        ];
+    
+        foreach ($destinatarios as $to_email) {
+            Mail::send('email.evento', $data, function($message) use ($to_email, $evento) {
+                $message->to($to_email)
+                        ->subject('Información del Evento: ' . $evento->nombreEvento);
+            });
+        }
+    
+        return redirect()->back()->with('success', 'El evento ha sido enviado por correo electrónico a todos los usuarios.');
     }
     }

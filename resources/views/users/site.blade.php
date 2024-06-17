@@ -1,14 +1,23 @@
 @extends('layout.header')
  
  
-@section('title','Inicio invitados')
+@section('title','Invitacion a Eventos ')
  
 <script src="{{ asset('js/sweetalert.js') }}"></script>
 <script src="{{ asset('js/students/indexInit.js') }}"></script>
 <script src="{{ asset('js/students/deleteModal.js') }}"></script>
 <body style="overflow-x: hidden">    
     <script src="{{ asset('js/inactividad.js') }}"></script>
- 
+    @if (session('success'))
+    <script>
+        swal({
+            title: "Envio exitoso",
+            text: "{{ session('success') }}",
+            icon: "success",
+            button: "OK",
+        })            
+    </script>
+@endif
  
     @include('layout.horizontalMenu')    
     <div class="wrapper">
@@ -78,8 +87,11 @@
                                         <p><b>Descripción </b>{{$info->descripcion}}</p>
                                     </div>
                                     <div class="card-footer text-body-secondary d-flex justify-content-center">
-                                        <a href="" class="btn btn-primary my-1 mx-1" style="background-color: #2F98FE;">Enviar</a>
-                                    </div>
+                                        <form method="POST" action="{{ route('user.send', ['id' => $info->idEvento]) }}">
+                                            @csrf
+                                            <input type="hidden" name="idEvento" value="{{ $info->idEvento }}">
+                                            <button type="submit" class="btn btn-primary my-1 mx-1" style="background-color: #2F98FE;">Enviar</button>
+                                        </form>                                      </div>
                                 </div>
                             </div>
                       @endif
