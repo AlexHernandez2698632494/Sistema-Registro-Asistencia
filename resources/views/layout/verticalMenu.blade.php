@@ -87,6 +87,11 @@
                 Cambiar contraseña
             </a>
         </li>
+        <li id="opcionesMostrarManual">
+            <a target="_blank" href="{{asset('/pdf/manualAdministrador.pdf')}}">
+                Manual de usuario
+            </a>
+        </li>    
     </ul>
     <ul class="list-unstyled CTAs">
         <li>
