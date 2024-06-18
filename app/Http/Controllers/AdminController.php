@@ -103,7 +103,7 @@ class AdminController extends Controller
 
                 if($newUser->save() ){
                     DB::commit();
-                    return to_route('admin.create')->with('exitoAgregar',' registrado correctamente');
+                    return to_route('admin.create')->with('exitoAgregar','Administrador registrado correctamente');
                 }else{
                     DB::rollBack();
                     return redirect()->back()->with('errorAgregar','Ha ocurrido un error al registrar ');
@@ -191,7 +191,7 @@ class AdminController extends Controller
             $adminEdit->save();
 
              DB::commit();
-             return to_route("admin.index")->with("exitoAgregar", "Actualizado con exito");
+             return to_route("admin.index")->with("exitoAgregar", "Se ha actualizado correctamente la información del administrador");
            }catch(Exception $e){}
          }else{
              return view('layout.403');            
@@ -268,18 +268,23 @@ class AdminController extends Controller
                     'idAdminEliminar' => 'required'
                 ]);
 
-                $eventId = $request->input('idAdminEliminar');
-
-                DB::transaction(function () use ($eventId) {
-                    
+                $adminId = $request->input('idAdminEliminar');
+                DB::transaction(function () use ($adminId) {
+                $admin = DB::table('administrador')->where('idAdmin', $adminId)->first();
+ 
                     // Eliminar el registro en la tabla Eventos
                     DB::table('administrador')
-                        ->where('idAdmin', $eventId)
+                        ->where('idAdmin', $adminId)
                         ->delete();
+
+                     DB::table('usuario')
+                         ->where('idUsuario',$admin->carnetAdmin)
+                         ->delete();
+
                 });
                 return to_route('admin.index')->with('exitoEliminacion', 'El administrador se ha sido eliminado correctamente');
             } catch (Exception $e) {
-                return to_route('admin.index')->with('errorEliminacion', 'Ha ocurrido un error al eliminar el administrador');
+                return to_route('admin.restoreView')->with('errorEliminacion', 'Ha ocurrido un error al eliminar el administrador'.$e->getMessage());
             };
         } else {
             return view('layout.403');

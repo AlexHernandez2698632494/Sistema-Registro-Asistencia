@@ -1,7 +1,7 @@
 @extends('layout.header')
 
 
-@section('title', 'Control de Admins')
+@section('title', 'Control de Administradores')
 
 <script src="{{ asset('js/sweetalert.js') }}"></script>
 <script src="{{ asset('js/admin/indexInit.js') }}"></script>

@@ -1,5 +1,5 @@
 const openDeleteEventModal = ( value) =>{
-    $('#eventosEliminados').modal('show');
+    $('#eliminarEvento').modal('show');
 
     const elements = value.split(',');
 

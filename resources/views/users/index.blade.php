@@ -56,7 +56,7 @@
                                 <tbody>
                                     @foreach ($estudiantesUDB as $estudianteUDB)
                                         <tr>
-                                            <td>Estudiante</td>
+                                            <td>Estudiante UDB</td>
                                             <td>{{$estudianteUDB->usuario}}</td>
                                             <td>{{ $estudianteUDB->nombreUDB.' '.$estudianteUDB->apellidosUDB }}</td>
                                         </tr>
@@ -77,14 +77,14 @@
                                     @endforeach
                                     @foreach ($estudiantesOtra as $estudianteOtra)
                                         <tr>
-                                            <td>Invitados Institución</td>
+                                            <td>Invitados Estudiante Institución</td>
                                             <td>{{$estudianteOtra->usuario}}</td>
                                             <td>{{ $estudianteOtra->nombreInstitucion.' '.$estudianteOtra->apellidosInstitucion }}</td>
                                         </tr>
                                     @endforeach                                                                                                                                           
                                     @foreach ($personalesUDB as $personalUDB)
                                     <tr>
-                                        <td>Personal</td>
+                                        <td>Personal UDB</td>
                                         <td>{{$personalUDB->usuario}}</td>
                                         <td>{{ $personalUDB->nombreUDB.' '.$personalUDB->apellidosUDB }}</td>
                                     </tr>

@@ -252,6 +252,8 @@ class viewEventLogController extends Controller
                      ) AS total_asistencia'
                  )
             )
+            ->where('en.asistencia', '<=', 1)
+            ->where('ev.idEvento', 1)
             ->groupBy(
                 'ev.nombreEvento', 
                 'ev.fecha', 

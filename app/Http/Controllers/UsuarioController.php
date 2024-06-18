@@ -22,9 +22,9 @@ class UsuarioController extends Controller
         $invitados = DB::table('usuario')->join('invitado','usuario.idusuario','=','invitado.duiInvitado')->where('usuario.nivel','=',1)->get();
         $estudiantesUDB = DB::table('usuario')->join('estudianteUDB','usuario.idusuario','=','estudianteUDB.carnetUDB')->where('usuario.nivel','=',2)->get();
         $personalesUDB = DB::table('usuario')->join('personalUDB','usuario.idusuario','=','personalUDB.carnetUDB')->where('usuario.nivel','=',3)->get();
-        $estudiantesOtra = DB::table('usuario')->join('estudianteInstitucion','usuario.idusuario','=','estudianteInstitucion.carnetinstitucion')->where('usuario.nivel','=',5)->get();
+        $estudiantesOtra = DB::table('usuario')->join('estudianteInstitucion','usuario.idusuario','=','estudianteInstitucion.carnetinstitucion')->where('usuario.nivel','=',4)->get();
         $administradores = DB::table('usuario')->join('administrador','usuario.idusuario','=','administrador.carnetAdmin')->where('usuario.nivel','=',0)->get();
-        //return $invitados;
+        //return $estudiantesOtra;
         return view('users.index',compact('invitados','estudiantesUDB','administradores','estudiantesOtra','personalesUDB'));
     }
 

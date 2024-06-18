@@ -4,7 +4,7 @@
 @section('title','Control de Administradores')
 
 <script src="{{ asset('js/sweetalert.js') }}"></script>
-<script src="{{ asset('js/admin/indexEInit.js') }}"></script>
+{{-- <script src="{{ asset('js/admin/indexEInit.js') }}"></script> --}}
 <script src="{{ asset('js/admin/removedInit.js') }}"></script>
 <script src="{{ asset('js/admin/restoreModal.js') }}"></script>
 <script src="{{ asset('js/admin/deleteAdmin.js') }}"></script>
@@ -41,6 +41,22 @@
             })            
         </script>
     @endif
+
+    @if (session('errorEliminacion'))
+    <script>
+        swal({
+            title: "Error al eliminar",
+            text: "{{ session('errorEliminacion') }}",
+            icon: "error",
+            button: "OK",
+            closeOnClickOutside: false,
+        }).then((value) => {
+            if (value) {
+                location.reload();
+            }
+        });
+    </script>
+@endif
     @include('layout.horizontalMenu')    
     <div class="wrapper">
         @include('layout.verticalMenu')

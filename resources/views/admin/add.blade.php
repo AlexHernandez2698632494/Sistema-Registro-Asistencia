@@ -2,12 +2,12 @@
  
  
  
-@section('title','Registro de es')
+@section('title','Registro de administradores')
  
 <script src="{{ asset('js/sweetalert.js') }}"></script>
 <script src="{{ asset('js/admin/addInit.js') }}"></script>
 <body>  
-    {{-- <script src="{{ asset('js/inactividad.js') }}"></script>     --}}
+     <script src="{{ asset('js/inactividad.js') }}"></script>   
     @if (session('exitoAgregar'))
         <script>
             swal({
