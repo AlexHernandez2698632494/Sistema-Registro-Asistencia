@@ -23,7 +23,12 @@
                 <a href="{{route('users.formContra')}}">
                     Cambiar contraseña
                 </a>
-            </li>                                                        
+            </li>
+            <li id="opcionesMostrarManual">
+                <a target="_blank" href="{{asset('/pdf/manualEstudianteOtra.pdf')}}">
+                    Manual de usuario
+                </a>
+            </li>                                                            
         </ul>
 
         <ul class="list-unstyled CTAs">
