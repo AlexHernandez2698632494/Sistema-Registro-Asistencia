@@ -179,6 +179,7 @@ class UDBStudentGuestSiteController extends Controller
             $validator = Validator::make($request->all(), [
                 'correoUDB' => 'required|email',
                 'estadoUDB' => 'required',
+                'carreraUDB' => 'required',
                 'telefonoUDB' => [
                     'required',
                     'regex:/^[267]\d{3}-\d{4}$/'
@@ -194,6 +195,7 @@ class UDBStudentGuestSiteController extends Controller
                 $UDB->correoUDB = $request->input('correoUDB');
                 $UDB->telefonOUDB = $request->input('telefonoUDB');
                 $UDB->estadoUDB = $request->input('estadoUDB');
+                $UDB->carreraUDB = $request->input('carreraUDB');
                 $UDB->save();
 
                 return redirect()->back()->with('exitoModificar', 'Información actualizada correctamente');
@@ -417,9 +419,6 @@ public function purchasedTicket(){
         $id = session()->get('estudianteUDB');
         $informacionUDB = DB::table('estudianteUDB')->where('idUDB','=',$id[0]->idUDB)->first();
         $entradas = DB::table('eventEntry')
-        ->join('entradas', 'entradas.idEventEntry', '=', 'eventEntry.idEventEntry')
-        ->select('eventEntry.idEventEntry')
-        ->where('eventEntry.nombre', '=', $informacionUDB->nombreUDB . ' ' . $informacionUDB->apellidosUDB)
         ->get();
         $purchaseTicket = DB::table('eventEntry')
         ->join('entradas', 'entradas.idEventEntry', '=', 'eventEntry.idEventEntry')
@@ -430,7 +429,6 @@ public function purchasedTicket(){
         ->get();
         $purchaseTickets = DB::table('eventEntry')
         ->join('entradas', 'entradas.idEventEntry', '=', 'eventEntry.idEventEntry')
-        ->join('eventEntries', 'eventEntries.idEventEntry', '=', 'eventEntry.idEventEntry')
         ->join('Eventos', 'eventEntry.idEvento', '=', 'Eventos.idEvento')
         ->select('Eventos.NombreEvento', 'Eventos.fecha', 'Eventos.hora', 'eventEntry.qr_code', 'eventEntry.idEventEntry')
         ->where('eventEntry.nombre', '=', $informacionUDB->nombreUDB . ' ' . $informacionUDB->apellidosUDB)

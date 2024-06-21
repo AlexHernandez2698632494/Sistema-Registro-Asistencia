@@ -77,6 +77,10 @@
                             {{$informacionUDB[0]->carnetUDB}}
                         </div>
                         <div class="col-lg-6 col-xs-12">
+                            <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Carrera</p>
+                            {{$informacionUDB[0]->carreraUDB}}
+                        </div>
+                        <div class="col-lg-6 col-xs-12">
                             <p style="margin-bottom: 0; font-weight: bold" class="mt-2">Teléfono</p>
                             {{$informacionUDB[0]->telefonoUDB}}
                         </div>
@@ -116,11 +120,11 @@
                     <div class="modal-body">
                         <div class="row mt-2">
                             <div class="col-lg-6 col-xs-12">
-                                <label for="txtCorreoInvitado" class="form-label" style="font-weight: bold">Correo del invitado</label>                                
+                                <label for="txtCorreoInvitado" class="form-label" style="font-weight: bold">Correo</label>                                
                                 <input type="email" id="txtCorreoInvitado" name="correoUDB" placeholder="Ingrese correo electrónico del invitado" class="form-control inputTxt" value="{{$informacionUDB[0]->correoUDB}}">
                             </div>
                             <div class="col-lg-6 col-xs-12">
-                                <label for="txtTelefonoInvitado" class="form-label" style="font-weight: bold">Teléfono del invitado</label>                                
+                                <label for="txtTelefonoInvitado" class="form-label" style="font-weight: bold">Teléfono</label>                                
                                 <input type="text" id="txtTelefonoInvitado" name="telefonoUDB" placeholder="Ingrese teléfono del invitado" class="form-control inputTxt" value="{{$informacionUDB[0]->telefonoUDB}}">
                             </div>   
                             <div class="col-lg-6 col-xs-12">
@@ -129,10 +133,16 @@
                                 <option value="Activo" {{ $informacionUDB[0]->estadoUDB == 'Activo' ? 'selected' : '' }}>Activo</option>
                                 <option value="No Activo" {{ $informacionUDB[0]->estadoUDB == 'no Activo' ? 'selected' : '' }}>No Activo</option>
                                 <option value="Graduado" {{ $informacionUDB[0]->estadoUDB == 'Graduado' ? 'selected' : '' }}>Graduado</option>
-
-                                    
                                 </select>
-                            </div>  
+                            </div>
+                            <div class="col-lg-6 col-xs-12">
+                            <label for="txtTelefonoInvitado" class="form-label" style="font-weight: bold">Carrera</label>                                
+                                <select class="form-select" id="sexo" name="carreraUDB" value="{{$informacionUDB[0]->carreraUDB}}" required>
+                                <option value="Ingeniería en Ciencias de la Computación" {{ $informacionUDB[0]->carreraUDB == 'Ingeniería en Ciencias de la Computación' ? 'selected' : '' }}>Ingeniería en Ciencias de la Computación</option>
+                                <option value="Ingeniería Biomédica"{{ $informacionUDB[0]->carreraUDB == 'Ingeniería Biomédica' ? 'selected' : '' }} >Ingeniería Biomédica</option>
+                              </select>
+                                
+                            </div> 
                             <input type="text" id="txtIdInvitado" name="idInvitadoActualizar" value="{{$informacionUDB[0]->idUDB}}" hidden>                    
                         </div>
                     </div>
