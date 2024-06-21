@@ -283,6 +283,7 @@ class UDBStudentGuestSiteController extends Controller
             file_put_contents(public_path($qrPath), $qrCode);
     
             $id= session()->get('estudianteUDB');
+            $idInvitado = 0;
             $idEstudianteUDB = $id[0]->idUDB;
             $idDocenteUDB = 0 ;
             $idPersonalUDB = 0;
@@ -290,6 +291,7 @@ class UDBStudentGuestSiteController extends Controller
             // Store the entry in the database
         $eventEntry = new EventEntry();
         $eventEntry->idEvento = $request->input('idEvento');
+        $eventEntry->idInvitado = $idInvitado;
         $eventEntry->idEstudianteUDB = $idEstudianteUDB;
         $eventEntry->idDocenteUDB = $idDocenteUDB;
         $eventEntry->idPersonalUDB = $idPersonalUDB;
@@ -348,6 +350,7 @@ class UDBStudentGuestSiteController extends Controller
             // Guarda la primera entrada en la tabla 'eventEntry'
             $idEventEntry = DB::table('eventEntry')->insertGetId([
                 'idEvento' => $request->idEvento,
+                'idInvitado' => 0,
                 'idEstudianteUDB' => $idEstudianteUDB,
                 'idDocenteUDB' => 0,
                 'idPersonalUDB' => 0,

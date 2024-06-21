@@ -273,6 +273,7 @@ class GuestSiteController extends Controller
             // Generar contenido y guardar QR
             $nombreEvento = $evento->NombreEvento;              
             $id= session()->get('invitado');
+            $idInvitado = $id[0]->idInvitado;
             // $url = route('viewEventLog.entry', ['id' => $idEvento]); 
             // Generate QR code content
             $qrContent = json_encode([
@@ -289,7 +290,7 @@ class GuestSiteController extends Controller
             $currentDateTime = date('Ymd_His');
             $qrPath = 'qr/'.$request->input('nombre').'_'.$nombreEvento.'_'.$currentDateTime.'.svg'; // Save as SVG
             file_put_contents(public_path($qrPath), $qrCode);
-    
+            $idInvitado = $idInvitado;
             $idEstudianteUDB = 0;
             $idDocenteUDB = 0 ;
             $idPersonalUDB = 0;
@@ -298,6 +299,7 @@ class GuestSiteController extends Controller
             // Store the entry in the database
             $eventEntry = new EventEntry();
             $eventEntry->idEvento = $request->input('idEvento');
+            $eventEntry->idInvitado = $idInvitado;
             $eventEntry->idEstudianteUDB = $idEstudianteUDB;
             $eventEntry->idDocenteUDB = $idDocenteUDB;
             $eventEntry->idPersonalUDB = $idPersonalUDB;
@@ -356,6 +358,7 @@ public function storeEntries(Request $request)
             // Guarda la primera entrada en la tabla 'eventEntry'
             $idEventEntry = DB::table('eventEntry')->insertGetId([
                 'idEvento' => $request->idEvento,
+                'idInvitado' => $idInvitado,
                 'idEstudianteUDB' => 0,
                 'idDocenteUDB' => 0,
                 'idPersonalUDB' => 0,

@@ -267,7 +267,7 @@ class GuestSiteOtherInstitutionController extends Controller
             $currentDateTime = date('Ymd_His');
             $qrPath = 'qr/'.$request->input('nombre').'_'.$nombreEvento.'_'.$currentDateTime.'.svg'; // Save as SVG
             file_put_contents(public_path($qrPath), $qrCode);
-    
+            $idInvitado = 0;
             $idEstudianteUDB = 0;
             $idDocenteUDB = 0 ;
             $idPersonalUDB = 0;
@@ -277,6 +277,7 @@ class GuestSiteOtherInstitutionController extends Controller
             // Store the entry in the database
             $eventEntry = new EventEntry();
             $eventEntry->idEvento = $request->input('idEvento');
+            $eventEntry->idInvitado = $idInvitado;
             $eventEntry->idEstudianteUDB = $idEstudianteUDB;
             $eventEntry->idDocenteUDB = $idDocenteUDB;
             $eventEntry->idPersonalUDB = $idPersonalUDB;
@@ -336,6 +337,7 @@ class GuestSiteOtherInstitutionController extends Controller
             // Guarda la primera entrada en la tabla 'eventEntry'
             $idEventEntry = DB::table('eventEntry')->insertGetId([
                 'idEvento' => $request->idEvento,
+                'idInvitado' => 0,
                 'idEstudianteUDB' => 0,
                 'idDocenteUDB' => 0,
                 'idPersonalUDB' => 0,
@@ -408,10 +410,7 @@ public function purchasedTicket(){
     if(session()->has('estudianteInstitucion')){
         $id = session()->get('estudianteInstitucion');
         $informacionUDB = DB::table('estudianteInstitucion')->where('idInstitucion','=',$id[0]->idInstitucion)->first();
-        $entradas = DB::table('eventEntry')
-        ->join('entradas', 'entradas.idEventEntry', '=', 'eventEntry.idEventEntry')
-        ->select('eventEntry.idEventEntry')
-        ->where('eventEntry.nombre', '=', $informacionUDB->nombreInstitucion . ' ' . $informacionUDB->apellidosInstitucion)
+        $entradas = DB::table('entradas')
         ->get();
         $purchaseTicket = DB::table('eventEntry')
         ->join('entradas', 'entradas.idEventEntry', '=', 'eventEntry.idEventEntry')
@@ -422,13 +421,12 @@ public function purchasedTicket(){
         ->get();
         $purchaseTickets = DB::table('eventEntry')
         ->join('entradas', 'entradas.idEventEntry', '=', 'eventEntry.idEventEntry')
-        ->join('eventEntries', 'eventEntries.idEventEntry', '=', 'eventEntry.idEventEntry')
         ->join('Eventos', 'eventEntry.idEvento', '=', 'Eventos.idEvento')
         ->select('Eventos.NombreEvento', 'Eventos.fecha', 'Eventos.hora', 'eventEntry.qr_code', 'eventEntry.idEventEntry')
         ->where('eventEntry.nombre', '=', $informacionUDB->nombreInstitucion . ' ' . $informacionUDB->apellidosInstitucion)
         ->where('entradas.idEventEntries', '=', 1)  // Ajusta esto según el valor dinámico que necesites
         ->get();
-        //return $entradas;
+        //return $purchaseTickets;
         return view('StudentGuestSite.purchasedTicket',compact('purchaseTicket','purchaseTickets','entradas'));
     } else {
         return view('layout.403');

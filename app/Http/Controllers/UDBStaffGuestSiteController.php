@@ -265,7 +265,7 @@ public function addEntry(Request $request)
         $currentDateTime = date('Ymd_His');
         $qrPath = 'qr/'.$request->input('nombre').'_'.$nombreEvento.'_'.$currentDateTime.'.svg'; // Save as SVG
         file_put_contents(public_path($qrPath), $qrCode);
-
+        $idInvitado = 0;
         $idEstudianteUDB = 0;
         $idDocenteUDB = 0 ;
         $id= session()->get('personalUDB');
@@ -275,6 +275,7 @@ public function addEntry(Request $request)
         // Store the entry in the database
         $eventEntry = new EventEntry();
         $eventEntry->idEvento = $request->input('idEvento');
+        $eventEntry->idInvitado = $idInvitado;
         $eventEntry->idEstudianteUDB = $idEstudianteUDB;
         $eventEntry->idDocenteUDB = $idDocenteUDB;
         $eventEntry->idPersonalUDB = $idPersonalUDB;
@@ -334,6 +335,7 @@ public function storeEntries(Request $request)
             // Guarda la primera entrada en la tabla 'eventEntry'
             $idEventEntry = DB::table('eventEntry')->insertGetId([
                 'idEvento' => $request->idEvento,
+                'idInvitado' => 0,
                 'idEstudianteUDB' => 0,
                 'idDocenteUDB' => 0,
                 'idPersonalUDB' => $idPersonalUDB,
