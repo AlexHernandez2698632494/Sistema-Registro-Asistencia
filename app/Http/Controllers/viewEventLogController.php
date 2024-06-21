@@ -44,7 +44,7 @@ class viewEventLogController extends Controller
         if ($entry) {
             $entry->asistencia = 1;
             $entry->save();
-            return back()->with('exito', 'Asistencia confirmada correctamente.');
+            return to_route('viewEventLog.entry')->with('exito', 'Asistencia confirmada correctamente.');
         } else {
             return back()->with('error', 'Entrada no encontrada.');
         }
@@ -56,44 +56,59 @@ class viewEventLogController extends Controller
             $idEvento = $request->get('idEvento'); // Obtener el idEvento desde la solicitud
 
             $records = DB::table('Eventos as e')
+            ->select([
+                'e.NombreEvento AS nombre_evento',
+                'e.fecha AS fecha',
+                'e.hora AS hora',
+                'e.capacidad AS capacidad',
+                'a.nombre AS nombre_area',
+                DB::raw("COALESCE(est.carreraUDB, per.profesionUDB, ee.nivel_educativo, en.nivel_educativo, 'Sin especificar') AS carrera_profesion"),
+                DB::raw("COUNT(DISTINCT ee.idEventEntry) AS total_registrados"),
+                DB::raw("SUM(CASE WHEN en.asistencia = TRUE THEN 1 ELSE 0 END) AS total_asistencia"),
+            ])
             ->join('areaFormativaEntretenimientoEvento as afee', 'e.idEvento', '=', 'afee.idEvento')
             ->join('Areas as a', 'afee.idAreas', '=', 'a.idAreas')
-            ->leftJoin('eventEntry as en', 'e.idEvento', '=', 'en.idEvento')
-            ->leftJoin('eventEntries as ee', 'en.idEventEntry', '=', 'ee.idEventEntry')
-            ->leftJoin('entradas', 'en.idEventEntry', '=', 'entradas.idEventEntry')
-            ->select(
-                'e.NombreEvento as nombre_evento',
-                'e.fecha',
-                'e.hora',
-                'a.nombre as nombre_area',
-                'e.capacidad',
-                'en.nombre as nombre_event_entry',
-                'ee.nombre as nombre_event_entries',
-                'en.nivel_educativo as nivel_educativo_event_entry',
-                DB::raw('COUNT(DISTINCT en.idEventEntry) as total_registrados'),
-                DB::raw('SUM(en.asistencia) as total_asistencia')
-            )
+            ->leftJoin('eventEntry as ee', 'e.idEvento', '=', 'ee.idEvento')
+            ->leftJoin('eventEntries as en', 'ee.idEventEntry', '=', 'en.idEventEntry')
+            ->leftJoin('estudianteUDB as est', 'ee.idEstudianteUDB', '=', 'est.idUDB')
+            ->leftJoin('personalUDB as per', 'ee.idPersonalUDB', '=', 'per.idUDB')
             ->where('e.estadoEliminacion', 1)
-            ->where('afee.estadoEliminacion', 1)
             ->where('a.estadoEliminacion', 1)
-            ->where('en.institucion', 'UDB')
-            ->where('en.institucion', 'Universidad Don Bosco')
-            ->groupBy(
-                'e.idEvento',
-                'e.NombreEvento',
-                'e.fecha',
-                'e.hora',
-                'a.nombre',
-                'e.capacidad',
-                'en.nivel_educativo',
-                'en.nombre',
-                'ee.nombre'
-            )
+            ->where(function($query) {
+                $query->where('ee.institucion', 'UDB')
+                      ->orWhere('ee.institucion', 'Universidad Don Bosco')
+                      ->orWhere('en.institucion', 'UDB')
+                      ->orWhere('en.institucion', 'Universidad Don Bosco');
+            })
+            ->groupBy('e.idEvento', 'a.idAreas', 'carrera_profesion')
+            ->orderBy('e.fecha', 'ASC')
+            ->orderBy('e.hora', 'ASC')
             ->get();
-                    //return $recordSUDB;
-            return view('viewEventLog.viewAttendanceRecordUDB', compact('records', 'recordsSUDB', 'recordsG', 'recordsSUDBG'));
+            
+//            return $records;
+            return view('viewEventLog.viewAttendanceRecordUDB', compact('records'));
         } else {
             return view('layout.403');
+        }
+    }
+
+    public function confirmAsistenciaG($id)
+    {
+        $entry = EventEntry::find($id);
+        if ($entry) {
+            $entry->asistencia = 1;
+            $entry->save();
+
+            // Suponiendo que EventEntries es otra tabla o modelo
+            $globalEntry = EntradaG::where('idEventEntry', $id)->first();
+            if ($globalEntry) {
+                $globalEntry->asistencia = 1;
+                $globalEntry->save();
+            }
+
+            return back()->with('exito', 'Asistencia global confirmada correctamente.');
+        } else {
+            return back()->with('error', 'Entrada no encontrada.');
         }
     }
 

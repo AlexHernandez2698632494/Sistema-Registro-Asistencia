@@ -420,7 +420,6 @@ if(session()->has('personalUDB')){
     ->get();
     $purchaseTickets = DB::table('eventEntry')
     ->join('entradas', 'entradas.idEventEntry', '=', 'eventEntry.idEventEntry')
-    ->join('eventEntries', 'eventEntries.idEventEntry', '=', 'eventEntry.idEventEntry')
     ->join('Eventos', 'eventEntry.idEvento', '=', 'Eventos.idEvento')
     ->select('Eventos.NombreEvento', 'Eventos.fecha', 'Eventos.hora', 'eventEntry.qr_code', 'eventEntry.idEventEntry')
     ->where('eventEntry.nombre', '=', $informacionUDB->nombreUDB . ' ' . $informacionUDB->apellidosUDB)
