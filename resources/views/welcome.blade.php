@@ -35,8 +35,8 @@
             })            
         </script>
     @endif
-   <section class="vh-100" style="background-color: #0060B4;">
-		<div class="container py-5 h-100">
+   <section class="vh-200" style="background-color: #0060B4;">
+		<div class="container py-5 h-200">
 			<div class="row d-flex justify-content-center align-items-center h-100">
 				<div class="col-12 col-md-8 col-lg-6 col-xl-5">
 					<div class="card shadow-2-strong" style="border-radius: 1rem;">
