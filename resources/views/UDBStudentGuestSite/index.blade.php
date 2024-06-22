@@ -225,7 +225,7 @@
 									<div class="col-lg-12 col-md-6 col-xs-12">
 										<div class="input-group mb-3">
 											<span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-phone"></i></span>
-											<input type="text" class="form-control" placeholder="Ingrese telefono" aria-label="phone" id="txtPhone" name="telefonoUDB" value="{{ old('telefonoUDB') }}">
+											<input type="text" class="form-control" placeholder="Ingrese teléfono" aria-label="phone" id="txtPhone" name="telefonoUDB" value="{{ old('telefonoUDB') }}">
 										</div>
 									</div>
 									<div class="col-lg-12  col-md-6 col-xs-12">

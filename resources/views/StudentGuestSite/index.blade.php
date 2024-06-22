@@ -91,7 +91,7 @@
 										<div class="input-group mb-3">
 											<span class="input-group-text" id="basic-addon1"><i class="bi-solid bi-gender-ambiguous"></i></span>
 											<select class="form-select" aria-label="Default select example" id="txtSex" name="sexo">
-												<option value="" disabled selected>Ingrese su genero</option>
+												<option value="" disabled selected>Ingrese su sexo</option>
 												<option value="Masculino">Masculino</option>
 												<option value="Femenino">Femenino</option>
 											</select>
@@ -131,7 +131,7 @@
 									<div class="col-lg-12 col-md-6 col-xs-12">
 										<div class="input-group mb-3">
 											<span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-phone"></i></span>
-											<input type="text" class="form-control" placeholder="Ingrese telefono" aria-label="phone" id="txtPhone" name="telefono" value="{{ old('telefono') }}">
+											<input type="text" class="form-control" placeholder="Ingrese teléfono" aria-label="phone" id="txtPhone" name="telefono" value="{{ old('telefono') }}">
 										</div>
 									</div>
 									<div class="col-lg-12  col-md-6 col-xs-12">
