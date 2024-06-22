@@ -1,7 +1,7 @@
 @extends('layout.header')
 
 @section('title','Login')
-    
+
 <script src="{{ asset('js/sweetalert.js') }}"></script>
 {{-- #7facff --}}
 <body>
@@ -15,26 +15,47 @@
             })            
         </script>
     @endif
-	@if (session('exitoRegistoAdmin'))
+	@if (session('exitoRegistroAdmin'))
         <script>
             swal({
                 title: "Administrador registrado",
-                text: "{{ session('exitoRegistoAdmin') }}",
+                text: "{{ session('exitoRegistroAdmin') }}",
                 icon: "success",
                 button: "OK",
             })            
         </script>
     @endif
-	@if (session('exitoSolicitud'))
+	@if (session('exitoAgregar'))
         <script>
             swal({
-                title: "Solicitud realizada",
-                text: "{{ session('exitoSolicitud') }}",
+                title: "Invitado registrado",
+                text: "{{ session('exitoAgregar') }}",
                 icon: "success",
                 button: "OK",
             })            
         </script>
     @endif
+	@if (session('exitoRestablecer'))
+	<script>
+		swal({
+			title: "Contraseña restablecida",
+			text: "{{ session('exitoRestablecer') }}",
+			icon: "success",
+			button: "OK",
+		})
+	</script>
+@endif
+
+@if (session('errorRestablecer'))
+	<script>
+		swal({
+			title: "Error al restablecer",
+			text: "{{ session('errorRestablecer') }}",
+			icon: "error",
+			button: "OK",
+		})            
+	</script>
+@endif
    <section class="vh-200" style="background-color: #0060B4;">
 		<div class="container py-5 h-200">
 			<div class="row d-flex justify-content-center align-items-center h-100">
