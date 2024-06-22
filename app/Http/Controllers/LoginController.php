@@ -311,6 +311,28 @@ class LoginController extends Controller
             $email = new Credentials($userName, $newPassword, $studentUDBName);
             Mail::to($personalUDBEmail)->send($email);
             return to_route('showLogin')->with('exitoRestablecer','La contraseña del usuario ha sido restablecida');
+        } else if($user->nivel ==4){
+            $student = DB::table('estudianteInstitucion')->where('carnetInstitucion','=', $user->idUsuario)->first();   
+            $studentEmail = $student->correoInstitucion;  
+            $newPassword = $this->generatePass();
+            DB::table('usuario')->where('usuario', $userName)->update([
+                'password' => hash('SHA256', $newPassword),
+            ]);
+            $studentName = $student->nombreInstitucion . ' ' . $student->apellidosInstitucion;
+            $email = new Credentials($userName, $newPassword, $studentName);
+            Mail::to($studentEmail)->send($email);
+            return to_route('showLogin')->with('exitoRestablecer','La contraseña del usuario ha sido restablecida');
+        } else if($user->nivel == 0){
+            $admin = DB::table('administrador')->where('carnetAdmin','=', $user->idUsuario)->first();   
+            $adminEmail = $admin->correoAdmin;  
+            $newPassword = $this->generatePass();
+            DB::table('usuario')->where('usuario', $userName)->update([
+                'password' => hash('SHA256', $newPassword),
+            ]);
+            $studentName = $admin->nombreAdmin . ' ' . $admin->apellidosAdmin;
+            $email = new Credentials($userName, $newPassword, $studentName);
+            Mail::to($adminEmail)->send($email);
+            return to_route('showLogin')->with('exitoRestablecer','La contraseña del usuario ha sido restablecida');
         }
-    }
+    } 
 }
