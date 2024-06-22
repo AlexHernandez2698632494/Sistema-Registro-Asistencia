@@ -36,14 +36,14 @@
         })
     </script>
     @endif
+
     @include('layout.horizontalMenu')
     <div class="wrapper">
         @include('layout.verticalMenu')
         <div id="content" class="mt-0 pt-0">
             <nav class="navbar navbar-expand-lg navbar-light bg-light mt-3 mx-5">
                 <div class="container-fluid">
-                    <a href="{{ route('events.index') }}" class="btn btn-light" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" data-bs-title="Regresar">
+                    <a href="{{ route('events.index') }}" class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Regresar">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                     <div class="col text-center">
@@ -131,7 +131,7 @@
                                 </form>
                                 <form action="{{ route('editCantidad', $purchaseRecord->idEventEntry) }}" method="GET">
                                     @csrf
-                                    <button type="submit" class="btn btn-secondary my-1 mx-1">
+                                    <button type="button" onclick="openEditarCantidadModal({{ $purchaseRecord->idEventEntry }})" class="btn btn-secondary my-1 mx-1">
                                         Editar Cantidad
                                     </button>
                                 </form>
@@ -143,4 +143,43 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal para editar cantidad -->
+    <div class="modal fade" id="editarCantidadModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-5" id="exampleModalLabel">Editar Cantidad</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('updateCantidad') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-body">
+                        <input type="hidden" id="editCantidadId" name="idEventEntry">
+                        <div class="row mt-2">
+                            <div class="col-lg-12">
+                                <label for="editCantidad" class="form-label">Cantidad</label>
+                                <input type="number" class="form-control" id="editCantidad" name="cantidad" min="2" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openEditarCantidadModal(idEventEntry) {
+            $('#editarCantidadModal').modal('show');
+            $('#editCantidadId').val(idEventEntry);
+        }
+    </script>
+
 </body>
+
+</html>

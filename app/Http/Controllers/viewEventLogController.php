@@ -38,6 +38,33 @@ class viewEventLogController extends Controller
             return view('layout.406');
         }
     }
+
+    public function updateCantidad(Request $request)
+    {
+        $idEventEntry = $request->input('idEventEntry');
+        $cantidad = $request->input('cantidad');
+    
+        // Obtener la entrada por su ID
+        $entrada = Entrada::where('idEventEntry', $idEventEntry)->first();
+    
+        // Verificar si se encontró la entrada
+        if ($entrada) {
+            // Verificar si la nueva cantidad es menor o igual a la cantidad actual
+            if ($cantidad <= $entrada->cantidad) {
+                // Actualizar la cantidad
+                $entrada->cantidad = $cantidad;
+                $entrada->save();
+                return redirect()->back()->with('exito', 'Cantidad actualizada correctamente.');
+            } else {
+                return redirect()->back()->with('error', 'La nueva cantidad no puede ser mayor que la cantidad actual.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'No se encontró la entrada para actualizar la cantidad.');
+        }
+    }
+    
+
+
     public function confirmAsistencia($id)
     {
         $entry = EventEntry::find($id);
@@ -85,57 +112,88 @@ class viewEventLogController extends Controller
             ->orderBy('e.hora', 'ASC')
             ->get();
             
-//            return $records;
+        // return $records;
             return view('viewEventLog.viewAttendanceRecordUDB', compact('records'));
         } else {
             return view('layout.403');
         }
     }
 
-    public function confirmAsistenciaG($id)
+    public function confirmAsistenciaG($idEventEntry)
     {
-        $entry = EventEntry::find($id);
-        if ($entry) {
-            $entry->asistencia = 1;
-            $entry->save();
-
-            // Suponiendo que EventEntries es otra tabla o modelo
-            $globalEntry = EntradaG::where('idEventEntry', $id)->first();
-            if ($globalEntry) {
-                $globalEntry->asistencia = 1;
-                $globalEntry->save();
-            }
-
-            return back()->with('exito', 'Asistencia global confirmada correctamente.');
-        } else {
-            return back()->with('error', 'Entrada no encontrada.');
+        // Obtener la entrada del evento específico
+        $entrada = Entrada::where('idEventEntry', $idEventEntry)->first();
+    
+        if (!$entrada) {
+            return redirect()->back()->with('error', 'No se encontró la entrada del evento.');
         }
+    
+        // Obtener la cantidad de la entrada
+        $cantidad = $entrada->cantidad;
+    
+        // Actualizar el estado de asistencia en EventEntry
+        $eventEntry = EventEntry::find($idEventEntry);
+        if ($eventEntry) {
+            $eventEntry->asistencia = true;
+            $eventEntry->save();
+        } else {
+            return redirect()->back()->with('error', 'No se encontró el registro del evento.');
+        }
+    
+        // Actualizar el estado de asistencia en EventEntries
+        $eventEntries = EntradaG::where('idEventEntry', $idEventEntry)->get();
+        foreach ($eventEntries as $eventEntry) {
+            $eventEntry->asistencia = true;
+            $eventEntry->save();
+        }
+    
+        return redirect()->back()->with('exito', 'Se ha confirmado la asistencia correctamente.');
     }
 
     public function viewAttendanceRecordEntertainmentArea(Request $request)
     {
         if (session()->has('administrador')) {
             $idEvento = $request->get('idEvento'); // Obtener el idEvento desde la solicitud
-            $records = DB::table('Eventos as e')
-                ->join('areaFormativaEntretenimientoEvento as afee', 'e.idEvento', '=', 'afee.idEvento')
-                ->join('Areas as a', 'afee.idAreas', '=', 'a.idAreas')
-                ->leftJoin('eventEntry as en', 'e.idEvento', '=', 'en.idEvento')
-                ->leftJoin('eventEntries as ee', 'en.idEventEntry', '=', 'ee.idEventEntry')
-                ->leftJoin('entradas', 'en.idEventEntry', '=', 'entradas.idEventEntry')
-                ->where('e.estadoEliminacion', 1)
-                ->where('afee.estadoEliminacion', 1)
-                ->where('a.estadoEliminacion', 1)
-                ->select(
-                    'e.nombreEvento',
-                    'e.fecha',
-                    'e.hora',
-                    'a.nombre',
-                    'e.capacidad',
-                    DB::raw('COALESCE(SUM(entradas.cantidad), 0) as total_registrados'),
-                    DB::raw('COALESCE(SUM(CASE WHEN en.asistencia = TRUE THEN 1 ELSE 0 END) + SUM(CASE WHEN ee.asistencia = TRUE THEN 1 ELSE 0 END), 0) as total_asistencia')
-                )
-                ->groupBy('e.idEvento', 'e.NombreEvento', 'e.fecha', 'e.hora', 'a.nombre', 'e.capacidad')
-                ->get();
+            $eventAsistencias = DB::table('eventEntry')
+        ->select('idEvento', DB::raw('SUM(CASE WHEN asistencia = TRUE THEN 1 ELSE 0 END) AS total_asistencia_eventEntry'))
+        ->groupBy('idEvento');
+
+    $eventEntriesAsistencias = DB::table('eventEntries')
+        ->select('idEvento', DB::raw('SUM(CASE WHEN asistencia = TRUE THEN 1 ELSE 0 END) AS total_asistencia_eventEntries'))
+        ->groupBy('idEvento');
+
+    $eventEntradas = DB::table('Eventos as e')
+        ->leftJoin('eventEntry as en', 'e.idEvento', '=', 'en.idEvento')
+        ->leftJoin('entradas as entradas', 'en.idEventEntry', '=', 'entradas.idEventEntry')
+        ->select('e.idEvento', DB::raw('SUM(COALESCE(entradas.cantidad, 0)) AS total_registrados'))
+        ->groupBy('e.idEvento');
+
+    $records = DB::table('Eventos as e')
+        ->join('areaFormativaEntretenimientoEvento as afee', 'e.idEvento', '=', 'afee.idEvento')
+        ->join('Areas as a', 'afee.idAreas', '=', 'a.idAreas')
+        ->leftJoinSub($eventAsistencias, 'ea', function($join) {
+            $join->on('e.idEvento', '=', 'ea.idEvento');
+        })
+        ->leftJoinSub($eventEntriesAsistencias, 'eea', function($join) {
+            $join->on('e.idEvento', '=', 'eea.idEvento');
+        })
+        ->leftJoinSub($eventEntradas, 'ee', function($join) {
+            $join->on('e.idEvento', '=', 'ee.idEvento');
+        })
+        ->where('e.estadoEliminacion', 1)
+        ->where('afee.estadoEliminacion', 1)
+        ->where('a.estadoEliminacion', 1)
+        ->groupBy('e.idEvento', 'e.NombreEvento', 'e.fecha', 'e.hora', 'a.nombre', 'e.capacidad')
+        ->select(
+            'e.NombreEvento as nombreEvento',
+            'e.fecha',
+            'e.hora',
+            'a.nombre as nombre',
+            'e.capacidad',
+            DB::raw('COALESCE(ee.total_registrados, 0) AS total_registrados'),
+            DB::raw('COALESCE(ea.total_asistencia_eventEntry, 0) + COALESCE(eea.total_asistencia_eventEntries, 0) AS total_asistencia')
+        )
+        ->get();
             return view('viewEventLog.viewAttendanceRecordEntertainmentArea', compact('records'));
         } else {
             return view('layout.403');

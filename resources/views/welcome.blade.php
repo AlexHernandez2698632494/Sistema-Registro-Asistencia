@@ -15,16 +15,18 @@
             })            
         </script>
     @endif
-	@if (session('exitoRegistroAdmin'))
+
+	@if (session('exitoRegistoAdmin'))
         <script>
             swal({
                 title: "Administrador registrado",
-                text: "{{ session('exitoRegistroAdmin') }}",
+                text: "{{ session('exitoRegistoAdmin') }}",
                 icon: "success",
                 button: "OK",
             })            
         </script>
     @endif
+
 	@if (session('exitoAgregar'))
         <script>
             swal({
