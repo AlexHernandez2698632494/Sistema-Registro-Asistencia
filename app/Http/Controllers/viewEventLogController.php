@@ -46,7 +46,6 @@ class viewEventLogController extends Controller
     
         // Obtener la entrada por su ID
         $entrada = Entrada::where('idEventEntry', $idEventEntry)->first();
-    
         // Verificar si se encontró la entrada
         if ($entrada) {
             // Verificar si la nueva cantidad es menor o igual a la cantidad actual
@@ -56,14 +55,71 @@ class viewEventLogController extends Controller
                 $entrada->save();
                 return redirect()->back()->with('exito', 'Cantidad actualizada correctamente.');
             } else {
-                return redirect()->back()->with('error', 'La nueva cantidad no puede ser mayor que la cantidad actual.');
+                $entrada->cantidad = $cantidad;
+                $entrada->save();
+                return redirect()->route('viewEventLog.ticketG', ['id' => $idEventEntry])->with('exito', 'Cantidad actualizada correctamente.');
             }
         } else {
             return redirect()->back()->with('error', 'No se encontró la entrada para actualizar la cantidad.');
         }
     }
     
-
+    public function purchaseTicketG(string $id){
+        if (session()->has('administrador')) {
+            $evento = DB::table('evententry')
+                        ->join('eventos','eventos.idEvento', '=', 'evententry.idEvento')
+                        ->where('evententry.idEvento', '=', $id)->first();
+    
+            // Obtener personas en común
+            $personasComun = DB::table('eventEntry')
+                                ->where('eventEntry.idEventEntry', '=', $id)
+                                ->get();
+            $personasComunes = DB::table('eventEntry')
+                                ->join('eventEntries', 'eventEntry.idEventEntry', '=', 'eventEntries.idEventEntry')
+                                ->where('eventEntry.idEventEntry', '=', $id)
+                                ->select('eventEntries.*')
+                                ->get();
+            //return $personasComun;
+            return view('viewEventLog.ticketG', compact('evento', 'personasComun','personasComunes'));
+        } else {
+            return redirect()->route('UDBStudentGuestSite.site')->with('error', 'Sesión no iniciada');
+        }
+    }
+    
+    public function storeEntries(Request $request)
+    {
+        $request->validate([
+            'idEvento' => 'required|integer',
+            'idEventEntry' => 'required|integer', // Validar que el idEventEntry esté presente
+            'nombre' => 'required|string|max:256',
+            'sexo' => 'required|string|in:Masculino,Femenino',
+            'nivel_educativo' => 'required|string|max:50',
+            'institucion' => 'required|string|max:256',
+        ]);
+    
+        try {
+            // Crear una nueva entrada en eventEntries
+            $eventEntries = new EntradaG();
+            $eventEntries->idEvento = $request->idEvento;
+            $eventEntries->idEventEntry = $request->idEventEntry;
+            $eventEntries->nombre = $request->nombre;
+            $eventEntries->sexo = $request->sexo;
+            $eventEntries->nivel_educativo = $request->nivel_educativo;
+            $eventEntries->institucion = $request->institucion;
+            $eventEntries->asistencia = false; // Valor predeterminado
+    
+            // Guardar la nueva entrada en eventEntries
+            $eventEntries->save();
+    
+            // Si tienes éxito, puedes redirigir con un mensaje de éxito
+            return redirect()->back()->with('exitoAgregar', 'Entrada guardada correctamente.');
+    
+        } catch (\Exception $e) {
+            // En caso de error, puedes redirigir con un mensaje de error
+            return redirect()->back()->with('errorAgregar', 'Error al guardar la entrada: ' . $e->getMessage());
+        }
+    }
+    
 
     public function confirmAsistencia($id)
     {

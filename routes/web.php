@@ -167,5 +167,6 @@ Route::get('/registro', [viewEventLogController::class, 'viewAttendanceRecordEnt
 Route::get('/registros/UDB', [viewEventLogController::class, 'viewAttendanceRecordUDB'])->name('viewEventLog.viewAttendanceRecordUDB');
 Route::get('/attendance/records', [viewEventLogController::class, 'viewAttendanceRecordEntertainmentArea'])->name('attendance.records');
 Route::get('/entry/edit/{idEntrada}', [viewEventLogController::class, 'editCantidad'])->name('editCantidad');
-Route::get('/entry/agree/{idEntrada}', [viewEventLogController::class, 'newPeople'])->name('newPeople');
+route::get('/adquirir/entradas/{id}', [viewEventLogController::class, 'purchaseTicketG'])->name('viewEventLog.ticketG');
 Route::put('/entry/updateCantidad', [viewEventLogController::class, 'updateCantidad'])->name('updateCantidad');
+Route::post('/entry/save', [viewEventLogController::class, 'storeEntries'])->name('storeEntries');
