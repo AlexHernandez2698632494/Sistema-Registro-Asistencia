@@ -68,7 +68,7 @@ class viewEventLogController extends Controller
         if (session()->has('administrador')) {
             $evento = DB::table('evententry')
                         ->join('eventos','eventos.idEvento', '=', 'evententry.idEvento')
-                        ->where('evententry.idEvento', '=', $id)->first();
+                        ->where('evententry.idEventEntry', '=', $id)->first();
     
             // Obtener personas en común
             $personasComun = DB::table('eventEntry')
@@ -79,7 +79,7 @@ class viewEventLogController extends Controller
                                 ->where('eventEntry.idEventEntry', '=', $id)
                                 ->select('eventEntries.*')
                                 ->get();
-            //return $personasComun;
+            //return $evento;
             return view('viewEventLog.ticketG', compact('evento', 'personasComun','personasComunes'));
         } else {
             return redirect()->route('UDBStudentGuestSite.site')->with('error', 'Sesión no iniciada');
@@ -87,38 +87,54 @@ class viewEventLogController extends Controller
     }
     
     public function storeEntries(Request $request)
-    {
-        $request->validate([
-            'idEvento' => 'required|integer',
-            'idEventEntry' => 'required|integer', // Validar que el idEventEntry esté presente
-            'nombre' => 'required|string|max:256',
-            'sexo' => 'required|string|in:Masculino,Femenino',
-            'nivel_educativo' => 'required|string|max:50',
-            'institucion' => 'required|string|max:256',
-        ]);
-    
-        try {
-            // Crear una nueva entrada en eventEntries
-            $eventEntries = new EntradaG();
-            $eventEntries->idEvento = $request->idEvento;
-            $eventEntries->idEventEntry = $request->idEventEntry;
-            $eventEntries->nombre = $request->nombre;
-            $eventEntries->sexo = $request->sexo;
-            $eventEntries->nivel_educativo = $request->nivel_educativo;
-            $eventEntries->institucion = $request->institucion;
-            $eventEntries->asistencia = false; // Valor predeterminado
-    
-            // Guardar la nueva entrada en eventEntries
-            $eventEntries->save();
-    
-            // Si tienes éxito, puedes redirigir con un mensaje de éxito
-            return redirect()->back()->with('exitoAgregar', 'Entrada guardada correctamente.');
-    
-        } catch (\Exception $e) {
-            // En caso de error, puedes redirigir con un mensaje de error
-            return redirect()->back()->with('errorAgregar', 'Error al guardar la entrada: ' . $e->getMessage());
+{
+    $request->validate([
+        'idEvento' => 'required|integer',
+        'idEventEntry' => 'required|integer',
+        'nombre' => 'required|string|max:256',
+        'sexo' => 'required|string|in:Masculino,Femenino',
+        'nivel_educativo' => 'required|string|max:50',
+        'institucion' => 'required|string|max:256',
+    ]);
+
+    try {
+        // Crear una nueva entrada en eventEntries
+        $eventEntries = new EntradaG();
+        $eventEntries->idEvento = $request->idEvento;
+        $eventEntries->idEventEntry = $request->idEventEntry;
+        $eventEntries->nombre = $request->nombre;
+        $eventEntries->sexo = $request->sexo;
+        $eventEntries->nivel_educativo = $request->nivel_educativo;
+        $eventEntries->institucion = $request->institucion;
+        $eventEntries->asistencia = false; // Valor predeterminado
+
+        // Guardar la nueva entrada en eventEntries
+        $eventEntries->save();
+
+        // Actualizar la cantidad en la tabla entradas
+        $entrada = Entrada::where('idEventEntry', $request->idEventEntry)->first();
+
+        if ($entrada) {
+            // Si la entrada ya existe, sumar 1 a la cantidad existente
+            $entrada->cantidad += 1;
+        } else {
+            // Si no existe, crear una nueva entrada en la tabla entradas
+            $entrada = new Entrada();
+            $entrada->idEventEntry = $request->idEventEntry;
+            $entrada->idEventEntries = $eventEntries->idEventEntries; // Asegúrate de obtener el ID correcto
+            $entrada->cantidad = 1; // Inicializar con 1 ya que es la primera entrada
         }
+
+        // Guardar la entrada en la tabla entradas
+        $entrada->save();
+
+        // Si tienes éxito, puedes redirigir con un mensaje de éxito
+        return redirect()->back()->with('exitoAgregar', 'Entrada guardada correctamente.');
+    } catch (\Exception $e) {
+        // En caso de error, puedes redirigir con un mensaje de error
+        return redirect()->back()->with('errorAgregar', 'Error al guardar la entrada: ' . $e->getMessage());
     }
+}
     
 
     public function confirmAsistencia($id)
