@@ -140,7 +140,7 @@
                                 <select class="form-select" id="sexo" name="carreraUDB" value="{{$informacionUDB[0]->carreraUDB}}" required>
                                 <optgroup label="Ingenierías">
                                 <option value="Ingeniería Mecanica"{{ $informacionUDB[0]->carreraUDB == 'Ingeniería Mecanica' ? 'selected' : '' }} >Ingeniería Mecanica</option>
-                                <option value="Ingeniería Industrial"{{ $informacionUDB[0]->carreraUDB == 'Ingeniería Mecanica' ? 'selected' : '' }}>Ingeniería Industrial</option>
+                                <option value="Ingeniería Industrial"{{ $informacionUDB[0]->carreraUDB == 'Ingeniería Industrial' ? 'selected' : '' }}>Ingeniería Industrial</option>
                                 <option value="Ingeniería Biomédica"{{ $informacionUDB[0]->carreraUDB == 'Ingeniería Biomédica' ? 'selected' : '' }}>Ingeniería Biomédica</option>
                                 <option value="Ingeniería en Ciencias de la Computación"{{ $informacionUDB[0]->carreraUDB == 'Ingeniería en Ciencias de la Computación' ? 'selected' : '' }}>Ingeniería en Ciencias de la Computación</option>
                                 <option value="Ingeniería Eléctrica"{{ $informacionUDB[0]->carreraUDB == 'Ingeniería Eléctrica' ? 'selected' : '' }}>Ingeniería Eléctrica</option>
