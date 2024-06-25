@@ -143,7 +143,7 @@ class viewEventLogController extends Controller
         if ($entry) {
             $entry->asistencia = 1;
             $entry->save();
-            return to_route('viewEventLog.entry')->with('exito', 'Asistencia confirmada correctamente.');
+            return redirect()->back()->with('exito', 'Asistencia confirmada correctamente.');
         } else {
             return back()->with('error', 'Entrada no encontrada.');
         }
