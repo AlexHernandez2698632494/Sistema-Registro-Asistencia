@@ -35,7 +35,8 @@ class UDBStudentGuestSiteController extends Controller
 
         $guestInfo = DB::table('Eventos')
             ->select('NombreEvento','fecha','hora','precio','idEvento')
-            ->where(DB::raw('CONCAT(fecha, " ", hora)'), '>', $now) // Filtrar eventos
+            ->where(DB::raw('CONCAT(fecha, " ", hora)'), '>', $now)
+            ->where('estadoEliminacion', '=', '1') // Filtrar eventos
             ->get();
 
         $formativa = DB::table('areaFormativaEntretenimientoEvento as afee')
@@ -44,7 +45,7 @@ class UDBStudentGuestSiteController extends Controller
             ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
             ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea')
             ->where('afe.nombreArea', '=', 'Area Formativa')
-            ->where(DB::raw('CONCAT(e.fecha, " ", e.hora)'), '>', $now) // Filtrar eventos
+            ->where('e.estadoEliminacion', '=', '1')->where(DB::raw('CONCAT(e.fecha, " ", e.hora)'), '>', $now) // Filtrar eventos
             ->get();
 
         $entrenimiento = DB::table('areaFormativaEntretenimientoEvento as afee')
@@ -53,7 +54,7 @@ class UDBStudentGuestSiteController extends Controller
             ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
             ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea')
             ->where('afe.nombreArea', '=', 'Area Entretenimiento')
-            ->where(DB::raw('CONCAT(e.fecha, " ", e.hora)'), '>', $now) // Filtrar eventos
+            ->where('e.estadoEliminacion', '=', '1')->where(DB::raw('CONCAT(e.fecha, " ", e.hora)'), '>', $now) // Filtrar eventos
             ->get();
 
         return view('UDBStudentGuestSite.site', compact('formativa', 'entrenimiento', 'guestInfo'));
