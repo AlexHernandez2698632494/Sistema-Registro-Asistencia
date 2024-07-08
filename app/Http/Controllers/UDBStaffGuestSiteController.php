@@ -17,6 +17,7 @@ use App\Models\AdquirirEntrada;
 use App\Models\Entrada;
 use App\Models\EntradaG;
 use App\Models\EventEntry;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class UDBStaffGuestSiteController extends Controller
@@ -111,10 +112,14 @@ class UDBStaffGuestSiteController extends Controller
     public function site()
     {
         if (session()->has('personalUDB')) {
+            $now = Carbon::now(); // Obtener la fecha y hora actual
+
             $guestInfo = DB::table('Eventos')
-                             ->select('NombreEvento','fecha','hora','precio','idEvento')
-                             ->get();
-            $formativa = DB::table('areaFormativaEntretenimientoEvento as afee')
+                ->select('NombreEvento','fecha','hora','precio','idEvento')
+                ->where(DB::raw('CONCAT(fecha, " ", hora)'), '>', $now) // Filtrar eventos
+                ->where('estadoEliminacion', '=', '1')
+                ->get();
+                $formativa = DB::table('areaFormativaEntretenimientoEvento as afee')
                 ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
                 ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
                 ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')

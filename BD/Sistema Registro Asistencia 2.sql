@@ -82,8 +82,8 @@ CREATE TABLE areaFormativaEntretenimiento(
     nivel int not null
 );
 
-insert into areaFormativaEntretenimiento values ('1','Area Formativa','1');
-insert into areaFormativaEntretenimiento values ('2','Area Entretenimiento','2');
+insert into areaFormativaEntretenimiento values ('1','Área Formativa','1');
+insert into areaFormativaEntretenimiento values ('2','Área Entretenimiento','2');
 
 CREATE TABLE Areas(
     idAreas INT PRIMARY KEY AUTO_INCREMENT,

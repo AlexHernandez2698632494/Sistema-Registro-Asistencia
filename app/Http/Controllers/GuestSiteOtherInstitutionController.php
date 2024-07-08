@@ -15,6 +15,7 @@ use App\Models\estudianteOtraInstitucion;
 use App\Models\EventEntry;
 use App\Models\Usuarios;
 use App\Models\eventos;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -29,23 +30,27 @@ class GuestSiteOtherInstitutionController extends Controller
 
     public function site () {
         if(session()->has('estudianteInstitucion')){
+            $now = Carbon::now(); // Obtener la fecha y hora actual
+
             $guestInfo = DB::table('Eventos')
-                             ->select('NombreEvento','fecha','hora','precio','idEvento')
-                             ->get();
-            $formativa = DB::table('areaFormativaEntretenimientoEvento as afee')
+                ->select('NombreEvento','fecha','hora','precio','idEvento')
+                ->where(DB::raw('CONCAT(fecha, " ", hora)'), '>', $now) // Filtrar eventos
+                ->where('estadoEliminacion', '=', '1')
+                ->get();
+                $formativa = DB::table('areaFormativaEntretenimientoEvento as afee')
                 ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
                 ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
                 ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
                 ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea')
                 ->where('afe.nombreArea', '=', 'Area Formativa')
-                ->get();
+                ->where('e.estadoEliminacion', '=', '1')->get();
             $entrenimiento = DB::table('areaFormativaEntretenimientoEvento as afee')
             ->join('eventos as e', 'e.idEvento', '=', 'afee.idEvento')
             ->join('areas as a', 'a.idAreas', '=', 'afee.idAreas')
             ->join('areaFormativaEntretenimiento as afe', 'afe.idAreaFormativaEntretenimiento', '=', 'a.idAreaFormativaEntretenimiento')
             ->select('e.NombreEvento', 'e.fecha', 'e.hora', 'e.precio', 'e.idEvento', 'e.descripcion', 'a.nombre', 'afe.nombreArea')
             ->where('afe.nombreArea', '=', 'Area Entretenimiento')
-            ->get();
+            ->where('e.estadoEliminacion', '=', '1')->get();
             return view('StudentGuestSite.site',compact('formativa','entrenimiento','guestInfo'));
          }else{
              return view('layout.403');            
